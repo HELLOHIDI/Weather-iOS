@@ -7,12 +7,13 @@
 
 import ProjectDescription
 import ProjectDescriptionHelpers
+import DependencyPlugin
 
 let project = Project.makeModule(
     name: "Core",
     product: .staticFramework,
     dependencies: [
-        .project(target: "ThirdPartyLibs", path: .relativeToRoot("Projects/ThirdPartyLibs"))
+        .Modules.thirdPartyLibs
     ],
     sources: ["Sources/**"]
 )

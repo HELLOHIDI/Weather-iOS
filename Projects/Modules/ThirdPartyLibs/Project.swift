@@ -7,10 +7,20 @@
 
 import ProjectDescription
 import ProjectDescriptionHelpers
+import DependencyPlugin
 
 let project = Project.makeModule(
     name: "ThirdPartyLibs",
     product: .framework,
     packages: [],
-    dependencies: []
+    dependencies: [
+        .SPM.SnapKit,
+        .SPM.Then,
+        .SPM.RxGesture,
+        .SPM.Kingfisher,
+        .SPM.RxCocoa,
+        .SPM.RxDataSources,
+        .SPM.RxRelay,
+        .SPM.RxSwift
+    ]
 )
