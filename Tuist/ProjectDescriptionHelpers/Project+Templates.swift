@@ -5,11 +5,11 @@ public extension Project {
         name: String,
         platform: Platform = .iOS,
         product: Product,
-        organizationName: String = "hellohidi",
+        organizationName: String = "baegteun",
         packages: [Package] = [],
-        deploymentTarget: DeploymentTarget? = .iOS(targetVersion: "16.0", devices: [.iphone, .ipad]),
+        deploymentTarget: DeploymentTarget? = .iOS(targetVersion: "15.0", devices: [.iphone, .ipad]),
         dependencies: [TargetDependency] = [],
-        sources: SourceFilesList = ["Sources/**"],
+        sources: SourceFilesList? = nil,
         resources: ResourceFileElements? = nil,
         infoPlist: InfoPlist = .default
     ) -> Project {
