@@ -8,10 +8,10 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 import DependencyPlugin
+import EnvPlugin
 
 let project = Project.makeModule(
-    name: "Weather-iOS",
-    platform: .iOS,
+    name: Environment.workspaceName,
     product: .app,
     dependencies: [
         .Features.Main.Feature,

@@ -1,13 +1,13 @@
 import ProjectDescription
+import EnvPlugin
 
 public extension Project {
     static func makeModule(
         name: String,
-        platform: Platform = .iOS,
         product: Product,
         organizationName: String = "baegteun",
         packages: [Package] = [],
-        deploymentTarget: DeploymentTarget? = .iOS(targetVersion: "15.0", devices: [.iphone, .ipad]),
+        deploymentTarget: DeploymentTarget? = Environment.deploymentTarget,
         dependencies: [TargetDependency] = [],
         sources: SourceFilesList? = nil,
         resources: ResourceFileElements? = nil,
@@ -22,9 +22,9 @@ public extension Project {
 
         let appTarget = Target(
             name: name,
-            platform: platform,
+            platform: Environment.platform,
             product: product,
-            bundleId: "\(organizationName).\(name)",
+            bundleId: "\(Environment.bundlePrefix).\(name)",
             deploymentTarget: deploymentTarget,
             infoPlist: infoPlist,
             sources: sources,
@@ -34,9 +34,9 @@ public extension Project {
 
         let testTarget = Target(
             name: "\(name)Tests",
-            platform: platform,
+            platform: Environment.platform,
             product: .unitTests,
-            bundleId: "\(organizationName).\(name)Tests",
+            bundleId: "\(Environment.bundlePrefix).\(name)Tests",
             deploymentTarget: deploymentTarget,
             infoPlist: .default,
             sources: ["Tests/**"],
