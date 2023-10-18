@@ -9,11 +9,10 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.makeModule(
-    name: "Features",
+    name: "Domain",
     product: .staticFramework,
     dependencies: [
-        .project(target: "DSKit", path: .relativeToRoot("Projects/DSKit")),
-        .project(target: "Domain", path: .relativeToRoot("Projects/Domain"))
+        .project(target: "Core", path: .relativeToRoot("Projects/Core"))
     ],
     sources: ["Sources/**"]
 )

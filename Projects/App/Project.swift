@@ -13,7 +13,8 @@ let project = Project.makeModule(
     platform: .iOS,
     product: .app,
     dependencies: [
-        .project(target: "Features", path: .relativeToRoot("Projects/Features"))
+        .project(target: "Features", path: .relativeToRoot("Projects/Features")),
+        .project(target: "Data", path: .relativeToRoot("Projects/Data"))
     ],
     sources: ["Sources/**"],
     resources: ["Resources/**"],
