@@ -7,13 +7,13 @@
 
 import ProjectDescription
 import ProjectDescriptionHelpers
+import DependencyPlugin
 
 let project = Project.makeModule(
-    name: "Features",
+    name: "DSKit",
     product: .staticFramework,
     dependencies: [
-        .project(target: "DSKit", path: .relativeToRoot("Projects/DSKit")),
-        .project(target: "Domain", path: .relativeToRoot("Projects/Domain"))
+        .core
     ],
     sources: ["Sources/**"]
 )

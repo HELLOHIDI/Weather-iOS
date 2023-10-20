@@ -7,13 +7,14 @@
 
 import ProjectDescription
 import ProjectDescriptionHelpers
+import DependencyPlugin
 
 let project = Project.makeModule(
     name: "Data",
     product: .staticFramework,
     dependencies: [
-        .project(target: "Networks", path: .relativeToRoot("Projects/Networks")),
-        .project(target: "Domain", path: .relativeToRoot("Projects/Domain"))
+        .domain,
+        .Modules.networks
     ],
     sources: ["Sources/**"]
 )

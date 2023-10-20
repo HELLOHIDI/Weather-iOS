@@ -7,14 +7,15 @@
 
 import ProjectDescription
 import ProjectDescriptionHelpers
+import DependencyPlugin
+import EnvPlugin
 
 let project = Project.makeModule(
-    name: "Weather-iOS",
-    platform: .iOS,
+    name: Environment.workspaceName,
     product: .app,
     dependencies: [
-        .project(target: "Features", path: .relativeToRoot("Projects/Features")),
-        .project(target: "Data", path: .relativeToRoot("Projects/Data"))
+        .Features.Main.Feature,
+        .data
     ],
     sources: ["Sources/**"],
     resources: ["Resources/**"],
