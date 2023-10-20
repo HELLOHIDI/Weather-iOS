@@ -11,7 +11,7 @@ public extension Project {
         dependencies: [TargetDependency] = [],
         sources: SourceFilesList? = nil,
         resources: ResourceFileElements? = nil,
-        infoPlist: InfoPlist = .default
+        infoPlist: InfoPlist = .extendingDefault(with: Project.appInfoPlist)
     ) -> Project {
         let settings: Settings = .settings(
             base: [:],

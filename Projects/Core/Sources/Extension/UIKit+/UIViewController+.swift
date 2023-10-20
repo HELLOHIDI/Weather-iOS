@@ -92,7 +92,7 @@ extension UIViewController{
         }
         guard view.frame.origin.y == 0 else { return }
         self.view.frame.origin.y -= keyboardHeight
-//        Device.keyBoardHeight = keyboardHeight
+        Device.keyBoardHeight = keyboardHeight
     }
 
     // 키보드가 사라졌다는 알림을 받으면 실행할 메서드
@@ -101,11 +101,11 @@ extension UIViewController{
         print("키보드 내려감")
         
         if let view = notification.object as? UIView{
-//            view.frame.origin.y += Device.keyBoardHeight
+            view.frame.origin.y += Device.keyBoardHeight
 
         } else {
             guard view.frame.origin.y < 0 else { return }
-//            self.view.frame.origin.y += Device.keyBoardHeight
+            self.view.frame.origin.y += Device.keyBoardHeight
         }
     }
     

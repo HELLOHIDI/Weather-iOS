@@ -12,8 +12,8 @@ public extension Project {
         "CFBundleShortVersionString": "1.0.0",
         "CFBundleDevelopmentRegion": "ko",
         "CFBundleVersion": "1",
-        "CFBundleIdentifier": "com.sopt-stamp-iOS.release",
-        "CFBundleDisplayName": "SOPT",
+        "CFBundleIdentifier": "com.Weather-iOS.release",
+        "CFBundleDisplayName": "Weather-iOS",
         "UILaunchStoryboardName": "LaunchScreen",
         "UIApplicationSceneManifest": [
             "UIApplicationSupportsMultipleScenes": false,
@@ -27,30 +27,24 @@ public extension Project {
             ]
         ],
         "UIAppFonts": [
-            // FIXME: - 폰트 추가 후 수정
-            //                "Item 0": "Pretendard-Black.otf",
-            //                "Item 1": "Pretendard-Bold.otf",
-            //                "Item 2": "Pretendard-ExtraBold.otf",
-            //                "Item 3": "Pretendard-ExtraLight.otf",
-            //                "Item 4": "Pretendard-Light.otf",
-            //                "Item 5": "Pretendard-Medium.otf",
-            //                "Item 6": "Pretendard-Regular.otf",
-            //                "Item 7": "Pretendard-SemiBold.otf",
-            //                "Item 8": "Pretendard-Thin.otf"
+            "Item 0": "SF-Pro-Display-Thin.otf",
+            "Item 1": "SF-Pro-Display-Regular.otf",
+            "Item 2": "SF-Pro-Display-Bold.otf",
+            "Item 3": "SF-Pro-Display-Medium.otf",
+            "Item 4": "SF-Pro-Display-Light.otf",
         ],
         "App Transport Security Settings": ["Allow Arbitrary Loads": true],
         "NSAppTransportSecurity": ["NSAllowsArbitraryLoads": true],
         "ITSAppUsesNonExemptEncryption": false,
-        "UIUserInterfaceStyle": "Dark",
-        "NSPhotoLibraryUsageDescription": "미션과 관련된 사진을 업로드하기 위해 갤러리 권한이 필요합니다.",
-        "CFBundleURLTypes": [
-            [
-                "CFBundleTypeRole": "Editor",
-                "CFBundleURLName": "sopt-makers",
-                "CFBundleURLSchemes": ["sopt-makers"]
-            ]
-        ],
-        "UIBackgroundModes": ["remote-notification"]
+//        "UIUserInterfaceStyle": "Dark",
+//        "CFBundleURLTypes": [
+//            [
+//                "CFBundleTypeRole": "Editor",
+//                "CFBundleURLName": "sopt-makers",
+//                "CFBundleURLSchemes": ["sopt-makers"]
+//            ]
+//        ],
+//        "UIBackgroundModes": ["remote-notification"]
     ]
     
     static let demoInfoPlist: [String: InfoPlist.Value] = [

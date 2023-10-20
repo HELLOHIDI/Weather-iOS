@@ -18,10 +18,5 @@ let project = Project.makeModule(
         .data
     ],
     sources: ["Sources/**"],
-    resources: ["Resources/**"],
-    infoPlist: .extendingDefault(with: [
-        "UIMainStoryboardFile": "",
-        "UILaunchStoryboardName": "LaunchScreen",
-        "ENABLE_TESTS": .boolean(true),
-    ])
+    resources: ["Resources/**"]
 )
