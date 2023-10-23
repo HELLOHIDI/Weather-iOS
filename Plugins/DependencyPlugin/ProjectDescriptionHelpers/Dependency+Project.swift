@@ -10,6 +10,8 @@ import ProjectDescription
 public extension Dep {
     struct Features {
         public struct Main {}
+        public struct Detail {}
+        public struct Root {}
     }
     
     struct Modules {}
@@ -41,8 +43,22 @@ public extension Dep.Features {
     static func project(name: String, group: String) -> Dep { .project(target: "\(group)\(name)", path: .relativeToFeature("\(group)\(name)")) }
 }
 
+public extension Dep.Features.Root {
+    static let group = "Root"
+    
+    static let Feature = Dep.Features.project(name: "Feature", group: group)
+    static let Interface = Dep.Features.project(name: "\(group)FeatureInterface", group: group)
+}
+
 public extension Dep.Features.Main {
     static let group = "Main"
+    
+    static let Feature = Dep.Features.project(name: "Feature", group: group)
+    static let Interface = Dep.Features.project(name: "\(group)FeatureInterface", group: group)
+}
+
+public extension Dep.Features.Detail {
+    static let group = "Detail"
     
     static let Feature = Dep.Features.project(name: "Feature", group: group)
     static let Interface = Dep.Features.project(name: "\(group)FeatureInterface", group: group)

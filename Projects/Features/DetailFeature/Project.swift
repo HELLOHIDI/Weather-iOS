@@ -2,7 +2,7 @@
 //  Project.swift
 //  ProjectDescriptionHelpers
 //
-//  Created by 류희재 on 2023/10/19.
+//  Created by 류희재 on 2023/10/23.
 //
 
 import ProjectDescription
@@ -10,11 +10,11 @@ import ProjectDescriptionHelpers
 import DependencyPlugin
 
 let project = Project.makeModule(
-    name: "DSKit",
+    name: "DetailFeature",
     product: .staticFramework,
     dependencies: [
-        .core
+        .Modules.dsKit,
+        .domain
     ],
-    sources: ["Sources/**"],
-    resources: ["ReSources/**"]
+    sources: ["Sources/**"]
 )
