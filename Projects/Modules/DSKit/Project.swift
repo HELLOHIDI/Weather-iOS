@@ -15,5 +15,6 @@ let project = Project.makeModule(
     dependencies: [
         .core
     ],
-    sources: ["Sources/**"]
+    sources: ["Sources/**"],
+    resources: ["ReSources/**"]
 )

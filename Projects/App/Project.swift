@@ -14,14 +14,9 @@ let project = Project.makeModule(
     name: Environment.workspaceName,
     product: .app,
     dependencies: [
-        .Features.Main.Feature,
+        .Features.Root.Feature,
         .data
     ],
     sources: ["Sources/**"],
-    resources: ["Resources/**"],
-    infoPlist: .extendingDefault(with: [
-        "UIMainStoryboardFile": "",
-        "UILaunchStoryboardName": "LaunchScreen",
-        "ENABLE_TESTS": .boolean(true),
-    ])
+    resources: ["Resources/**"]
 )
