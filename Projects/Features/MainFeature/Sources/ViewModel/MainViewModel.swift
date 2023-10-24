@@ -31,8 +31,6 @@ public final class MainViewModel {
         let output = Output()
         self.bindOutput(output: output, disposeBag: disposeBag)
         
-        
-      
         return output
     }
     
