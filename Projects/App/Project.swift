@@ -14,7 +14,7 @@ let project = Project.makeModule(
     name: Environment.workspaceName,
     product: .app,
     dependencies: [
-        .Features.Root.Feature,
+        .Features.Main.Feature,
         .data
     ],
     sources: ["Sources/**"],

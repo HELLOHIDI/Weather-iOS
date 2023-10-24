@@ -5,7 +5,7 @@ public extension Project {
     static func makeModule(
         name: String,
         product: Product,
-        organizationName: String = "baegteun",
+        organizationName: String = "hellohidi",
         packages: [Package] = [],
         deploymentTarget: DeploymentTarget? = Environment.deploymentTarget,
         dependencies: [TargetDependency] = [],
