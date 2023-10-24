@@ -24,7 +24,7 @@ final class MainView: UIView {
     private let contentView = UIView()
     private let titleLabel = UILabel()
     private let searchBar = UISearchBar()
-    private let weatherView = MainWeatherView()
+    public let weatherView = MainWeatherView()
     
     // MARK: - UI Components
     

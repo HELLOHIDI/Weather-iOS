@@ -10,13 +10,27 @@ import UIKit
 
 import Core
 import DSKit
+import Domain
 
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
+
+protocol MainViewWeatherListDelegate: AnyObject {
+    func weatherViewDidTap(_ tag: Int)
+}
 
 final class MainWeatherListView: UIView {
     
     // MARK: - Properties
+    
+    weak var delegate: MainViewWeatherListDelegate?
+    
+    private let tapGesture = UITapGestureRecognizer()
+    private let disposeBag = DisposeBag()
+    
+    // MARK: - UI Components
     
     private let weatherImageView = UIImageView()
     private let myPlaceLabel = UILabel()
@@ -26,8 +40,6 @@ final class MainWeatherListView: UIView {
     private let maximumTemparatureLabel = UILabel()
     private let minimumTemparatureLabel = UILabel()
     
-    // MARK: - UI Components
-    
     // MARK: - Life Cycle
     
     override init(frame: CGRect) {
@@ -36,6 +48,12 @@ final class MainWeatherListView: UIView {
         style()
         hieararchy()
         layout()
+        
+        tapGesture.rx.event
+            .bind { [weak self] _ in
+                self?.delegate?.weatherViewDidTap(self!.tag)
+            }
+            .disposed(by: disposeBag)
     }
     
     required init?(coder: NSCoder) {
@@ -45,6 +63,9 @@ final class MainWeatherListView: UIView {
     // MARK: - Custom Method
     
     private func style() {
+        self.do {
+            $0.addGestureRecognizer(tapGesture)
+        }
         weatherImageView.do {
             $0.image = DSKitAsset.listImg.image
         }
@@ -62,25 +83,21 @@ final class MainWeatherListView: UIView {
         }
         
         weatherLabel.do {
-            $0.text = "흐림"
             $0.font = DSKitFontFamily.SFProDisplay.medium.font(size: 16)
             $0.textColor = .white
         }
         
         temparatureLabel.do {
-            $0.text = "21°"
             $0.font = DSKitFontFamily.SFProDisplay.thin.font(size: 52)
             $0.textColor = .white
         }
         
         maximumTemparatureLabel.do {
-            $0.text = "최고: 29°"
             $0.font = DSKitFontFamily.SFProDisplay.medium.font(size: 15)
             $0.textColor = .white
         }
         
         minimumTemparatureLabel.do {
-            $0.text = "최고: 29°"
             $0.font = DSKitFontFamily.SFProDisplay.medium.font(size: 15)
             $0.textColor = .white
         }
@@ -131,6 +148,15 @@ final class MainWeatherListView: UIView {
             $0.top.equalTo(maximumTemparatureLabel)
             $0.leading.equalTo(maximumTemparatureLabel.snp.trailing).offset(6)
         }
+    }
+    
+    func dataBind(_ tag: Int, _ data: WeatherModel) {
+        self.tag = tag
+        placeLabel.text = data.place
+        weatherLabel.text = data.weather
+        temparatureLabel.text = "\(data.temparature)°"
+        maximumTemparatureLabel.text = "\(data.maxTemparature)°"
+        minimumTemparatureLabel.text = "\(data.minTemparature)°"
     }
 }
 

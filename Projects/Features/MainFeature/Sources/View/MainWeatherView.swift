@@ -18,13 +18,6 @@ final class MainWeatherView: UIView {
     // MARK: - UI Components
     
     let stackView = UIStackView()
-    let weatherList1 = MainWeatherListView()
-    let weatherList2 = MainWeatherListView()
-    let weatherList3 = MainWeatherListView()
-    let weatherList4 = MainWeatherListView()
-    let weatherList5 = MainWeatherListView()
-    let weatherList6 = MainWeatherListView()
-    let weatherList7 = MainWeatherListView()
     
     
     // MARK: - Life Cycle
@@ -53,15 +46,7 @@ final class MainWeatherView: UIView {
     
     private func hieararchy() {
         self.addSubview(stackView)
-        stackView.addArrangedSubViews(
-            weatherList1,
-            weatherList2,
-            weatherList3,
-            weatherList4,
-            weatherList5,
-            weatherList6,
-            weatherList7
-        )
+//        stackView.addArrangedSubViews()
     }
     
     private func layout() {

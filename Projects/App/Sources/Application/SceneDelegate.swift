@@ -7,8 +7,8 @@
 
 import UIKit
 
+import Domain
 import MainFeature
-
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
@@ -21,7 +21,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = MainViewController()
+        window.rootViewController = MainViewController(
+            viewModel: MainViewModel(
+                mainUseCase: DefaultMainUseCase()
+            )
+        )
         window.makeKeyAndVisible()
         self.window = window
     }
