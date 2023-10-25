@@ -19,65 +19,65 @@ public extension WeatherHourlyModel {
     static let hourlyWeatherData: [WeatherHourlyModel] = [
         WeatherHourlyModel(
             time: "Now",
-            temparature: "21",
+            temparature: "21°",
             weatherImage: DSKitAsset.cloudy.image
         ),
         WeatherHourlyModel(
-            time: "Now",
-            temparature: "21",
+            time: "10시",
+            temparature: "21°",
             weatherImage: DSKitAsset.cloudy.image
         ),
         WeatherHourlyModel(
-            time: "Now",
+            time: "11시",
+            temparature: "21°",
+            weatherImage: DSKitAsset.cloudy.image
+        ),
+
+        WeatherHourlyModel(
+            time: "12시",
+            temparature: "21°",
+            weatherImage: DSKitAsset.cloudy.image
+        ),
+
+        WeatherHourlyModel(
+            time: "13시",
+            temparature: "21°",
+            weatherImage: DSKitAsset.cloudy.image
+        ),
+
+        WeatherHourlyModel(
+            time: "14시",
             temparature: "21",
             weatherImage: DSKitAsset.cloudy.image
         ),
 
         WeatherHourlyModel(
-            time: "Now",
-            temparature: "21",
+            time: "15시",
+            temparature: "21°",
             weatherImage: DSKitAsset.cloudy.image
         ),
 
         WeatherHourlyModel(
-            time: "Now",
-            temparature: "21",
+            time: "16시",
+            temparature: "21°",
             weatherImage: DSKitAsset.cloudy.image
         ),
 
         WeatherHourlyModel(
-            time: "Now",
-            temparature: "21",
+            time: "17시",
+            temparature: "21°",
             weatherImage: DSKitAsset.cloudy.image
         ),
 
         WeatherHourlyModel(
-            time: "Now",
-            temparature: "21",
+            time: "18시",
+            temparature: "21°",
             weatherImage: DSKitAsset.cloudy.image
         ),
 
         WeatherHourlyModel(
-            time: "Now",
-            temparature: "21",
-            weatherImage: DSKitAsset.cloudy.image
-        ),
-
-        WeatherHourlyModel(
-            time: "Now",
-            temparature: "21",
-            weatherImage: DSKitAsset.cloudy.image
-        ),
-
-        WeatherHourlyModel(
-            time: "Now",
-            temparature: "21",
-            weatherImage: DSKitAsset.cloudy.image
-        ),
-
-        WeatherHourlyModel(
-            time: "Now",
-            temparature: "21",
+            time: "19시",
+            temparature: "21°",
             weatherImage: DSKitAsset.cloudy.image
         )
     ]

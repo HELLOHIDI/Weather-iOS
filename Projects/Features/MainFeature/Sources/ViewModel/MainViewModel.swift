@@ -42,4 +42,9 @@ public final class MainViewModel {
     }
 }
 
+public extension MainViewModel {
+    func getWeatherList() -> [WeatherModel] {
+        return mainUseCase.weatherList.value
+    }
+}
 

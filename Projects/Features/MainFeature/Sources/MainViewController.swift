@@ -81,7 +81,7 @@ extension MainViewController: MainViewWeatherListDelegate {
     func weatherViewDidTap(_ tag: Int) {
         let detailVC = DetailViewController(
             viewModel: DetailViewModel(
-                detailUseCase: DefaultDetailUseCase()
+                detailUseCase: DefaultDetailUseCase.init(viewModel.getWeatherList())
             )
         )
         self.navigationController?.pushViewController(detailVC, animated: true)

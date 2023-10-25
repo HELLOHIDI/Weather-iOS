@@ -18,18 +18,14 @@ final class DetailView: UIView {
     
     // MARK: - Properties
     
-    private let scrollView = UIScrollView()
-    private let contentView = UIView()
-    private let backgroundImageView = UIImageView()
-    private let detailTopView = DetailTopView()
-    let detaiHourlyWeatherView = DetailHourlyWeatherView()
-    
-    // MARK: - UI Components
+    public let detailCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
     
     // MARK: - Life Cycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        register()
         
         style()
         hieararchy()
@@ -40,55 +36,37 @@ final class DetailView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Custom Method
+    private func register() {
+        detailCollectionView.register(
+            DetailWeatherCollectionViewCell.self, forCellWithReuseIdentifier: DetailWeatherCollectionViewCell.cellIdentifier
+        )
+    }
     
     private func style() {
-        backgroundImageView.do {
-            $0.image = DSKitAsset.backgroundImg.image
-        }
-        
-        scrollView.do {
-            $0.alwaysBounceVertical = true
+        detailCollectionView.do {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .horizontal
+            layout.itemSize = CGSize(
+                width: UIScreen.main.bounds.width,
+                height: UIScreen.main.bounds.height
+            )
+            layout.minimumLineSpacing = 0
+            layout.minimumInteritemSpacing = 0
+            
+            $0.collectionViewLayout = layout
+            $0.backgroundColor = .clear
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.isScrollEnabled = true
         }
     }
     
     private func hieararchy() {
-        self.addSubviews(backgroundImageView, scrollView)
-        scrollView.addSubview(contentView)
-        contentView.addSubviews(detailTopView, detaiHourlyWeatherView)
+        self.addSubview(detailCollectionView)
     }
     
     private func layout() {
-        backgroundImageView.snp.makeConstraints {
+        detailCollectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
-        }
-        
-        scrollView.snp.makeConstraints {
-            $0.top.equalTo(safeAreaLayoutGuide)
-            $0.leading.trailing.bottom.equalToSuperview()
-        }
-        
-        contentView.snp.makeConstraints {
-            $0.edges.equalTo(scrollView.contentLayoutGuide)
-            $0.width.equalTo(scrollView.frameLayoutGuide)
-            $0.height.equalTo(scrollView.frameLayoutGuide).priority(.low)
-        }
-        
-        detailTopView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(34)
-            $0.leading.trailing.equalToSuperview().inset(122)
-            $0.height.equalTo(212.adjusted)
-        }
-        
-        detaiHourlyWeatherView.snp.makeConstraints {
-            $0.top.equalTo(detailTopView.snp.bottom).offset(44)
-            $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(212.adjusted)
         }
     }
 }
-
-
-
-
-

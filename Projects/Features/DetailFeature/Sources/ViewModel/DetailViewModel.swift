@@ -24,7 +24,8 @@ public final class DetailViewModel {
     }
     
     struct Output {
-        public var hourlyWeatherList = BehaviorRelay<[WeatherHourlyModel]>(value: WeatherHourlyModel.hourlyWeatherData)
+        public var myPlaceWeatherList = BehaviorRelay<[WeatherModel]>(value: [])
+        public var hourlyWeatherList = BehaviorRelay<[WeatherHourlyModel]>(value: [])
     }
     
     func transform(from input: Input, disposeBag: DisposeBag) -> Output {
@@ -36,8 +37,8 @@ public final class DetailViewModel {
     
     
     private func bindOutput(output: Output, disposeBag: DisposeBag) {
-        detailUseCase.hourlyWeatherList.subscribe(onNext: { weatherList in
-            output.hourlyWeatherList.accept(weatherList)
+        detailUseCase.weatherList.subscribe(onNext: { weatherdata in
+            output.myPlaceWeatherList.accept(weatherdata)
         }).disposed(by: disposeBag)
     }
 }

@@ -10,7 +10,6 @@ import RxSwift
 import RxCocoa
 
 public protocol DetailUseCase {
-    var myPlaceWeatherData: BehaviorRelay<WeatherModel?> { get }
-    var hourlyWeatherList: BehaviorRelay<[WeatherHourlyModel]> { get }
+    var weatherList: BehaviorRelay<[WeatherModel]> { get }
 }
 

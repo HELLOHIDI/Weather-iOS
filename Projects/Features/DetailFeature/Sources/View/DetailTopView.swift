@@ -7,8 +7,10 @@
 //
 
 import UIKit
-import DSKit
+
 import Core
+import DSKit
+import Domain
 
 import SnapKit
 import Then
@@ -47,33 +49,26 @@ final class DetailTopView: UIView {
         stackView.do {
             $0.axis = .vertical
             $0.distribution = .equalSpacing
+            $0.alignment = .center
             $0.spacing = 4
         }
         placeLabel.do {
-            $0.text = "의정부시"
             $0.textColor = .white
-            $0.textAlignment = .center
             $0.font = DSKitFontFamily.SFProDisplay.regular.font(size: 36)
         }
         
         temparatureLabel.do {
-            $0.text = "21"
             $0.textColor = .white
-            $0.textAlignment = .center
             $0.font = DSKitFontFamily.SFProDisplay.thin.font(size: 102)
         }
         
         weatherLabel.do {
-            $0.text = "흐림"
             $0.textColor = .white
-            $0.textAlignment = .center
             $0.font = DSKitFontFamily.SFProDisplay.regular.font(size: 24)
         }
         
         maxmimTemparatureLabel.do {
-            $0.text = "asdfasdf"
             $0.textColor = .white
-            $0.textAlignment = .center
             $0.font = DSKitFontFamily.SFProDisplay.medium.font(size: 20)
         }
     }
@@ -92,6 +87,15 @@ final class DetailTopView: UIView {
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
+}
+
+extension DetailTopView {
+    func updateUI(_ data: WeatherModel) {
+        placeLabel.text = data.place
+        temparatureLabel.text = "\(data.temparature)°"
+        weatherLabel.text = data.weather
+        maxmimTemparatureLabel.text = "최고:\(data.maxTemparature)°   최저:\(data.minTemparature)°"
     }
 }
 

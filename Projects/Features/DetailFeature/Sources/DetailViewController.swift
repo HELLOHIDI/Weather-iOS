@@ -7,6 +7,8 @@
 //
 
 import UIKit
+
+import Core
 import Domain
 
 import SnapKit
@@ -23,6 +25,9 @@ public final class DetailViewController : UIViewController {
     private let disposeBag = DisposeBag()
     
     let rootView = DetailView()
+    
+    var previousOffset: CGFloat = 0
+        var currentPage: Int = 0
     
     //MARK: - UI Components
     
@@ -44,31 +49,75 @@ public final class DetailViewController : UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
+        style()
+        delegate()
+        
         bindUI()
         bindViewModel()
     }
     
-    private func bindUI() {
+    private func style() {
+        self.navigationController?.navigationBar.isHidden = true
     }
+    
+    private func delegate() {
+        rootView.detailCollectionView.delegate = self
+    }
+    
+    private func bindUI() {}
     
     private func bindViewModel() {
         let input = DetailViewModel.Input()
         
         let output = self.viewModel.transform(from: input, disposeBag: disposeBag)
         
-        output.hourlyWeatherList
+        //        output.hourlyWeatherList
+        //            .asDriver(onErrorJustReturn: [])
+        //            .drive(with: self, onNext: { owner, weatherList in
+        //                owner.updateUI(weatherList)
+        //            }).disposed(by: disposeBag)
+        
+        output.myPlaceWeatherList
             .asDriver(onErrorJustReturn: [])
-            .drive(with: self, onNext: { owner, weatherList in
-                owner.updateUI(weatherList)
-            }).disposed(by: disposeBag)
+            .drive(self.rootView.detailCollectionView.rx.items) { collectionView, index, data in
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: DetailWeatherCollectionViewCell.cellIdentifier,
+                    for: IndexPath(item: index, section: 0)) as! DetailWeatherCollectionViewCell
+                cell.dataBind(data)
+                return cell
+            }.disposed(by: disposeBag)
     }
-    
-    private func updateUI(_ weatherList: [WeatherHourlyModel]) {
-        (0..<weatherList.count).enumerated().map { index, _ in
-            let weatherListView = DetailHourlyStackView()
-            weatherListView.dataBind(weatherList[index])
-            return weatherListView
-        }.forEach(rootView.detaiHourlyWeatherView.stackView.addArrangedSubview)
-    }
-    
 }
+
+extension DetailViewController: UICollectionViewDelegate {
+    public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let point = self.targetContentOffset(scrollView, withVelocity: velocity)
+        targetContentOffset.pointee = point
+        
+        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: velocity.x, options: .allowUserInteraction, animations: {
+            self.rootView.detailCollectionView.setContentOffset(point, animated: true)
+        }, completion: nil)
+    }
+    
+    func targetContentOffset(_ scrollView: UIScrollView, withVelocity velocity: CGPoint) -> CGPoint {
+        
+        let flowLayout = rootView.detailCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        
+        if previousOffset > rootView.detailCollectionView.contentOffset.x && velocity.x < 0 {
+            currentPage = currentPage - 1
+        } else if previousOffset < rootView.detailCollectionView.contentOffset.x && velocity.x > 0 {
+            currentPage = currentPage + 1
+        }
+        
+        let additional = (flowLayout.itemSize.width + flowLayout.minimumLineSpacing) - flowLayout.headerReferenceSize.width
+        
+        let updatedOffset = (flowLayout.itemSize.width + flowLayout.minimumLineSpacing) * CGFloat(currentPage) - additional
+        
+        previousOffset = updatedOffset
+        
+    
+        return CGPoint(x: updatedOffset, y: 0)
+    }
+}
+
+
