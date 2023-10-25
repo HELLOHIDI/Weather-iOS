@@ -19,7 +19,7 @@ public final class DetailViewController : UIViewController {
     
     //MARK: - Properties
     
-    //    public let viewModel: MainViewModel
+    public let viewModel: DetailViewModel
     private let disposeBag = DisposeBag()
     
     let rootView = DetailView()
@@ -28,14 +28,14 @@ public final class DetailViewController : UIViewController {
     
     //MARK: - Life Cycle
     
-    //        public init(viewModel: MainViewModel) {
-    //            self.viewModel = viewModel
-    //            super.init(nibName: nil, bundle: nil)
-    //        }
-    //    
-    //        required init?(coder: NSCoder) {
-    //            fatalError("init(coder:) has not been implemented")
-    //        }
+    public init(viewModel: DetailViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     public override func loadView() {
         self.view = rootView
@@ -49,21 +49,26 @@ public final class DetailViewController : UIViewController {
     }
     
     private func bindUI() {
-        //        tapSubject.subscribe(with: self, onNext: { owner, index in
-        //            print("와 \(index)번째 터치 인식 성공이다!")
-        //        }).disposed(by: disposeBag)
     }
     
     private func bindViewModel() {
-        //        let input = MainViewModel.Input()
-        //
-        //        let output = self.viewModel.transform(from: input, disposeBag: disposeBag)
-        //
-        //        output.weatherList
-        //            .asDriver(onErrorJustReturn: [])
-        //            .drive(with: self, onNext: { owner, weatherList in
-        //                owner.updateUI(weatherList)
-        //            }).disposed(by: disposeBag)
+        let input = DetailViewModel.Input()
+        
+        let output = self.viewModel.transform(from: input, disposeBag: disposeBag)
+        
+        output.hourlyWeatherList
+            .asDriver(onErrorJustReturn: [])
+            .drive(with: self, onNext: { owner, weatherList in
+                owner.updateUI(weatherList)
+            }).disposed(by: disposeBag)
+    }
+    
+    private func updateUI(_ weatherList: [WeatherHourlyModel]) {
+        (0..<weatherList.count).enumerated().map { index, _ in
+            let weatherListView = DetailHourlyStackView()
+            weatherListView.dataBind(weatherList[index])
+            return weatherListView
+        }.forEach(rootView.detaiHourlyWeatherView.stackView.addArrangedSubview)
     }
     
 }

@@ -10,9 +10,11 @@ import UIKit
 
 import Core
 import DSKit
+import Domain
 
 import SnapKit
 import Then
+
 
 final class DetailHourlyStackView: UIView {
     
@@ -50,19 +52,14 @@ final class DetailHourlyStackView: UIView {
         }
         
         timeLabel.do {
-            $0.text = "12"
             $0.font = DSKitFontFamily.SFProDisplay.medium.font(size: 17)
             $0.textAlignment = .center
             $0.textColor = .white
         }
         
-        weatherImageView.do {
-            $0.image = DSKitAsset.cloudy.image
-        }
-        
         temparatureLabel.do {
-            $0.text = "21"
             $0.font = DSKitFontFamily.SFProDisplay.medium.font(size: 22)
+            $0.textAlignment = .center
             $0.textColor =  .white
         }
     }
@@ -80,6 +77,12 @@ final class DetailHourlyStackView: UIView {
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
+    
+    func dataBind(_ data: WeatherHourlyModel) {
+        timeLabel.text = data.time
+        weatherImageView.image = data.weatherImage
+        temparatureLabel.text = data.temparature
     }
 }
 

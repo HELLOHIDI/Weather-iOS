@@ -19,7 +19,6 @@ final class MainWeatherView: UIView {
     
     let stackView = UIStackView()
     
-    
     // MARK: - Life Cycle
     
     override init(frame: CGRect) {
@@ -46,7 +45,6 @@ final class MainWeatherView: UIView {
     
     private func hieararchy() {
         self.addSubview(stackView)
-//        stackView.addArrangedSubViews()
     }
     
     private func layout() {

@@ -23,7 +23,7 @@ final class DetailHourlyWeatherView: UIView {
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
-    private let stackView = UIStackView()
+    let stackView = UIStackView()
     
     // MARK: - UI Components
     
@@ -47,7 +47,7 @@ final class DetailHourlyWeatherView: UIView {
         self.do {
             $0.backgroundColor = .clear
             $0.makeCornerRound(radius: 15)
-            $0.setBorder(borderWidth: 0.5, borderColor: .white)
+            $0.setBorder(borderWidth: 0.5, borderColor: .white.withAlphaComponent(0.25))
         }
         
         describeLabel.do {
@@ -58,11 +58,15 @@ final class DetailHourlyWeatherView: UIView {
         }
         
         separator.do {
-            $0.backgroundColor = .systemPink
+            $0.backgroundColor = .white
+        }
+        
+        scrollView.do {
+            $0.isPagingEnabled = true
+            $0.showsHorizontalScrollIndicator = false
         }
         
         stackView.do {
-            $0.backgroundColor = .yellow
             $0.axis = .horizontal
             $0.distribution = .fillEqually
             $0.spacing = 22
@@ -80,10 +84,14 @@ final class DetailHourlyWeatherView: UIView {
             $0.top.equalToSuperview().offset(10)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
+        
         separator.snp.makeConstraints {
             $0.top.equalTo(describeLabel.snp.bottom).offset(11)
-            $0.height.equalTo(50)
+            $0.leading.equalToSuperview().offset(14)
+            $0.trailing.equalToSuperview()
+            $0.height.equalTo(1.adjusted)
         }
+        
         scrollView.snp.makeConstraints {
             $0.top.equalTo(separator.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
@@ -97,7 +105,7 @@ final class DetailHourlyWeatherView: UIView {
         
         stackView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(14)
-            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.leading.trailing.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview().inset(10)
         }
     }

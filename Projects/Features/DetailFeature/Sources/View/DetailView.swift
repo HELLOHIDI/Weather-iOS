@@ -22,7 +22,7 @@ final class DetailView: UIView {
     private let contentView = UIView()
     private let backgroundImageView = UIImageView()
     private let detailTopView = DetailTopView()
-    private let detaiHourlyWeatherView = DetailHourlyWeatherView()
+    let detaiHourlyWeatherView = DetailHourlyWeatherView()
     
     // MARK: - UI Components
     
@@ -53,8 +53,7 @@ final class DetailView: UIView {
     }
     
     private func hieararchy() {
-        self.addSubviews(backgroundImageView)
-        backgroundImageView.addSubview(scrollView)
+        self.addSubviews(backgroundImageView, scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubviews(detailTopView, detaiHourlyWeatherView)
     }
@@ -78,13 +77,13 @@ final class DetailView: UIView {
         detailTopView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(34)
             $0.leading.trailing.equalToSuperview().inset(122)
-            $0.height.equalTo(212)
+            $0.height.equalTo(212.adjusted)
         }
         
         detaiHourlyWeatherView.snp.makeConstraints {
             $0.top.equalTo(detailTopView.snp.bottom).offset(44)
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(212)
+            $0.height.equalTo(212.adjusted)
         }
     }
 }
