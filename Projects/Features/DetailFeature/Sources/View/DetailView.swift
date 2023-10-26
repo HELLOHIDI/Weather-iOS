@@ -19,6 +19,7 @@ final class DetailView: UIView {
     // MARK: - Properties
     
     public let detailCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
+    public let detailBottomView = DetailBottomView()
     
     // MARK: - Life Cycle
     
@@ -48,25 +49,29 @@ final class DetailView: UIView {
             layout.scrollDirection = .horizontal
             layout.itemSize = CGSize(
                 width: UIScreen.main.bounds.width,
-                height: UIScreen.main.bounds.height
+                height: UIScreen.main.bounds.height.adjusted
             )
             layout.minimumLineSpacing = 0
             layout.minimumInteritemSpacing = 0
             
             $0.collectionViewLayout = layout
             $0.backgroundColor = .clear
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.isScrollEnabled = true
         }
     }
     
     private func hieararchy() {
-        self.addSubview(detailCollectionView)
+        self.addSubviews(detailCollectionView, detailBottomView)
     }
     
     private func layout() {
         detailCollectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        
+        detailBottomView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(82.adjusted)
         }
     }
 }

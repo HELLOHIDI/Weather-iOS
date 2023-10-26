@@ -24,12 +24,11 @@ public final class DetailViewController : UIViewController {
     public let viewModel: DetailViewModel
     private let disposeBag = DisposeBag()
     
-    let rootView = DetailView()
-    
-    var previousOffset: CGFloat = 0
-        var currentPage: Int = 0
+    private let scrollEventSubject = PublishSubject<Int>()
     
     //MARK: - UI Components
+    
+    let rootView = DetailView()
     
     //MARK: - Life Cycle
     
@@ -64,26 +63,54 @@ public final class DetailViewController : UIViewController {
         rootView.detailCollectionView.delegate = self
     }
     
-    private func bindUI() {}
+    private func bindUI() {
+        rootView.detailBottomView.listButton
+            .rx.tap
+            .subscribe(with: self, onNext: { owner, _ in
+                owner.navigationController?.popViewController(animated: true)
+            }).disposed(by: disposeBag)
+    }
     
     private func bindViewModel() {
-        let input = DetailViewModel.Input()
+        let input = DetailViewModel.Input(
+            viewWillAppearEvent: self.rx.viewWillAppear.asObservable(),
+            scrollEvent: scrollEventSubject.asObservable()
+        )
         
         let output = self.viewModel.transform(from: input, disposeBag: disposeBag)
-        
-        //        output.hourlyWeatherList
-        //            .asDriver(onErrorJustReturn: [])
-        //            .drive(with: self, onNext: { owner, weatherList in
-        //                owner.updateUI(weatherList)
-        //            }).disposed(by: disposeBag)
         
         output.myPlaceWeatherList
             .asDriver(onErrorJustReturn: [])
             .drive(self.rootView.detailCollectionView.rx.items) { collectionView, index, data in
+                collectionView.setContentOffset(
+                    CGPoint(
+                        x: self.viewModel.getCurrentPage() * UIScreen.main.bounds.width,
+                        y: -59.adjusted
+                    ),
+                    animated: true
+                )
+                
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: DetailWeatherCollectionViewCell.cellIdentifier,
                     for: IndexPath(item: index, section: 0)) as! DetailWeatherCollectionViewCell
                 cell.dataBind(data)
+                return cell
+            }.disposed(by: disposeBag)
+        
+        output.weatherIndicatorList
+            .asDriver(onErrorJustReturn: [])
+            .drive(with: self, onNext: { owner, indicatorList in
+                owner.rootView.detailBottomView.updateLayout(indicatorList.count)
+            }).disposed(by: disposeBag)
+        
+        output.weatherIndicatorList
+            .asDriver(onErrorJustReturn: [])
+            .drive(self.rootView.detailBottomView.indicatorCollectionView.rx.items) { collectionView, index, data in
+                print(data)
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: DetailIndicatorCollectionViewCell.cellIdentifier,
+                    for: IndexPath(item: index, section: 0)) as! DetailIndicatorCollectionViewCell
+                cell.updateUI(index, data)
                 return cell
             }.disposed(by: disposeBag)
     }
@@ -91,33 +118,34 @@ public final class DetailViewController : UIViewController {
 
 extension DetailViewController: UICollectionViewDelegate {
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let point = self.targetContentOffset(scrollView, withVelocity: velocity)
-        targetContentOffset.pointee = point
+        let layout = self.rootView.detailCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
         
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: velocity.x, options: .allowUserInteraction, animations: {
-            self.rootView.detailCollectionView.setContentOffset(point, animated: true)
-        }, completion: nil)
-    }
-    
-    func targetContentOffset(_ scrollView: UIScrollView, withVelocity velocity: CGPoint) -> CGPoint {
+        var offset = targetContentOffset.pointee
+        let index = (offset.x + scrollView.contentInset.left) / layout.itemSize.width
+        var roundedIndex = round(index)
         
-        let flowLayout = rootView.detailCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        
-        if previousOffset > rootView.detailCollectionView.contentOffset.x && velocity.x < 0 {
-            currentPage = currentPage - 1
-        } else if previousOffset < rootView.detailCollectionView.contentOffset.x && velocity.x > 0 {
-            currentPage = currentPage + 1
+        if scrollView.contentOffset.x > targetContentOffset.pointee.x {
+            roundedIndex = floor(index)
+        } else if scrollView.contentOffset.x < targetContentOffset.pointee.x {
+            roundedIndex = ceil(index)
+        } else {
+            roundedIndex = round(index)
         }
         
-        let additional = (flowLayout.itemSize.width + flowLayout.minimumLineSpacing) - flowLayout.headerReferenceSize.width
+        var currentPage = self.viewModel.getCurrentPage()
+        if currentPage > roundedIndex {
+            currentPage -= 1
+            roundedIndex = currentPage
+        } else if currentPage < roundedIndex {
+            currentPage += 1
+            roundedIndex = currentPage
+        }
         
-        let updatedOffset = (flowLayout.itemSize.width + flowLayout.minimumLineSpacing) * CGFloat(currentPage) - additional
-        
-        previousOffset = updatedOffset
-        
-    
-        return CGPoint(x: updatedOffset, y: 0)
+        offset = CGPoint(
+            x: roundedIndex * layout.itemSize.width - scrollView.contentInset.left,
+            y: 0
+        )
+        targetContentOffset.pointee = offset
+        scrollEventSubject.onNext(Int(currentPage))
     }
 }
-
-

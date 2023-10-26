@@ -81,12 +81,12 @@ final class DetailHourlyWeatherView: UIView {
     
     private func layout() {
         describeLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
+            $0.top.equalToSuperview().offset(10.adjusted)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
         
         separator.snp.makeConstraints {
-            $0.top.equalTo(describeLabel.snp.bottom).offset(11)
+            $0.top.equalTo(describeLabel.snp.bottom).offset(11.adjusted)
             $0.leading.equalToSuperview().offset(14)
             $0.trailing.equalToSuperview()
             $0.height.equalTo(1.adjusted)
@@ -104,9 +104,9 @@ final class DetailHourlyWeatherView: UIView {
         }
         
         stackView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(14)
+            $0.top.equalToSuperview().offset(14.adjusted)
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.bottom.equalToSuperview().inset(10)
+            $0.bottom.equalToSuperview().inset(10.adjusted)
         }
     }
 }

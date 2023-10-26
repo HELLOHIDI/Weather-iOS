@@ -53,7 +53,10 @@ final class DetailWeatherCollectionViewCell: UICollectionViewCell {
     private func hieararchy() {
         contentView.addSubviews(backgroundImageView, scrollView)
         scrollView.addSubview(cellContentView)
-        cellContentView.addSubviews(detailTopView, detaiHourlyWeatherView)
+        cellContentView.addSubviews(
+            detailTopView,
+            detaiHourlyWeatherView
+        )
     }
     
     private func layout() {
@@ -73,7 +76,7 @@ final class DetailWeatherCollectionViewCell: UICollectionViewCell {
         }
         
         detailTopView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(78)
+            $0.top.equalToSuperview().offset(78.adjusted)
             $0.leading.trailing.equalToSuperview().inset(111)
             $0.height.equalTo(212.adjusted)
         }
@@ -89,10 +92,10 @@ final class DetailWeatherCollectionViewCell: UICollectionViewCell {
 extension DetailWeatherCollectionViewCell {
     public func dataBind(_ data: WeatherModel) {
         detailTopView.updateUI(data)
-        updateUI(data.hourlyWeatherData)
+        updateHourlyWeatherUI(data.hourlyWeatherData)
     }
     
-    private func updateUI(_ weatherList: [WeatherHourlyModel]) {
+    private func updateHourlyWeatherUI(_ weatherList: [WeatherHourlyModel]) {
         (0..<weatherList.count).enumerated().map { index, _ in
             let weatherListView = DetailHourlyStackView()
             weatherListView.dataBind(weatherList[index])
