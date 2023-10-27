@@ -41,9 +41,6 @@ public final class MainViewModel {
     private func bindOutput(output: Output, disposeBag: DisposeBag) {
         mainUseCase.weatherList.subscribe(onNext: { weatherList in
             output.weatherList.accept(weatherList)
-            for weather in output.weatherList.value {
-                print("\(weather.place)가 viewModel에 추가됨요")
-            }
         }).disposed(by: disposeBag)
     }
 }

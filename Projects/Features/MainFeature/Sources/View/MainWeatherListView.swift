@@ -77,7 +77,6 @@ final class MainWeatherListView: UIView {
         }
         
         placeLabel.do {
-            $0.text = "의정부시"
             $0.font = DSKitFontFamily.SFProDisplay.medium.font(size: 17)
             $0.textColor = .white
         }
@@ -94,11 +93,13 @@ final class MainWeatherListView: UIView {
         
         maximumTemparatureLabel.do {
             $0.font = DSKitFontFamily.SFProDisplay.medium.font(size: 15)
+            $0.setKerning(withKerning: 0.75)
             $0.textColor = .white
         }
         
         minimumTemparatureLabel.do {
             $0.font = DSKitFontFamily.SFProDisplay.medium.font(size: 15)
+            $0.setKerning(withKerning: 0.75)
             $0.textColor = .white
         }
     }
@@ -139,14 +140,15 @@ final class MainWeatherListView: UIView {
             $0.top.equalToSuperview().offset(5)
             $0.trailing.equalToSuperview().inset(22)
         }
+        
         maximumTemparatureLabel.snp.makeConstraints {
             $0.top.equalTo(weatherLabel)
-            $0.leading.equalToSuperview().offset(150)
+            $0.trailing.equalToSuperview().inset(83)
         }
         
         minimumTemparatureLabel.snp.makeConstraints {
             $0.top.equalTo(maximumTemparatureLabel)
-            $0.leading.equalTo(maximumTemparatureLabel.snp.trailing).offset(6)
+            $0.trailing.equalToSuperview().inset(20)
         }
     }
     
@@ -155,8 +157,8 @@ final class MainWeatherListView: UIView {
         placeLabel.text = data.place
         weatherLabel.text = data.weather
         temparatureLabel.text = "\(data.temparature)°"
-        maximumTemparatureLabel.text = "\(data.maxTemparature)°"
-        minimumTemparatureLabel.text = "\(data.minTemparature)°"
+        maximumTemparatureLabel.text = "최고:\(data.maxTemparature)°"
+        minimumTemparatureLabel.text = "최저:\(data.minTemparature)°"
     }
 }
 

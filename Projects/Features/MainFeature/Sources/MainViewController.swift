@@ -32,7 +32,7 @@ public final class MainViewController : UIViewController {
     //MARK: - UI Components
     
     private lazy var seeMoreButton = UIBarButtonItem()
-    private lazy var weatherSearchController: UISearchController = { createWeatherSearchBar() }()
+    private lazy var weatherSearchController =  UISearchController(searchResultsController: nil)
     
     //MARK: - Life Cycle
     
@@ -53,8 +53,8 @@ public final class MainViewController : UIViewController {
         super.viewDidLoad()
         
         style()
+        delegate()
         
-        bindUI()
         bindViewModel()
     }
     
@@ -87,10 +87,23 @@ public final class MainViewController : UIViewController {
             $0.tintColor = .white
         }
         
+        weatherSearchController.searchBar.do {
+            $0.searchTextField.setPlaceholderColor(
+                text: "도시 또는 공항 검색",
+                color: .lightGray
+            )
+            $0.barTintColor = .black
+            $0.tintColor = .white
+            $0.searchTextField.backgroundColor = .darkGray
+            $0.setValue("취소", forKey: "cancelButtonText")
+            $0.setImage(DSKitAsset.search.image, for: .search, state: .normal)
+        }
+        
         weatherSearchController.searchBar.searchTextField.textColor = .white
     }
     
-    private func bindUI() {
+    private func delegate() {
+        weatherSearchController.searchResultsUpdater = self
     }
     
     private func bindViewModel() {
@@ -121,22 +134,6 @@ public final class MainViewController : UIViewController {
             weatherListView.dataBind(index, weatherList[index])
             return weatherListView
         }.forEach(rootView.weatherView.stackView.addArrangedSubview)
-    }
-    
-    func createWeatherSearchBar() -> UISearchController {
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchBar
-            .searchTextField
-            .setPlaceholderColor(color: .darkGray)
-        
-        searchController.searchBar.barTintColor = .black                                // contentsView Color
-        searchController.searchBar.tintColor = .white                                   // cancleButton Color
-        searchController.searchBar.searchTextField.backgroundColor = .darkGray
-        searchController.searchBar.setValue("취소", forKey: "cancelButtonText")
-        searchController.searchBar.setImage(DSKitAsset.search.image, for: .search, state: .normal)
-        searchController.searchResultsUpdater = self
-        
-        return searchController
     }
 }
 
