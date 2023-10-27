@@ -11,4 +11,6 @@ import RxCocoa
 
 public protocol MainUseCase {
     var weatherList: BehaviorRelay<[WeatherModel]> { get }
+    
+    func updateSearchResult(_ text: String)
 }

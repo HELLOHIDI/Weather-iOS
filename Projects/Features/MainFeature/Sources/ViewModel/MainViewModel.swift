@@ -20,7 +20,7 @@ public final class MainViewModel {
     }
     
     struct Input {
-        
+        let searchBarDidChangeEvent: Observable<String>
     }
     
     struct Output {
@@ -31,6 +31,9 @@ public final class MainViewModel {
         let output = Output()
         self.bindOutput(output: output, disposeBag: disposeBag)
         
+        input.searchBarDidChangeEvent.subscribe(with: self, onNext: { owner, text in
+            owner.mainUseCase.updateSearchResult(text)
+        }).disposed(by: disposeBag)
         return output
     }
     
@@ -38,6 +41,9 @@ public final class MainViewModel {
     private func bindOutput(output: Output, disposeBag: DisposeBag) {
         mainUseCase.weatherList.subscribe(onNext: { weatherList in
             output.weatherList.accept(weatherList)
+            for weather in output.weatherList.value {
+                print("\(weather.place)가 viewModel에 추가됨요")
+            }
         }).disposed(by: disposeBag)
     }
 }
