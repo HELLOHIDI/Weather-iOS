@@ -128,10 +128,10 @@ public final class MainViewController : UIViewController {
             subview.removeFromSuperview()
         }
         
-        (0..<weatherList.count).enumerated().map { index, _ in
+        (0..<weatherList.count).enumerated().map { index , _ in
             let weatherListView = MainWeatherListView()
             weatherListView.delegate = self
-            weatherListView.dataBind(index, weatherList[index])
+            weatherListView.dataBind(weatherList[index])
             return weatherListView
         }.forEach(rootView.weatherView.stackView.addArrangedSubview)
     }
@@ -143,7 +143,7 @@ extension MainViewController: MainViewWeatherListDelegate {
             viewModel: DetailViewModel(
                 detailUseCase: DefaultDetailUseCase.init(
                     tag,
-                    viewModel.getWeatherList()
+                    WeatherModel.weatherData
                 )
             )
         )

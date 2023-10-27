@@ -152,8 +152,8 @@ final class MainWeatherListView: UIView {
         }
     }
     
-    func dataBind(_ tag: Int, _ data: WeatherModel) {
-        self.tag = tag
+    func dataBind(_ data: WeatherModel) {
+        self.tag = data.tag
         placeLabel.text = data.place
         weatherLabel.text = data.weather
         temparatureLabel.text = "\(data.temparature)°"

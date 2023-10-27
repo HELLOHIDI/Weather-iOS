@@ -7,6 +7,7 @@
 //
 
 public struct WeatherModel {
+    public let tag: Int
     public let place, weather: String
     public let temparature, maxTemparature, minTemparature: Int
     public let hourlyWeatherData: [WeatherHourlyModel]
@@ -15,6 +16,7 @@ public struct WeatherModel {
 public extension WeatherModel {
     static let weatherData: [WeatherModel] = [
         WeatherModel(
+            tag: 0,
             place: "의정부시",
             weather: "흐림",
             temparature: 21,
@@ -23,6 +25,7 @@ public extension WeatherModel {
             hourlyWeatherData: WeatherHourlyModel.hourlyWeatherData
         ),
         WeatherModel(
+            tag: 1,
             place: "석계역",
             weather: "밝음",
             temparature: 23,
@@ -31,6 +34,7 @@ public extension WeatherModel {
             hourlyWeatherData: WeatherHourlyModel.hourlyWeatherData
         ),
         WeatherModel(
+            tag: 2,
             place: "제주도",
             weather: "눈",
             temparature: 21,
