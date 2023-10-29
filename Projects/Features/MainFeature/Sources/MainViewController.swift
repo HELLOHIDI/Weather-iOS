@@ -139,7 +139,7 @@ public final class MainViewController : UIViewController {
 
 extension MainViewController: MainViewWeatherListDelegate {
     func weatherViewDidTap(_ tag: Int) {
-        let detailVC = DetailViewController(
+        let detailVC = DetailPageViewController(
             viewModel: DetailViewModel(
                 detailUseCase: DefaultDetailUseCase.init(
                     tag,
