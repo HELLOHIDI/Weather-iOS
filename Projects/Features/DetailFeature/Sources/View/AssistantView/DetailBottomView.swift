@@ -19,8 +19,8 @@ final class DetailBottomView: UIView {
     // MARK: - Properties
     
     let mapButton = UIButton()
-    let indicatorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
     let listButton = UIButton()
+    let pageControl = UIPageControl()
     
     // MARK: - UI Components
     
@@ -28,8 +28,6 @@ final class DetailBottomView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        register()
         
         style()
         hieararchy()
@@ -41,10 +39,6 @@ final class DetailBottomView: UIView {
     }
     
     // MARK: - Custom Method
-    
-    private func register() {
-        indicatorCollectionView.register(DetailIndicatorCollectionViewCell.self, forCellWithReuseIdentifier: DetailIndicatorCollectionViewCell.cellIdentifier)
-    }
     
     private func style() {
         self.do {
@@ -59,19 +53,9 @@ final class DetailBottomView: UIView {
             $0.setImage(DSKitAsset.map.image, for: .normal)
         }
         
-        indicatorCollectionView.do {
-            let layout = UICollectionViewFlowLayout()
-            layout.scrollDirection = .horizontal
-            layout.itemSize = CGSize(
-                width: 24.adjusted,
-                height: 24.adjusted
-            )
-            layout.minimumLineSpacing = 4
-            layout.minimumInteritemSpacing = 0
-            
-            $0.collectionViewLayout = layout
-            $0.backgroundColor = .clear
-            $0.isScrollEnabled = false
+        pageControl.do {
+            $0.currentPageIndicatorTintColor = .white
+            $0.pageIndicatorTintColor = .white.withAlphaComponent(0.5)
         }
         
         listButton.do {
@@ -80,7 +64,7 @@ final class DetailBottomView: UIView {
     }
     
     private func hieararchy() {
-        self.addSubviews(mapButton, listButton, indicatorCollectionView)
+        self.addSubviews(mapButton, pageControl, listButton)
     }
     
     private func layout() {
@@ -95,16 +79,11 @@ final class DetailBottomView: UIView {
             $0.trailing.equalToSuperview().inset(10)
             $0.size.equalTo(44.adjusted)
         }
-    }
-}
-
-extension DetailBottomView {
-    public func updateLayout(_ indicatorCnt: Int) {
-        indicatorCollectionView.snp.remakeConstraints {
-            let width = indicatorCnt * Int(24.adjusted) + (indicatorCnt - 1) * 4
+        
+        pageControl.snp.remakeConstraints {
             $0.top.equalToSuperview().offset(14)
+            $0.width.equalTo(200)
             $0.centerX.equalToSuperview()
-            $0.width.equalTo(width)
             $0.height.equalTo(24.adjusted)
         }
     }

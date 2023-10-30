@@ -20,14 +20,7 @@ public final class DefaultDetailUseCase: DetailUseCase {
         self.weatherList.accept(weatherList)
     }
     
-    public func updateIndicatorView(_ updatePage: Int? = nil) {
-//        if let updatePage {
-//            self.currentPage.accept(updatePage)
-//        }
-//        let updateIndicatorList: [WeatherIndicatorModel] = (0..<weatherList.value.count).map { index in
-//            let isSelected = index == currentPage.value
-//            return WeatherIndicatorModel(isSelected: isSelected)
-//        }
-////        weatherIndicatorList.accept(updateIndicatorList)
+    public func updateCurrentPage(_ page: Int) {
+        currentPage.accept(page)
     }
 }

@@ -23,28 +23,20 @@ public final class DetailViewController : UIViewController {
     //MARK: - Properties
     
     private var _weatherModelPrimaryKey: Int?
-        private var _weatherData: WeatherModel?
-        
-        var weatherModelPrimaryKey: Int? {
-            get {
-                return _weatherModelPrimaryKey
-            }
-            set {
-                _weatherModelPrimaryKey = newValue
-                dump(_weatherModelPrimaryKey)
-            }
+    private var _weatherData: WeatherModel?
+    
+    var weatherModelPrimaryKey: Int? {
+        get { return _weatherModelPrimaryKey }
+        set { _weatherModelPrimaryKey = newValue }
+    }
+    
+    var weatherData: WeatherModel? {
+        get { return _weatherData }
+        set {
+            _weatherData = newValue
+            rootView.dataBind(_weatherData)
         }
-        
-        var weatherData: WeatherModel? {
-            get {
-                return _weatherData
-            }
-            set {
-                _weatherData = newValue
-                dump(_weatherData)
-                rootView.dataBind(_weatherData)
-            }
-        }
+    }
     
     //MARK: - UI Components
     
@@ -56,9 +48,6 @@ public final class DetailViewController : UIViewController {
         super.init(nibName: nil, bundle: nil)
         self.weatherData = weatherData
         self.weatherModelPrimaryKey = forPK
-
-        print("\(forPK)번째 도시는 \(weatherData.place)")
-        
     }
     
     required init?(coder: NSCoder) {

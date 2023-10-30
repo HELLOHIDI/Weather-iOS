@@ -25,14 +25,14 @@ public final class DetailPageViewController: UIViewController {
     public let viewModel: DetailViewModel
     private let disposeBag = DisposeBag()
     
+    private let pagingSubject = PublishSubject<Int>()
+    
     private var viewControllerList: [UIViewController] = [UIViewController]()
     
     //MARK: - UI Components
     
-    private lazy var pageControl: UIPageControl = { createPageControl() }()
     private var pageViewController: UIPageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
-    private lazy var pageControlBarItem: UIBarButtonItem = UIBarButtonItem(customView: pageControl)
-    //    private let detailBottomView = DetailBottomView()
+    private let detailBottomView = DetailBottomView()
     
     
     public init(viewModel: DetailViewModel) {
@@ -57,27 +57,17 @@ public final class DetailPageViewController: UIViewController {
         layout()
     }
     
-    
-    func createPageControl() -> UIPageControl {
-        let pageControl = UIPageControl()
-        pageControl.numberOfPages = 3
-        pageControl.currentPageIndicatorTintColor = .white
-        pageControl.pageIndicatorTintColor = .white.withAlphaComponent(0.5)
-        pageControl.setIndicatorImage(DSKitAsset.dot.image, forPage: 0)
-        return pageControl
-    }
-    
     private func bindUI() {
-        //        detailBottomView.listButton
-        //            .rx.tap
-        //            .subscribe(with: self, onNext: { owner, _ in
-        //                owner.navigationController?.popViewController(animated: true)
-        //            }).disposed(by: disposeBag)
+        detailBottomView.listButton
+            .rx.tap
+            .subscribe(with: self, onNext: { owner, _ in
+                owner.navigationController?.popViewController(animated: true)
+            }).disposed(by: disposeBag)
     }
     
     private func bindViewModel() {
         let input = DetailViewModel.Input(
-            viewWillAppearEvent: self.rx.viewWillAppear.asObservable()
+            pagingEvent: pagingSubject.asObservable()
         )
         
         let output = self.viewModel.transform(from: input, disposeBag: disposeBag)
@@ -85,22 +75,15 @@ public final class DetailPageViewController: UIViewController {
         output.myPlaceWeatherList
             .asDriver(onErrorJustReturn: [])
             .drive(with: self, onNext: { owner, weatherList in
-                for page in 0..<weatherList.count {
-                    owner.viewControllerList.append(
-                        DetailViewController(
-                            forPK: page,
-                            weatherData: weatherList[page]
-                        )
-                    )
-                }
-                owner.pageViewController.setViewControllers(
-                    [owner.viewControllerList[owner.viewModel.getCurrentPage()]],
-                    direction: .forward,
-                    animated: true,
-                    completion: nil
-                )
+                owner.updatePageViewController(weatherList)
+                owner.updatePageControl(weatherList.count)
             }).disposed(by: disposeBag)
         
+        output.currentPage
+            .asDriver(onErrorJustReturn: Int())
+            .drive(with: self, onNext: { owner, currnetPage in
+                owner.detailBottomView.pageControl.currentPage = currnetPage
+            }).disposed(by: disposeBag)
     }
     
     private func delegate() {
@@ -113,12 +96,21 @@ public final class DetailPageViewController: UIViewController {
     }
     
     private func hierarchy() {
-        self.view.addSubview(pageViewController.view)
+        self.view.addSubviews(
+            pageViewController.view,
+            detailBottomView
+        )
     }
     
     private func layout() {
         pageViewController.view.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+        
+        detailBottomView.snp.makeConstraints {
+            $0.bottom.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(82.adjusted)
         }
     }
 }
@@ -128,7 +120,7 @@ extension DetailPageViewController: UIPageViewControllerDelegate {
         guard completed else { return }
         
         if let viewConroller = pageViewController.viewControllers?.first {
-            pageControl.currentPage = viewControllerList.firstIndex(of: viewConroller) ?? 0
+            pagingSubject.onNext(viewControllerList.firstIndex(of: viewConroller) ?? 0)
         }
     }
 }
@@ -146,5 +138,29 @@ extension DetailPageViewController: UIPageViewControllerDataSource {
         if let index = viewControllerList.firstIndex(of: viewController), index < viewControllerList.count - 1 {
             return viewControllerList[index + 1]
         } else { return nil }
+    }
+}
+
+extension DetailPageViewController {
+    func updatePageViewController(_ weatherList: [WeatherModel]) {
+        for page in 0..<weatherList.count {
+            self.viewControllerList.append(
+                DetailViewController(
+                    forPK: page,
+                    weatherData: weatherList[page]
+                )
+            )
+        }
+        self.pageViewController.setViewControllers(
+            [self.viewControllerList[self.viewModel.getCurrentPage()]],
+            direction: .forward,
+            animated: true,
+            completion: nil
+        )
+    }
+    
+    func updatePageControl(_ cnt: Int) {
+        self.detailBottomView.pageControl.numberOfPages = cnt
+        self.detailBottomView.pageControl.setIndicatorImage(DSKitAsset.navigator.image, forPage: 0)
     }
 }

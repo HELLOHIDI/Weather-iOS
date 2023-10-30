@@ -14,5 +14,7 @@ import RxCocoa
 public protocol DetailUseCase {
     var weatherList: BehaviorRelay<[WeatherModel]> { get }
     var currentPage: BehaviorRelay<Int> { get }
+    
+    func updateCurrentPage(_ page: Int)
 }
 

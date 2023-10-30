@@ -22,7 +22,7 @@ public final class DetailViewModel {
     }
     
     struct Input {
-        let viewWillAppearEvent: Observable<Void>
+        let pagingEvent: Observable<Int>
     }
     
     struct Output {
@@ -34,8 +34,8 @@ public final class DetailViewModel {
         let output = Output()
         self.bindOutput(output: output, disposeBag: disposeBag)
         
-        input.viewWillAppearEvent.subscribe(with: self, onNext: { owner, _ in
-            
+        input.pagingEvent.subscribe(with: self, onNext: { owner, page in
+            owner.detailUseCase.updateCurrentPage(page)
         }).disposed(by: disposeBag)
         
         
