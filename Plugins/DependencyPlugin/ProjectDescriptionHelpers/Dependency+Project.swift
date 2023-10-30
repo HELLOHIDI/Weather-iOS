@@ -41,13 +41,10 @@ public extension Dep.Modules {
 
 public extension Dep.Features {
     static func project(name: String, group: String) -> Dep { .project(target: "\(group)\(name)", path: .relativeToFeature("\(group)\(name)")) }
-}
-
-public extension Dep.Features.Root {
-    static let group = "Root"
     
-    static let Feature = Dep.Features.project(name: "Feature", group: group)
-    static let Interface = Dep.Features.project(name: "\(group)FeatureInterface", group: group)
+    static let BaseFeatureDependency = TargetDependency.project(target: "BaseFeatureDependency", path: .relativeToFeature("BaseFeatureDependency"))
+    
+    static let RootFeature = TargetDependency.project(target: "RootFeature", path: .relativeToFeature("RootFeature"))
 }
 
 public extension Dep.Features.Main {

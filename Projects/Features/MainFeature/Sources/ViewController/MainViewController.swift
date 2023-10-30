@@ -18,9 +18,15 @@ import RxSwift
 import RxGesture
 import RxCocoa
 
+protocol MainViewControllerDelegate: AnyObject {
+    func pushToDetailVC(_ tag: Int)
+}
+
 public final class MainViewController : UIViewController {
     
     //MARK: - Properties
+    
+    weak var mainDelegate: MainViewControllerDelegate?
     
     public let viewModel: MainViewModel
     private let disposeBag = DisposeBag()
@@ -53,7 +59,7 @@ public final class MainViewController : UIViewController {
         super.viewDidLoad()
         
         style()
-        delegate()
+        setDelegate()
         
         bindViewModel()
     }
@@ -102,7 +108,7 @@ public final class MainViewController : UIViewController {
         weatherSearchController.searchBar.searchTextField.textColor = .white
     }
     
-    private func delegate() {
+    private func setDelegate() {
         weatherSearchController.searchResultsUpdater = self
     }
     
@@ -139,15 +145,7 @@ public final class MainViewController : UIViewController {
 
 extension MainViewController: MainViewWeatherListDelegate {
     func weatherViewDidTap(_ tag: Int) {
-        let detailVC = DetailPageViewController(
-            viewModel: DetailViewModel(
-                detailUseCase: DefaultDetailUseCase.init(
-                    tag,
-                    WeatherModel.weatherData
-                )
-            )
-        )
-        self.navigationController?.pushViewController(detailVC, animated: true)
+        self.mainDelegate?.pushToDetailVC(tag)
     }
 }
 

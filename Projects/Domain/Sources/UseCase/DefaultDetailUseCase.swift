@@ -12,12 +12,11 @@ import RxSwift
 import RxCocoa
 
 public final class DefaultDetailUseCase: DetailUseCase {    
-    public var weatherList = BehaviorRelay<[WeatherModel]>(value: [])
+    public var weatherList = BehaviorRelay<[WeatherModel]>(value: WeatherModel.weatherData)
     public var currentPage = BehaviorRelay<Int>(value: Int())
     
-    public init(_ currentPage: Int, _ weatherList: [WeatherModel]) {
+    public init(_ currentPage: Int) {
         self.currentPage.accept(currentPage)
-        self.weatherList.accept(weatherList)
     }
     
     public func updateCurrentPage(_ page: Int) {

@@ -13,8 +13,7 @@ let project = Project.makeModule(
     name: "DetailFeature",
     product: .staticFramework,
     dependencies: [
-        .Modules.dsKit,
-        .domain
+        .Features.BaseFeatureDependency
     ],
     sources: ["Sources/**"]
 )

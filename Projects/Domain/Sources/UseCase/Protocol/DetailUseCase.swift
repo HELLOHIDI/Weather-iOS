@@ -16,5 +16,7 @@ public protocol DetailUseCase {
     var currentPage: BehaviorRelay<Int> { get }
     
     func updateCurrentPage(_ page: Int)
+    
+    init(_ currentPage: Int)
 }
 

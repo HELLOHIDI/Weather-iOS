@@ -49,11 +49,7 @@ final class MainWeatherListView: UIView {
         hieararchy()
         layout()
         
-        tapGesture.rx.event
-            .bind { [weak self] _ in
-                self?.delegate?.weatherViewDidTap(self!.tag)
-            }
-            .disposed(by: disposeBag)
+        bindUI()
     }
     
     required init?(coder: NSCoder) {
@@ -150,6 +146,13 @@ final class MainWeatherListView: UIView {
             $0.top.equalTo(maximumTemparatureLabel)
             $0.trailing.equalToSuperview().inset(20)
         }
+    }
+    
+    private func bindUI() {
+        tapGesture.rx.event
+            .bind { [weak self] _ in
+                self?.delegate?.weatherViewDidTap(self!.tag)
+            }.disposed(by: disposeBag)
     }
     
     func dataBind(_ data: WeatherModel) {
