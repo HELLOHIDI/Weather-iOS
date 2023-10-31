@@ -16,7 +16,7 @@ import SnapKit
 import Then
 
 
-final class DetailHourlyStackView: UIView {
+final class DetailHourlyCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     

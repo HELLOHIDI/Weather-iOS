@@ -22,21 +22,8 @@ public final class DetailViewController : UIViewController {
     
     //MARK: - Properties
     
-    private var _weatherModelPrimaryKey: Int?
-    private var _weatherData: WeatherModel?
-    
-    var weatherModelPrimaryKey: Int? {
-        get { return _weatherModelPrimaryKey }
-        set { _weatherModelPrimaryKey = newValue }
-    }
-    
-    var weatherData: WeatherModel? {
-        get { return _weatherData }
-        set {
-            _weatherData = newValue
-            rootView.dataBind(_weatherData)
-        }
-    }
+    private var weatherModelPrimaryKey: Int?
+    private var weatherData: WeatherModel
     
     //MARK: - UI Components
     
@@ -45,9 +32,9 @@ public final class DetailViewController : UIViewController {
     //MARK: - Life Cycle
     
     init(forPK: Int, weatherData: WeatherModel) {
-        super.init(nibName: nil, bundle: nil)
         self.weatherData = weatherData
         self.weatherModelPrimaryKey = forPK
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -60,5 +47,29 @@ public final class DetailViewController : UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        
+        updateUI()
+        delegate()
+    }
+    
+    private func updateUI() {
+        rootView.detaiHourlyWeatherView.hourlyCollectionView.reloadData()
+        rootView.detailTopView.updateUI(weatherData)
+    }
+    
+    private func delegate() {
+        rootView.detaiHourlyWeatherView.hourlyCollectionView.dataSource = self
+    }
+}
+
+extension DetailViewController: UICollectionViewDataSource {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return weatherData.hourlyWeatherData.count
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailHourlyCollectionViewCell.cellIdentifier, for: indexPath) as! DetailHourlyCollectionViewCell
+        cell.dataBind(weatherData.hourlyWeatherData[indexPath.item])
+        return cell
     }
 }

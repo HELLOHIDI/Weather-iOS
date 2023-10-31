@@ -16,14 +16,12 @@ public class AppCoordinator: Coordinator {
     public var childCoordinators: [Coordinator] = []
     public var navigationController: UINavigationController
     
-    var isMain = true
-    
     public init(navigationController: UINavigationController!) {
         self.navigationController = navigationController
     }
     
     public func start() {
-        if isMain { showMainViewController() }
+        showMainViewController()
     }
     
     private func showMainViewController() {

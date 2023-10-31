@@ -6,6 +6,9 @@
 //  Copyright © 2023 hellohidi. All rights reserved.
 //
 
+import RxSwift
+import RxCocoa
+
 public struct WeatherModel {
     public let tag: Int
     public let place, weather: String

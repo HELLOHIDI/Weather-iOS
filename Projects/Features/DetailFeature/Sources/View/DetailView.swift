@@ -17,10 +17,10 @@ import Then
 
 final class DetailView: UIView {
     private let scrollView = UIScrollView()
-    private let cellContentView = UIView()
+    private let contentView = UIView()
     private let backgroundImageView = UIImageView()
-    private let detailTopView = DetailTopView()
-    private let detaiHourlyWeatherView = DetailHourlyWeatherView()
+    let detailTopView = DetailTopView()
+    let detaiHourlyWeatherView = DetailHourlyWeatherView()
     
     // MARK: - UI Components
     
@@ -52,8 +52,8 @@ final class DetailView: UIView {
     
     private func hieararchy() {
         self.addSubviews(backgroundImageView, scrollView)
-        scrollView.addSubview(cellContentView)
-        cellContentView.addSubviews(
+        scrollView.addSubview(contentView)
+        contentView.addSubviews(
             detailTopView,
             detaiHourlyWeatherView
         )
@@ -69,7 +69,7 @@ final class DetailView: UIView {
             $0.leading.trailing.bottom.equalToSuperview()
         }
         
-        cellContentView.snp.makeConstraints {
+        contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
             $0.width.equalTo(scrollView.frameLayoutGuide)
             $0.height.equalTo(scrollView.frameLayoutGuide).priority(.low)
@@ -86,21 +86,5 @@ final class DetailView: UIView {
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(212.adjusted)
         }
-    }
-}
-
-extension DetailView {
-    public func dataBind(_ data: WeatherModel?) {
-        guard let data else { return }
-        detailTopView.updateUI(data)
-        updateHourlyWeatherUI(data.hourlyWeatherData)
-    }
-    
-    private func updateHourlyWeatherUI(_ weatherList: [WeatherHourlyModel]) {
-        (0..<weatherList.count).enumerated().map { index, _ in
-            let weatherListView = DetailHourlyStackView()
-            weatherListView.dataBind(weatherList[index])
-            return weatherListView
-        }.forEach(detaiHourlyWeatherView.stackView.addArrangedSubview)
     }
 }

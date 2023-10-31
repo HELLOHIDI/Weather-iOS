@@ -20,10 +20,7 @@ final class DetailHourlyWeatherView: UIView {
     
     private let describeLabel = UILabel()
     private let separator = UIView()
-    
-    private let scrollView = UIScrollView()
-    private let contentView = UIView()
-    let stackView = UIStackView()
+    let hourlyCollectionView = UICollectionView.init(frame: .zero, collectionViewLayout: .init())
     
     // MARK: - UI Components
     
@@ -31,6 +28,8 @@ final class DetailHourlyWeatherView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        register()
         
         style()
         hieararchy()
@@ -42,6 +41,13 @@ final class DetailHourlyWeatherView: UIView {
     }
     
     // MARK: - Custom Method
+    
+    private func register() {
+        hourlyCollectionView.register(
+            DetailHourlyCollectionViewCell.self,
+            forCellWithReuseIdentifier: DetailHourlyCollectionViewCell.cellIdentifier
+        )
+    }
     
     private func style() {
         self.do {
@@ -61,22 +67,23 @@ final class DetailHourlyWeatherView: UIView {
             $0.backgroundColor = .white
         }
         
-        scrollView.do {
-            $0.isPagingEnabled = true
-            $0.showsHorizontalScrollIndicator = false
-        }
-        
-        stackView.do {
-            $0.axis = .horizontal
-            $0.distribution = .fillEqually
-            $0.spacing = 22
+        hourlyCollectionView.do {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .horizontal
+            layout.itemSize = CGSize(
+                width: 34.adjusted,
+                height: 122.adjusted
+            )
+            layout.minimumLineSpacing = 22
+            layout.minimumInteritemSpacing = 0
+            
+            $0.collectionViewLayout = layout
+            $0.backgroundColor = .clear
         }
     }
     
     private func hieararchy() {
-        self.addSubviews(describeLabel, separator, scrollView)
-        scrollView.addSubview(contentView)
-        contentView.addSubview(stackView)
+        self.addSubviews(describeLabel, separator, hourlyCollectionView)
     }
     
     private func layout() {
@@ -92,19 +99,8 @@ final class DetailHourlyWeatherView: UIView {
             $0.height.equalTo(1.adjusted)
         }
         
-        scrollView.snp.makeConstraints {
-            $0.top.equalTo(separator.snp.bottom)
-            $0.leading.trailing.bottom.equalToSuperview()
-        }
-        
-        contentView.snp.makeConstraints {
-            $0.edges.equalTo(scrollView.contentLayoutGuide)
-            $0.width.equalTo(scrollView.frameLayoutGuide).priority(.low)
-            $0.height.equalTo(scrollView.frameLayoutGuide)
-        }
-        
-        stackView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(14.adjusted)
+        hourlyCollectionView.snp.makeConstraints {
+            $0.top.equalTo(separator.snp.bottom).offset(14.adjusted)
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview().inset(10.adjusted)
         }

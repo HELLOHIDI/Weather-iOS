@@ -118,12 +118,11 @@ public final class MainViewController : UIViewController {
         
         output.weatherList
             .asDriver(onErrorJustReturn: [])
-            .drive(self.rootView.weatherView.rx.items) { collectionView, index, data in
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: MainWeatherCollectionViewCell.cellIdentifier,
-                    for: IndexPath(item: index, section: 0)) as! MainWeatherCollectionViewCell
+            .drive(self.rootView.weatherView.rx.items(
+                cellIdentifier: MainWeatherCollectionViewCell.cellIdentifier,
+                cellType: MainWeatherCollectionViewCell.self)
+            ) { _, data, cell in
                 cell.dataBind(data)
-                return cell
             }.disposed(by: disposeBag)
     }
 }
