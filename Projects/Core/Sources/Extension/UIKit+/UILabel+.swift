@@ -21,7 +21,7 @@ extension UILabel {
         guard let targetString else { return }
         let attributedString = NSAttributedString(string: targetString,
                                                   attributes: [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue])
-
+        
         attributedText = attributedString
     }
     
@@ -54,11 +54,17 @@ extension UILabel {
         
         style.lineSpacing = spacing
         attributedString.addAttribute(.paragraphStyle,
-                                     value: style,
-                                     range: NSRange(location: 0, length: attributedString.length))
+                                      value: style,
+                                      range: NSRange(location: 0, length: attributedString.length))
         attributedText = attributedString
     }
-
+    
+    public func setKerning(withKerning kerning: Double) {
+        guard let text = text else { return }
+        
+        self.attributedText = NSAttributedString(string: text, attributes: [NSAttributedString.Key.kern: kerning])
+    }
+    
 }
 
 extension String {

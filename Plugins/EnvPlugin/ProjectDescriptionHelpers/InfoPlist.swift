@@ -51,8 +51,8 @@ public extension Project {
       "CFBundleShortVersionString": "1.0.0",
       "CFBundleDevelopmentRegion": "ko",
       "CFBundleVersion": "1",
-      "CFBundleIdentifier": "com.sopt-stamp-iOS.test",
-      "CFBundleDisplayName": "SOPT-Test",
+      "CFBundleIdentifier": "com.Weather-iOS.test",
+      "CFBundleDisplayName": "Weather-iOS-Test",
       "UILaunchStoryboardName": "LaunchScreen",
       "UIApplicationSceneManifest": [
           "UIApplicationSupportsMultipleScenes": false,

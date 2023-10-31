@@ -10,7 +10,7 @@ import UIKit
 
 extension UIView {
     
-    func addSubviews (_ views: UIView...){
+    public func addSubviews (_ views: UIView...){
         views.forEach { self.addSubview($0) }
     }
     
@@ -27,7 +27,7 @@ extension UIView {
         layer.masksToBounds = false
     }
     
-    func makeCornerRound (radius: CGFloat){
+    public func makeCornerRound (radius: CGFloat){
         layer.cornerRadius = radius
         layer.masksToBounds = true
     }
@@ -38,7 +38,7 @@ extension UIView {
         clipsToBounds = true
     }
     
-    func setBorder(borderWidth: CGFloat, borderColor: UIColor) {
+    public func setBorder(borderWidth: CGFloat, borderColor: UIColor) {
         layer.borderWidth = borderWidth
         layer.borderColor = borderColor.cgColor
     }

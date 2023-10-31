@@ -11,7 +11,7 @@ import DependencyPlugin
 
 let project = Project.makeModule(
     name: "Core",
-    product: .staticFramework,
+    product: .framework,
     dependencies: [
         .Modules.thirdPartyLibs
     ],
