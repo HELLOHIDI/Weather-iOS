@@ -14,8 +14,7 @@ import Domain
 public class DefaultDetailCoordinator: DetailCoordinator {
     
     public var childCoordinators: [Coordinator] = []
-    
-    private var navigationController: UINavigationController!
+    public var navigationController: UINavigationController
     
     public init(navigationController: UINavigationController) {
         self.navigationController = navigationController

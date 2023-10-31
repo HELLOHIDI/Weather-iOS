@@ -14,7 +14,7 @@ import DetailFeature
 public class AppCoordinator: Coordinator {
     
     public var childCoordinators: [Coordinator] = []
-    private var navigationController: UINavigationController!
+    public var navigationController: UINavigationController
     
     var isMain = true
     
