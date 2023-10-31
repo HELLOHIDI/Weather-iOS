@@ -16,10 +16,10 @@ public protocol MainCoordinatorDelegate {
 }
 
 public class DefaultMainCoordinator: MainCoordinator {
+    
     public var childCoordinators: [Coordinator] = []
     public var delegate: MainCoordinatorDelegate?
-    
-    private var navigationController: UINavigationController!
+    public var navigationController: UINavigationController
     
     public init(navigationController: UINavigationController) {
         self.navigationController = navigationController

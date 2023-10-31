@@ -13,20 +13,16 @@ import Core
 import SnapKit
 import Then
 
-final class MainWeatherView: UIView {
-    
-    // MARK: - UI Components
-    
-    let stackView = UIStackView()
+final class MainWeatherView: UICollectionView {
     
     // MARK: - Life Cycle
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+        super.init(frame: .zero, collectionViewLayout: .init())
+        
+        register()
         
         style()
-        hieararchy()
-        layout()
     }
     
     required init?(coder: NSCoder) {
@@ -35,21 +31,25 @@ final class MainWeatherView: UIView {
     
     // MARK: - Custom Method
     
+    private func register() {
+        self.register(
+            MainWeatherCollectionViewCell.self,
+            forCellWithReuseIdentifier: MainWeatherCollectionViewCell.cellIdentifier
+        )
+    }
     private func style() {
-        stackView.do {
-            $0.axis = .vertical
-            $0.distribution = .fillEqually
-            $0.spacing = 16
-        }
-    }
-    
-    private func hieararchy() {
-        self.addSubview(stackView)
-    }
-    
-    private func layout() {
-        stackView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+        self.do {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .horizontal
+            layout.itemSize = CGSize(
+                width: 355.adjusted,
+                height: 117.adjusted
+            )
+            layout.minimumLineSpacing = 16
+            layout.minimumInteritemSpacing = 0
+            
+            $0.collectionViewLayout = layout
+            $0.backgroundColor = .clear
         }
     }
 }

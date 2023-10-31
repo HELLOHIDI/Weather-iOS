@@ -6,6 +6,8 @@
 //  Copyright © 2023 hellohidi. All rights reserved.
 //
 
+import Foundation
+
 import Domain
 
 import RxSwift
@@ -23,7 +25,7 @@ public final class MainViewModel {
     }
     
     struct Input {
-        let weatherListViewDidTapEvent: Observable<Int>
+        let weatherListViewDidTapEvent: Observable<IndexPath>
         let searchBarDidChangeEvent: Observable<String>
     }
     
@@ -36,7 +38,7 @@ public final class MainViewModel {
         self.bindOutput(output: output, disposeBag: disposeBag)
         
         input.weatherListViewDidTapEvent.subscribe(with: self, onNext: { owner, page in
-            self.mainCoordinator?.pushToDetailVC(with: page)
+            self.mainCoordinator?.pushToDetailVC(with: page.item)
         }).disposed(by: disposeBag)
         
         input.searchBarDidChangeEvent.subscribe(with: self, onNext: { owner, text in

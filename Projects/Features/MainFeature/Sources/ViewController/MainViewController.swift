@@ -26,7 +26,6 @@ public final class MainViewController : UIViewController {
     private let disposeBag = DisposeBag()
     
     public let searchBarDidChangeSubject = PublishSubject<String>()
-    public let weatherListViewDidTapSubject = PublishSubject<Int>()
     
     //MARK: - UI Components
     
@@ -56,14 +55,11 @@ public final class MainViewController : UIViewController {
         style()
         setDelegate()
         
+        bindUI()
         bindViewModel()
     }
     
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.navigationController?.navigationBar.isHidden = false
-    }
+    //MARK: - Custom Method
     
     private func style() {
         navigationItem.do {
@@ -106,9 +102,15 @@ public final class MainViewController : UIViewController {
         weatherSearchController.searchResultsUpdater = self
     }
     
+    private func bindUI() {
+        self.rx.viewWillAppear.subscribe(with: self, onNext: { owner, _ in
+            owner.navigationController?.navigationBar.isHidden = false
+        }).disposed(by: disposeBag)
+    }
+    
     private func bindViewModel() {
         let input = MainViewModel.Input(
-            weatherListViewDidTapEvent: weatherListViewDidTapSubject.asObservable(),
+            weatherListViewDidTapEvent: rootView.weatherView.rx.itemSelected.asObservable(),
             searchBarDidChangeEvent: searchBarDidChangeSubject.asObservable()
         )
         
@@ -116,31 +118,13 @@ public final class MainViewController : UIViewController {
         
         output.weatherList
             .asDriver(onErrorJustReturn: [])
-            .drive(with: self, onNext: { owner, weatherList in
-                owner.updateUI(weatherList)
-            }).disposed(by: disposeBag)
-    }
-    
-    //MARK: - Custom Method
-    
-    private func updateUI(_ weatherList: [WeatherModel]) {
-        for subview in rootView.weatherView.stackView.arrangedSubviews {
-            rootView.weatherView.stackView.removeArrangedSubview(subview)
-            subview.removeFromSuperview()
-        }
-        
-        (0..<weatherList.count).enumerated().map { index , _ in
-            let weatherListView = MainWeatherListView()
-            weatherListView.delegate = self
-            weatherListView.dataBind(weatherList[index])
-            return weatherListView
-        }.forEach(rootView.weatherView.stackView.addArrangedSubview)
-    }
-}
-
-extension MainViewController: MainViewWeatherListDelegate {
-    func weatherViewDidTap(_ tag: Int) {
-        weatherListViewDidTapSubject.onNext(tag)
+            .drive(self.rootView.weatherView.rx.items) { collectionView, index, data in
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: MainWeatherCollectionViewCell.cellIdentifier,
+                    for: IndexPath(item: index, section: 0)) as! MainWeatherCollectionViewCell
+                cell.dataBind(data)
+                return cell
+            }.disposed(by: disposeBag)
     }
 }
 
