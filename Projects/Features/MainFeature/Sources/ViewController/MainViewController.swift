@@ -18,24 +18,19 @@ import RxSwift
 import RxGesture
 import RxCocoa
 
-protocol MainViewControllerDelegate: AnyObject {
-    func pushToDetailVC(_ tag: Int)
-}
-
 public final class MainViewController : UIViewController {
     
     //MARK: - Properties
-    
-    weak var mainDelegate: MainViewControllerDelegate?
     
     public let viewModel: MainViewModel
     private let disposeBag = DisposeBag()
     
     public let searchBarDidChangeSubject = PublishSubject<String>()
-    
-    let rootView = MainView()
+    public let weatherListViewDidTapSubject = PublishSubject<Int>()
     
     //MARK: - UI Components
+    
+    let rootView = MainView()
     
     private lazy var seeMoreButton = UIBarButtonItem()
     private lazy var weatherSearchController =  UISearchController(searchResultsController: nil)
@@ -71,7 +66,6 @@ public final class MainViewController : UIViewController {
     }
     
     private func style() {
-        
         navigationItem.do {
             $0.title = "날씨"
             $0.rightBarButtonItem = seeMoreButton
@@ -114,6 +108,7 @@ public final class MainViewController : UIViewController {
     
     private func bindViewModel() {
         let input = MainViewModel.Input(
+            weatherListViewDidTapEvent: weatherListViewDidTapSubject.asObservable(),
             searchBarDidChangeEvent: searchBarDidChangeSubject.asObservable()
         )
         
@@ -145,7 +140,7 @@ public final class MainViewController : UIViewController {
 
 extension MainViewController: MainViewWeatherListDelegate {
     func weatherViewDidTap(_ tag: Int) {
-        self.mainDelegate?.pushToDetailVC(tag)
+        weatherListViewDidTapSubject.onNext(tag)
     }
 }
 

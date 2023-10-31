@@ -47,26 +47,18 @@ public final class DetailPageViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        bindUI()
         bindViewModel()
         
-        delegate()
+        setDelegate()
         
         style()
         hierarchy()
         layout()
     }
     
-    private func bindUI() {
-        detailBottomView.listButton
-            .rx.tap
-            .subscribe(with: self, onNext: { owner, _ in
-                owner.navigationController?.popViewController(animated: true)
-            }).disposed(by: disposeBag)
-    }
-    
     private func bindViewModel() {
         let input = DetailViewModel.Input(
+            listButtonDidTapEvent: detailBottomView.listButton.rx.tap.asObservable(),
             pagingEvent: pagingSubject.asObservable()
         )
         
@@ -86,7 +78,7 @@ public final class DetailPageViewController: UIViewController {
             }).disposed(by: disposeBag)
     }
     
-    private func delegate() {
+    private func setDelegate() {
         pageViewController.delegate = self
         pageViewController.dataSource = self
     }

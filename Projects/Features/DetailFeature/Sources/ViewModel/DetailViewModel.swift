@@ -15,13 +15,20 @@ import RxCocoa
 
 public final class DetailViewModel {
     internal var disposeBag = DisposeBag()
+    
+    public let detailCoordinator: DetailCoordinator?
     public let detailUseCase: DetailUseCase
     
-    public init(detailUseCase: DetailUseCase) {
+    public init(
+        detailCoordinator: DetailCoordinator,
+        detailUseCase: DetailUseCase
+    ) {
+        self.detailCoordinator = detailCoordinator
         self.detailUseCase = detailUseCase
     }
     
     struct Input {
+        let listButtonDidTapEvent: Observable<Void>
         let pagingEvent: Observable<Int>
     }
     
@@ -34,10 +41,13 @@ public final class DetailViewModel {
         let output = Output()
         self.bindOutput(output: output, disposeBag: disposeBag)
         
+        input.listButtonDidTapEvent.subscribe(with: self, onNext: { owner, _ in
+            owner.detailCoordinator?.popViewController()
+        }).disposed(by: disposeBag)
+        
         input.pagingEvent.subscribe(with: self, onNext: { owner, page in
             owner.detailUseCase.updateCurrentPage(page)
         }).disposed(by: disposeBag)
-        
         
         return output
     }

@@ -11,7 +11,7 @@ import UIKit
 import BaseFeatureDependency
 import Domain
 
-public class DetailCoordinator: Coordinator {
+public class DefaultDetailCoordinator: DetailCoordinator {
     
     public var childCoordinators: [Coordinator] = []
     
@@ -24,10 +24,14 @@ public class DetailCoordinator: Coordinator {
     public func start(_ currentPage: Int) {
         let viewController = DetailPageViewController(
             viewModel: DetailViewModel(
+                detailCoordinator: self,
                 detailUseCase: DefaultDetailUseCase.init(currentPage)
             )
         )
         self.navigationController.pushViewController(viewController, animated: true)
     }
+    
+    public func popViewController() {
+        self.navigationController.popViewController(animated: true)
+    }
 }
-

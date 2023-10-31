@@ -16,31 +16,25 @@ public class AppCoordinator: Coordinator {
     public var childCoordinators: [Coordinator] = []
     private var navigationController: UINavigationController!
     
-    var isMain: Bool = true
+    var isMain = true
     
     public init(navigationController: UINavigationController!) {
         self.navigationController = navigationController
     }
     
     public func start() {
-        if isMain {
-            showMainViewController()
-        } else {
-//            showDetailViewController(tag)
-        }
+        if isMain { showMainViewController() }
     }
     
     private func showMainViewController() {
-        let coordinator = MainCoordinator(navigationController: navigationController)
+        let coordinator = DefaultMainCoordinator(navigationController: self.navigationController)
         coordinator.delegate = self
         coordinator.start()
         self.childCoordinators.append(coordinator)
-        
     }
     
     private func showDetailViewController(_ tag: Int) {
-        let coordinator = DetailCoordinator(navigationController: navigationController)
-//        coordinator.delegate = self
+        let coordinator = DefaultDetailCoordinator(navigationController: navigationController)
         coordinator.start(tag)
         self.childCoordinators.append(coordinator)
     }
