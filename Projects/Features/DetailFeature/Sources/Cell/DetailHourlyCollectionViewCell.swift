@@ -85,8 +85,3 @@ final class DetailHourlyCollectionViewCell: UICollectionViewCell {
         temparatureLabel.text = data.temparature
     }
 }
-
-
-
-
-

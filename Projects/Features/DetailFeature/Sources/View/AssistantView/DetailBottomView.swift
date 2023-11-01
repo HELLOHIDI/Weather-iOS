@@ -46,7 +46,7 @@ final class DetailBottomView: UIView {
                 borderWidth: 0.4,
                 borderColor: .white.withAlphaComponent(0.4)
             )
-            $0.backgroundColor = .clear
+            $0.backgroundColor = UIColor(red: 0.16, green: 0.19, blue: 0.25, alpha: 1)
         }
         
         mapButton.do {

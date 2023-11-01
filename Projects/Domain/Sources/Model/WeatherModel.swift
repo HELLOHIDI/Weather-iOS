@@ -13,7 +13,8 @@ public struct WeatherModel {
     public let tag: Int
     public let place, weather: String
     public let temparature, maxTemparature, minTemparature: Int
-    public let hourlyWeatherData: [WeatherHourlyModel]
+    public let hourlyWeatherData: BehaviorRelay<[WeatherHourlyModel]>
+    public let weatherForecastData: BehaviorRelay<[WeatherForecastModel]>
 }
 
 public extension WeatherModel {
@@ -25,7 +26,8 @@ public extension WeatherModel {
             temparature: 21,
             maxTemparature: 29,
             minTemparature: 18,
-            hourlyWeatherData: WeatherHourlyModel.hourlyWeatherData
+            hourlyWeatherData: BehaviorRelay<[WeatherHourlyModel]>(value: WeatherHourlyModel.hourlyWeatherData),
+            weatherForecastData: BehaviorRelay<[WeatherForecastModel]>(value: WeatherForecastModel.weatherForecastData)
         ),
         WeatherModel(
             tag: 1,
@@ -34,7 +36,8 @@ public extension WeatherModel {
             temparature: 23,
             maxTemparature: 31,
             minTemparature: 25,
-            hourlyWeatherData: WeatherHourlyModel.hourlyWeatherData
+            hourlyWeatherData: BehaviorRelay<[WeatherHourlyModel]>(value: WeatherHourlyModel.hourlyWeatherData),
+            weatherForecastData: BehaviorRelay<[WeatherForecastModel]>(value: WeatherForecastModel.weatherForecastData)
         ),
         WeatherModel(
             tag: 2,
@@ -43,7 +46,8 @@ public extension WeatherModel {
             temparature: 21,
             maxTemparature: 18,
             minTemparature: 4,
-            hourlyWeatherData: WeatherHourlyModel.hourlyWeatherData
+            hourlyWeatherData: BehaviorRelay<[WeatherHourlyModel]>(value: WeatherHourlyModel.hourlyWeatherData),
+            weatherForecastData: BehaviorRelay<[WeatherForecastModel]>(value: WeatherForecastModel.weatherForecastData)
         )
     ]
 }

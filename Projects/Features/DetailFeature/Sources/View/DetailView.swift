@@ -18,9 +18,10 @@ import Then
 final class DetailView: UIView {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
-    private let backgroundImageView = UIImageView()
+    private let backgroundImageView = UIImageView.init(image: DSKitAsset.backgroundImg.image)
     let detailTopView = DetailTopView()
     let detaiHourlyWeatherView = DetailHourlyWeatherView()
+    let detailForecastWeatherView = DetailForecastWeatherView()
     
     // MARK: - UI Components
     
@@ -29,7 +30,6 @@ final class DetailView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        style()
         hieararchy()
         layout()
     }
@@ -40,22 +40,13 @@ final class DetailView: UIView {
     
     // MARK: - Custom Method
     
-    private func style() {
-        backgroundImageView.do {
-            $0.image = DSKitAsset.backgroundImg.image
-        }
-        
-        scrollView.do {
-            $0.alwaysBounceVertical = true
-        }
-    }
-    
     private func hieararchy() {
         self.addSubviews(backgroundImageView, scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubviews(
             detailTopView,
-            detaiHourlyWeatherView
+            detaiHourlyWeatherView,
+            detailForecastWeatherView
         )
     }
     
@@ -65,14 +56,15 @@ final class DetailView: UIView {
         }
         
         scrollView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(100)
         }
         
         contentView.snp.makeConstraints {
+            let contentHeight = 78.adjusted + 212.adjusted + 44 + 212.adjusted + 20 + 550.adjusted
             $0.edges.equalTo(scrollView.contentLayoutGuide)
             $0.width.equalTo(scrollView.frameLayoutGuide)
-            $0.height.equalTo(scrollView.frameLayoutGuide).priority(.low)
+            $0.height.equalTo(contentHeight).priority(.low)
         }
         
         detailTopView.snp.makeConstraints {
@@ -85,6 +77,12 @@ final class DetailView: UIView {
             $0.top.equalTo(detailTopView.snp.bottom).offset(44)
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(212.adjusted)
+        }
+        
+        detailForecastWeatherView.snp.makeConstraints {
+            $0.top.equalTo(detaiHourlyWeatherView.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(550.adjusted)
         }
     }
 }

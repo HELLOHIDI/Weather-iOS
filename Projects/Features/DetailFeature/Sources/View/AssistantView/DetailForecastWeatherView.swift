@@ -1,19 +1,25 @@
 //
-//  MainWeatherScrollView.swift
-//  MainFeature
+//  DetailForecastWeatherView.swift
+//  DetailFeature
 //
-//  Created by 류희재 on 2023/10/23.
-//  Copyright © 2023 baegteun. All rights reserved.
+//  Created by 류희재 on 2023/11/02.
+//  Copyright © 2023 hellohidi. All rights reserved.
 //
 
 import UIKit
 
 import Core
+import DSKit
 
 import SnapKit
 import Then
 
-final class MainWeatherView: UICollectionView {
+final class DetailForecastWeatherView: UICollectionView {
+    
+    // MARK: - Properties
+    
+    
+    // MARK: - UI Components
     
     // MARK: - Life Cycle
     
@@ -33,23 +39,31 @@ final class MainWeatherView: UICollectionView {
     
     private func register() {
         self.register(
-            MainWeatherCollectionViewCell.self,
-            forCellWithReuseIdentifier: MainWeatherCollectionViewCell.cellIdentifier
+            DetailForecastWeatherViewCell.self,
+            forCellWithReuseIdentifier: DetailForecastWeatherViewCell.cellIdentifier
         )
     }
+    
     private func style() {
         self.do {
             let layout = UICollectionViewFlowLayout()
-            layout.scrollDirection = .horizontal
             layout.itemSize = CGSize(
-                width: 375,
-                height: 117.adjusted
+                width: 335,
+                height: 55.adjusted
             )
-            layout.minimumLineSpacing = 16
+            layout.minimumLineSpacing = 0
             layout.minimumInteritemSpacing = 0
             
             $0.collectionViewLayout = layout
-            $0.backgroundColor = .clear
+            $0.backgroundColor = UIColor(red: 0.17, green: 0.2, blue: 0.25, alpha: 1)
+            $0.makeCornerRound(radius: 15)
+            $0.setBorder(borderWidth: 0.5, borderColor: .white.withAlphaComponent(0.25))
+            $0.isScrollEnabled = false
         }
     }
 }
+
+
+
+
+

@@ -24,6 +24,7 @@ public final class DetailViewController : UIViewController {
     
     private var weatherModelPrimaryKey: Int?
     private var weatherData: WeatherModel
+    private let disposeBag = DisposeBag()
     
     //MARK: - UI Components
     
@@ -49,27 +50,33 @@ public final class DetailViewController : UIViewController {
         super.viewDidLoad()
         
         updateUI()
-        delegate()
+        
+        bindViewModel()
     }
     
     private func updateUI() {
-        rootView.detaiHourlyWeatherView.hourlyCollectionView.reloadData()
         rootView.detailTopView.updateUI(weatherData)
     }
     
-    private func delegate() {
-        rootView.detaiHourlyWeatherView.hourlyCollectionView.dataSource = self
-    }
-}
-
-extension DetailViewController: UICollectionViewDataSource {
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return weatherData.hourlyWeatherData.count
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailHourlyCollectionViewCell.cellIdentifier, for: indexPath) as! DetailHourlyCollectionViewCell
-        cell.dataBind(weatherData.hourlyWeatherData[indexPath.item])
-        return cell
+    private func bindViewModel() {
+        weatherData.hourlyWeatherData
+            .asDriver(onErrorJustReturn: [])
+            .drive(
+                self.rootView.detaiHourlyWeatherView.hourlyCollectionView.rx.items(
+                    cellIdentifier: DetailHourlyCollectionViewCell.cellIdentifier,
+                    cellType: DetailHourlyCollectionViewCell.self)
+            ) { _, data, cell in
+                cell.dataBind(data)
+            }.disposed(by: disposeBag)
+        
+        weatherData.weatherForecastData
+            .asDriver(onErrorJustReturn: [])
+            .drive(
+                self.rootView.detailForecastWeatherView.rx.items(
+                    cellIdentifier: DetailForecastWeatherViewCell.cellIdentifier,
+                    cellType: DetailForecastWeatherViewCell.self)
+            ) { _, data, cell in
+                cell.dataBind(data)
+            }.disposed(by: disposeBag)
     }
 }
