@@ -14,12 +14,7 @@ import DSKit
 import SnapKit
 import Then
 
-final class DetailForecastWeatherView: UICollectionView {
-    
-    // MARK: - Properties
-    
-    
-    // MARK: - UI Components
+final class DetailForecastView: UICollectionView {
     
     // MARK: - Life Cycle
     
@@ -39,8 +34,14 @@ final class DetailForecastWeatherView: UICollectionView {
     
     private func register() {
         self.register(
-            DetailForecastWeatherViewCell.self,
-            forCellWithReuseIdentifier: DetailForecastWeatherViewCell.cellIdentifier
+            DetailForecastCollectionViewCell.self,
+            forCellWithReuseIdentifier: DetailForecastCollectionViewCell.cellIdentifier
+        )
+        
+        self.register(
+            DetailForecastHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: DetailForecastHeaderView.reuseCellIdentifier
         )
     }
     
@@ -49,10 +50,14 @@ final class DetailForecastWeatherView: UICollectionView {
             let layout = UICollectionViewFlowLayout()
             layout.itemSize = CGSize(
                 width: 335,
-                height: 55.adjusted
+                height: 55
             )
             layout.minimumLineSpacing = 0
             layout.minimumInteritemSpacing = 0
+            layout.headerReferenceSize = CGSize(
+                width: 335,
+                height: 38
+            )
             
             $0.collectionViewLayout = layout
             $0.backgroundColor = UIColor(red: 0.17, green: 0.2, blue: 0.25, alpha: 1)

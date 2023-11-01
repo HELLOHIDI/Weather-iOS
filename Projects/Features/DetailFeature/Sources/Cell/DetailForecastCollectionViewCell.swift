@@ -16,7 +16,7 @@ import SnapKit
 import Then
 
 
-final class DetailForecastWeatherViewCell: UICollectionViewCell {
+final class DetailForecastCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
@@ -77,7 +77,6 @@ final class DetailForecastWeatherViewCell: UICollectionViewCell {
         separator.do {
             $0.backgroundColor = .white
         }
-        
     }
     
     private func hieararchy() {
@@ -113,7 +112,7 @@ final class DetailForecastWeatherViewCell: UICollectionViewCell {
         temparatureIndicatorBar.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalTo(minTemparatureLabel.snp.trailing).offset(6)
-            $0.trailing.equalTo(maxTemparatureLabel.snp.leading).inset(5)
+            $0.width.equalTo(108)
             $0.height.equalTo(12.adjusted)
         }
         maxTemparatureLabel.snp.makeConstraints {
@@ -121,22 +120,22 @@ final class DetailForecastWeatherViewCell: UICollectionViewCell {
             $0.trailing.equalToSuperview().inset(17)
         }
         separator.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(0.2)
-            $0.leading.equalToSuperview().offset(15)
-            $0.trailing.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(0.2)
         }
     }
 }
 
-extension DetailForecastWeatherViewCell {
+extension DetailForecastCollectionViewCell {
     func dataBind(_ data: WeatherForecastModel) {
         dateLabel.text = data.day
         weatherImageView.image = data.weatherImg
         if let rainfall = data.rainfall {
             rainFallLabel.text = rainfall
         }
-        minTemparatureLabel.text = "\(data.minTemparature)"
-        maxTemparatureLabel.text = "\(data.maxTemparature)"
+        minTemparatureLabel.text = "\(data.minTemparature)°"
+        maxTemparatureLabel.text = "\(data.maxTemparature)°"
     }
 }
+

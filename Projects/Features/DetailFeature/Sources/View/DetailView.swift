@@ -21,7 +21,7 @@ final class DetailView: UIView {
     private let backgroundImageView = UIImageView.init(image: DSKitAsset.backgroundImg.image)
     let detailTopView = DetailTopView()
     let detaiHourlyWeatherView = DetailHourlyWeatherView()
-    let detailForecastWeatherView = DetailForecastWeatherView()
+    let detailForecastWeatherView = DetailForecastView()
     
     // MARK: - UI Components
     
@@ -61,10 +61,9 @@ final class DetailView: UIView {
         }
         
         contentView.snp.makeConstraints {
-            let contentHeight = 78.adjusted + 212.adjusted + 44 + 212.adjusted + 20 + 550.adjusted
             $0.edges.equalTo(scrollView.contentLayoutGuide)
             $0.width.equalTo(scrollView.frameLayoutGuide)
-            $0.height.equalTo(contentHeight).priority(.low)
+            $0.height.equalTo(scrollView.frameLayoutGuide).priority(.low)
         }
         
         detailTopView.snp.makeConstraints {
@@ -82,7 +81,25 @@ final class DetailView: UIView {
         detailForecastWeatherView.snp.makeConstraints {
             $0.top.equalTo(detaiHourlyWeatherView.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(550.adjusted)
+        }
+    }
+}
+
+extension DetailView {
+    func updateLayout(_ forecaseCnt: Int) {
+        let foreCastHeight: CGFloat = CGFloat(forecaseCnt * 55) + 38
+        let contentHeight = 78.adjusted + 212.adjusted + 44 + 212.adjusted + 20 + foreCastHeight
+        
+        contentView.snp.remakeConstraints {
+            $0.edges.equalTo(scrollView.contentLayoutGuide)
+            $0.width.equalTo(scrollView.frameLayoutGuide)
+            $0.height.equalTo(contentHeight).priority(.low)
+        }
+        
+        detailForecastWeatherView.snp.remakeConstraints {
+            $0.top.equalTo(detaiHourlyWeatherView.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(foreCastHeight)
         }
     }
 }

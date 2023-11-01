@@ -15,8 +15,8 @@ import Domain
 import SnapKit
 import Then
 import RxSwift
-import RxGesture
 import RxCocoa
+import RxDataSources
 
 public final class DetailViewController : UIViewController {
     
@@ -24,7 +24,12 @@ public final class DetailViewController : UIViewController {
     
     private var weatherModelPrimaryKey: Int?
     private var weatherData: WeatherModel
+    
     private let disposeBag = DisposeBag()
+    
+    var sectionSubject = BehaviorRelay(value: [SectionData<WeatherForecastModel>]())
+    private var weatherForecastDataSource: RxCollectionViewSectionedReloadDataSource<SectionData<WeatherForecastModel>>?
+    
     
     //MARK: - UI Components
     
@@ -51,11 +56,36 @@ public final class DetailViewController : UIViewController {
         
         updateUI()
         
+        configureDataSource()
+        configureCollectionView()
         bindViewModel()
     }
     
     private func updateUI() {
         rootView.detailTopView.updateUI(weatherData)
+    }
+    
+    private func configureDataSource() {
+        weatherForecastDataSource = RxCollectionViewSectionedReloadDataSource<SectionData<WeatherForecastModel>>(
+            configureCell: { dataSource, collectionView, indexPath, data in
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: DetailForecastCollectionViewCell.cellIdentifier,
+                    for: indexPath
+                ) as! DetailForecastCollectionViewCell
+                cell.dataBind(data)
+                return cell
+            },configureSupplementaryView: { (dataSource, collectionView, kind, indexPath) -> UICollectionReusableView in
+                let kind = UICollectionView.elementKindSectionHeader
+                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DetailForecastHeaderView.reuseCellIdentifier, for: indexPath) as! DetailForecastHeaderView
+                return header
+            })
+    }
+    
+    func configureCollectionView() {
+        guard let weatherForecastDataSource else { return }
+        sectionSubject
+            .bind(to: rootView.detailForecastWeatherView.rx.items(dataSource: weatherForecastDataSource))
+            .disposed(by: disposeBag)
     }
     
     private func bindViewModel() {
@@ -70,13 +100,16 @@ public final class DetailViewController : UIViewController {
             }.disposed(by: disposeBag)
         
         weatherData.weatherForecastData
+            .subscribe(with: self, onNext: { owner, forecastData in
+                var updateSection: [SectionData<WeatherForecastModel>] = []
+                updateSection.append(SectionData<WeatherForecastModel>(items: forecastData))
+                owner.sectionSubject.accept(updateSection)
+            }).disposed(by: disposeBag)
+        
+        weatherData.weatherForecastData
             .asDriver(onErrorJustReturn: [])
-            .drive(
-                self.rootView.detailForecastWeatherView.rx.items(
-                    cellIdentifier: DetailForecastWeatherViewCell.cellIdentifier,
-                    cellType: DetailForecastWeatherViewCell.self)
-            ) { _, data, cell in
-                cell.dataBind(data)
-            }.disposed(by: disposeBag)
+            .drive(with: self, onNext: { owner, weatherData in
+                owner.rootView.updateLayout(weatherData.count)
+            }).disposed(by: disposeBag)
     }
 }

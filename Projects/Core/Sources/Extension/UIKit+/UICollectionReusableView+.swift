@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UICollectionReusableView{
+public extension UICollectionReusableView{
     static var reuseCellIdentifier: String {
         return String(describing: self)
     }
