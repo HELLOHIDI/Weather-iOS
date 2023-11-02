@@ -21,10 +21,10 @@ final class DetailTopView: UIView {
     
     private let stackView = UIStackView()
     
-    private let placeLabel = UILabel()
-    private let temparatureLabel = UILabel()
-    private let weatherLabel = UILabel()
-    private let maxmimTemparatureLabel = UILabel()
+    let placeLabel = UILabel()
+    let temparatureLabel = UILabel()
+    let weatherLabel = UILabel()
+    let maxmimTemparatureLabel = UILabel()
     
     
     // MARK: - UI Components

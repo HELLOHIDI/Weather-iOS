@@ -16,11 +16,12 @@ import SnapKit
 import Then
 
 final class DetailView: UIView {
-    private let scrollView = UIScrollView()
+    let scrollView = UIScrollView()
     private let contentView = UIView()
     private let backgroundImageView = UIImageView.init(image: DSKitAsset.backgroundImg.image)
     let detailTopView = DetailTopView()
-    let detaiHourlyWeatherView = DetailHourlyWeatherView()
+    let detailStickyHeaderView = DetailTopHeaderView()
+    let detailHourlyWeatherView = DetailHourlyWeatherView()
     let detailForecastWeatherView = DetailForecastView()
     
     // MARK: - UI Components
@@ -41,11 +42,15 @@ final class DetailView: UIView {
     // MARK: - Custom Method
     
     private func hieararchy() {
-        self.addSubviews(backgroundImageView, scrollView)
+        self.addSubviews(
+            backgroundImageView,
+            scrollView,
+            detailTopView,
+            detailStickyHeaderView
+        )
         scrollView.addSubview(contentView)
         contentView.addSubviews(
-            detailTopView,
-            detaiHourlyWeatherView,
+            detailHourlyWeatherView,
             detailForecastWeatherView
         )
     }
@@ -56,7 +61,8 @@ final class DetailView: UIView {
         }
         
         scrollView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
+            $0.top.equalTo(detailStickyHeaderView.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview().inset(100)
         }
         
@@ -72,14 +78,20 @@ final class DetailView: UIView {
             $0.height.equalTo(212.adjusted)
         }
         
-        detaiHourlyWeatherView.snp.makeConstraints {
-            $0.top.equalTo(detailTopView.snp.bottom).offset(44)
+        detailStickyHeaderView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(50.adjusted)
+            $0.leading.trailing.equalToSuperview().inset(111)
+            $0.height.equalTo(100)
+        }
+        
+        detailHourlyWeatherView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(190.adjusted)
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(212.adjusted)
         }
         
         detailForecastWeatherView.snp.makeConstraints {
-            $0.top.equalTo(detaiHourlyWeatherView.snp.bottom).offset(20)
+            $0.top.equalTo(detailHourlyWeatherView.snp.bottom).offset(20.adjusted)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
     }
@@ -88,7 +100,7 @@ final class DetailView: UIView {
 extension DetailView {
     func updateLayout(_ forecaseCnt: Int) {
         let foreCastHeight: CGFloat = CGFloat(forecaseCnt * 55) + 38
-        let contentHeight = 78.adjusted + 212.adjusted + 44 + 212.adjusted + 20 + foreCastHeight
+        let contentHeight = 290.adjusted + 212.adjusted + 20.adjusted + foreCastHeight - 100
         
         contentView.snp.remakeConstraints {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
@@ -97,7 +109,7 @@ extension DetailView {
         }
         
         detailForecastWeatherView.snp.remakeConstraints {
-            $0.top.equalTo(detaiHourlyWeatherView.snp.bottom).offset(20)
+            $0.top.equalTo(detailHourlyWeatherView.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(foreCastHeight)
         }

@@ -55,14 +55,21 @@ public final class DetailViewController : UIViewController {
         super.viewDidLoad()
         
         updateUI()
+        setDelegate()
         
         configureDataSource()
         configureCollectionView()
+        
         bindViewModel()
     }
     
     private func updateUI() {
         rootView.detailTopView.updateUI(weatherData)
+        rootView.detailStickyHeaderView.updateUI(weatherData)
+    }
+    
+    private func setDelegate() {
+        rootView.scrollView.delegate = self
     }
     
     private func configureDataSource() {
@@ -92,7 +99,7 @@ public final class DetailViewController : UIViewController {
         weatherData.hourlyWeatherData
             .asDriver(onErrorJustReturn: [])
             .drive(
-                self.rootView.detaiHourlyWeatherView.hourlyCollectionView.rx.items(
+                self.rootView.detailHourlyWeatherView.hourlyCollectionView.rx.items(
                     cellIdentifier: DetailHourlyCollectionViewCell.cellIdentifier,
                     cellType: DetailHourlyCollectionViewCell.self)
             ) { _, data, cell in
@@ -111,5 +118,44 @@ public final class DetailViewController : UIViewController {
             .drive(with: self, onNext: { owner, weatherData in
                 owner.rootView.updateLayout(weatherData.count)
             }).disposed(by: disposeBag)
+    }
+}
+
+extension DetailViewController: UIScrollViewDelegate {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let alpha1 = 1.0 - ((scrollView.contentOffset.y - 30) / 40 )
+        let alpha2 = 1.0 - ((scrollView.contentOffset.y - 70) / 40 )
+        let alpha3 = 1.0 - ((scrollView.contentOffset.y - 110) / 40 )
+        let alpha4 = 1.0 - ((scrollView.contentOffset.y - 150) / 40 )
+        print("현재위치 \(scrollView.contentOffset.y)")
+        switch scrollView.contentOffset.y {
+        case 30..<70:
+            print("🍎 \(alpha1)")
+            rootView.detailTopView.maxmimTemparatureLabel.alpha = alpha1
+        case 70..<110:
+            print("🍏 \(alpha2)")
+            rootView.detailTopView.weatherLabel.alpha = alpha2
+        case 110..<150:
+            print("🍗 \(alpha3)")
+            rootView.detailTopView.temparatureLabel.alpha = alpha3
+        case 150...:
+            print("🦖 \(alpha4)")
+            rootView.detailStickyHeaderView.isHidden = false
+            rootView.detailTopView.placeLabel.alpha = alpha4
+        default:
+            break
+        }
+        
+        
+        //        rootView.detailTopView.alpha = alpha
+        //        rootView.detailTopView.maxmimTemparatureLabel.alpha = alpha
+        //        rootView.detailStickyHeaderView.alpha = 1 - alpha
+        
+//        print(rootView.detailTopView.frame.minY)
+//        print(rootView.detailTopView.placeLabel.frame.minY)
+//        print(rootView.detailTopView.temparatureLabel.frame.minY)
+//        print(rootView.detailTopView.weatherLabel.frame.minY)
+//        print(rootView.detailTopView.maxmimTemparatureLabel.frame.minY)
+        
     }
 }
