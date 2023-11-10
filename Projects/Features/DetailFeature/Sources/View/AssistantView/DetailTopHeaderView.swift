@@ -20,7 +20,7 @@ final class DetailTopHeaderView: UIView {
     // MARK: - Properties
     
     private let placeLabel = UILabel()
-    private let weatherLabel = UILabel()
+    let weatherLabel = UILabel()
     
     // MARK: - UI Components
     
@@ -62,7 +62,7 @@ final class DetailTopHeaderView: UIView {
     
     private func layout() {
         placeLabel.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalToSuperview().offset(34.adjusted)
             $0.centerX.equalToSuperview()
         }
         

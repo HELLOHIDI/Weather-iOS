@@ -19,6 +19,7 @@ final class DetailView: UIView {
     let scrollView = UIScrollView()
     private let contentView = UIView()
     private let backgroundImageView = UIImageView.init(image: DSKitAsset.backgroundImg.image)
+    
     let detailTopView = DetailTopView()
     let detailStickyHeaderView = DetailTopHeaderView()
     let detailHourlyWeatherView = DetailHourlyWeatherView()
@@ -44,9 +45,9 @@ final class DetailView: UIView {
     private func hieararchy() {
         self.addSubviews(
             backgroundImageView,
-            scrollView,
             detailTopView,
-            detailStickyHeaderView
+            detailStickyHeaderView,
+            scrollView
         )
         scrollView.addSubview(contentView)
         contentView.addSubviews(
@@ -79,9 +80,9 @@ final class DetailView: UIView {
         }
         
         detailStickyHeaderView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(50.adjusted)
+            $0.top.equalToSuperview().offset(40.adjusted)
             $0.leading.trailing.equalToSuperview().inset(111)
-            $0.height.equalTo(100)
+            $0.height.equalTo(100.adjusted)
         }
         
         detailHourlyWeatherView.snp.makeConstraints {

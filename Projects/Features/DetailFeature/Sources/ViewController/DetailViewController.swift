@@ -131,12 +131,15 @@ extension DetailViewController: UIScrollViewDelegate {
         switch scrollView.contentOffset.y {
         case 30..<70:
             print("🍎 \(alpha1)")
+            rootView.detailStickyHeaderView.isHidden = true
             rootView.detailTopView.maxmimTemparatureLabel.alpha = alpha1
         case 70..<110:
             print("🍏 \(alpha2)")
+            rootView.detailStickyHeaderView.isHidden = true
             rootView.detailTopView.weatherLabel.alpha = alpha2
         case 110..<150:
             print("🍗 \(alpha3)")
+            rootView.detailStickyHeaderView.isHidden = true
             rootView.detailTopView.temparatureLabel.alpha = alpha3
         case 150...:
             print("🦖 \(alpha4)")
@@ -146,16 +149,9 @@ extension DetailViewController: UIScrollViewDelegate {
             break
         }
         
-        
-        //        rootView.detailTopView.alpha = alpha
-        //        rootView.detailTopView.maxmimTemparatureLabel.alpha = alpha
-        //        rootView.detailStickyHeaderView.alpha = 1 - alpha
-        
-//        print(rootView.detailTopView.frame.minY)
-//        print(rootView.detailTopView.placeLabel.frame.minY)
-//        print(rootView.detailTopView.temparatureLabel.frame.minY)
-//        print(rootView.detailTopView.weatherLabel.frame.minY)
-//        print(rootView.detailTopView.maxmimTemparatureLabel.frame.minY)
-        
+        if scrollView.contentOffset.y == 194 {
+            print("🍬 날씨별 header 닿음")
+        }
     }
 }
+//111 42; 171 104.667
