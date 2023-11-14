@@ -14,21 +14,8 @@ import Domain
 
 import SnapKit
 import Then
-import RxSwift
-import RxCocoa
 
-protocol MainViewWeatherListDelegate: AnyObject {
-    func weatherViewDidTap(_ tag: Int)
-}
-
-final class MainWeatherListView: UIView {
-    
-    // MARK: - Properties
-    
-    weak var delegate: MainViewWeatherListDelegate?
-    
-    private let tapGesture = UITapGestureRecognizer()
-    private let disposeBag = DisposeBag()
+final class MainWeatherCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Components
     
@@ -48,12 +35,6 @@ final class MainWeatherListView: UIView {
         style()
         hieararchy()
         layout()
-        
-        tapGesture.rx.event
-            .bind { [weak self] _ in
-                self?.delegate?.weatherViewDidTap(self!.tag)
-            }
-            .disposed(by: disposeBag)
     }
     
     required init?(coder: NSCoder) {
@@ -63,9 +44,6 @@ final class MainWeatherListView: UIView {
     // MARK: - Custom Method
     
     private func style() {
-        self.do {
-            $0.addGestureRecognizer(tapGesture)
-        }
         weatherImageView.do {
             $0.image = DSKitAsset.listImg.image
         }

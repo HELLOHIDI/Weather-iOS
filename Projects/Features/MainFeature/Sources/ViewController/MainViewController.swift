@@ -27,9 +27,9 @@ public final class MainViewController : UIViewController {
     
     public let searchBarDidChangeSubject = PublishSubject<String>()
     
-    let rootView = MainView()
-    
     //MARK: - UI Components
+    
+    let rootView = MainView()
     
     private lazy var seeMoreButton = UIBarButtonItem()
     private lazy var weatherSearchController =  UISearchController(searchResultsController: nil)
@@ -53,19 +53,15 @@ public final class MainViewController : UIViewController {
         super.viewDidLoad()
         
         style()
-        delegate()
+        setDelegate()
         
+        bindUI()
         bindViewModel()
     }
     
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.navigationController?.navigationBar.isHidden = false
-    }
+    //MARK: - Custom Method
     
     private func style() {
-        
         navigationItem.do {
             $0.title = "날씨"
             $0.rightBarButtonItem = seeMoreButton
@@ -102,12 +98,19 @@ public final class MainViewController : UIViewController {
         weatherSearchController.searchBar.searchTextField.textColor = .white
     }
     
-    private func delegate() {
+    private func setDelegate() {
         weatherSearchController.searchResultsUpdater = self
+    }
+    
+    private func bindUI() {
+        self.rx.viewWillAppear.subscribe(with: self, onNext: { owner, _ in
+            owner.navigationController?.navigationBar.isHidden = false
+        }).disposed(by: disposeBag)
     }
     
     private func bindViewModel() {
         let input = MainViewModel.Input(
+            weatherListViewDidTapEvent: rootView.weatherView.rx.itemSelected.asObservable(),
             searchBarDidChangeEvent: searchBarDidChangeSubject.asObservable()
         )
         
@@ -115,39 +118,12 @@ public final class MainViewController : UIViewController {
         
         output.weatherList
             .asDriver(onErrorJustReturn: [])
-            .drive(with: self, onNext: { owner, weatherList in
-                owner.updateUI(weatherList)
-            }).disposed(by: disposeBag)
-    }
-    
-    //MARK: - Custom Method
-    
-    private func updateUI(_ weatherList: [WeatherModel]) {
-        for subview in rootView.weatherView.stackView.arrangedSubviews {
-            rootView.weatherView.stackView.removeArrangedSubview(subview)
-            subview.removeFromSuperview()
-        }
-        
-        (0..<weatherList.count).enumerated().map { index , _ in
-            let weatherListView = MainWeatherListView()
-            weatherListView.delegate = self
-            weatherListView.dataBind(weatherList[index])
-            return weatherListView
-        }.forEach(rootView.weatherView.stackView.addArrangedSubview)
-    }
-}
-
-extension MainViewController: MainViewWeatherListDelegate {
-    func weatherViewDidTap(_ tag: Int) {
-        let detailVC = DetailViewController(
-            viewModel: DetailViewModel(
-                detailUseCase: DefaultDetailUseCase.init(
-                    tag,
-                    WeatherModel.weatherData
-                )
-            )
-        )
-        self.navigationController?.pushViewController(detailVC, animated: true)
+            .drive(self.rootView.weatherView.rx.items(
+                cellIdentifier: MainWeatherCollectionViewCell.cellIdentifier,
+                cellType: MainWeatherCollectionViewCell.self)
+            ) { _, data, cell in
+                cell.dataBind(data)
+            }.disposed(by: disposeBag)
     }
 }
 

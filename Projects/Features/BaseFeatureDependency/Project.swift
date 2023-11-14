@@ -2,7 +2,7 @@
 //  Project.swift
 //  ProjectDescriptionHelpers
 //
-//  Created by 류희재 on 2023/10/19.
+//  Created by 류희재 on 2023/10/30.
 //
 
 import ProjectDescription
@@ -10,10 +10,11 @@ import ProjectDescriptionHelpers
 import DependencyPlugin
 
 let project = Project.makeModule(
-    name: "MainFeature",
-    product: .staticFramework,
+    name: "BaseFeatureDependency",
+    product: .framework,
     dependencies: [
-        .Features.BaseFeatureDependency
+        .Modules.dsKit,
+        .domain
     ],
     sources: ["Sources/**"]
 )

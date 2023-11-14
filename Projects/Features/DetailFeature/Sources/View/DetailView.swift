@@ -10,25 +10,27 @@ import UIKit
 
 import Core
 import DSKit
+import Domain
 
 import SnapKit
 import Then
 
 final class DetailView: UIView {
+    let scrollView = UIScrollView()
+    private let contentView = UIView()
+    private let backgroundImageView = UIImageView.init(image: DSKitAsset.backgroundImg.image)
+    let detailTopView = DetailTopView()
+    let detailStickyHeaderView = DetailTopHeaderView()
+    let detailHourlyWeatherView = DetailHourlyWeatherView()
+    let detailForecastWeatherView = DetailForecastView()
     
-    // MARK: - Properties
-    
-    public let detailCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
-    public let detailBottomView = DetailBottomView()
+    // MARK: - UI Components
     
     // MARK: - Life Cycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        register()
-        
-        style()
         hieararchy()
         layout()
     }
@@ -37,41 +39,79 @@ final class DetailView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func register() {
-        detailCollectionView.register(
-            DetailWeatherCollectionViewCell.self, forCellWithReuseIdentifier: DetailWeatherCollectionViewCell.cellIdentifier
+    // MARK: - Custom Method
+    
+    private func hieararchy() {
+        self.addSubviews(
+            backgroundImageView,
+            scrollView,
+            detailTopView,
+            detailStickyHeaderView
+        )
+        scrollView.addSubview(contentView)
+        contentView.addSubviews(
+            detailHourlyWeatherView,
+            detailForecastWeatherView
         )
     }
     
-    private func style() {
-        detailCollectionView.do {
-            let layout = UICollectionViewFlowLayout()
-            layout.scrollDirection = .horizontal
-            layout.itemSize = CGSize(
-                width: UIScreen.main.bounds.width,
-                height: UIScreen.main.bounds.height.adjusted
-            )
-            layout.minimumLineSpacing = 0
-            layout.minimumInteritemSpacing = 0
-            
-            $0.collectionViewLayout = layout
-            $0.backgroundColor = .clear
-        }
-    }
-    
-    private func hieararchy() {
-        self.addSubviews(detailCollectionView, detailBottomView)
-    }
-    
     private func layout() {
-        detailCollectionView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+        backgroundImageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
         
-        detailBottomView.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(82.adjusted)
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(detailStickyHeaderView.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(100)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.edges.equalTo(scrollView.contentLayoutGuide)
+            $0.width.equalTo(scrollView.frameLayoutGuide)
+            $0.height.equalTo(scrollView.frameLayoutGuide).priority(.low)
+        }
+        
+        detailTopView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(78.adjusted)
+            $0.leading.trailing.equalToSuperview().inset(111)
+            $0.height.equalTo(212.adjusted)
+        }
+        
+        detailStickyHeaderView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(50.adjusted)
+            $0.leading.trailing.equalToSuperview().inset(111)
+            $0.height.equalTo(100)
+        }
+        
+        detailHourlyWeatherView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(190.adjusted)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(212.adjusted)
+        }
+        
+        detailForecastWeatherView.snp.makeConstraints {
+            $0.top.equalTo(detailHourlyWeatherView.snp.bottom).offset(20.adjusted)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+    }
+}
+
+extension DetailView {
+    func updateLayout(_ forecaseCnt: Int) {
+        let foreCastHeight: CGFloat = CGFloat(forecaseCnt * 55) + 38
+        let contentHeight = 290.adjusted + 212.adjusted + 20.adjusted + foreCastHeight - 100
+        
+        contentView.snp.remakeConstraints {
+            $0.edges.equalTo(scrollView.contentLayoutGuide)
+            $0.width.equalTo(scrollView.frameLayoutGuide)
+            $0.height.equalTo(contentHeight).priority(.low)
+        }
+        
+        detailForecastWeatherView.snp.remakeConstraints {
+            $0.top.equalTo(detailHourlyWeatherView.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(foreCastHeight)
         }
     }
 }

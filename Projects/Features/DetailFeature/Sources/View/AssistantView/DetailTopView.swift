@@ -21,10 +21,10 @@ final class DetailTopView: UIView {
     
     private let stackView = UIStackView()
     
-    private let placeLabel = UILabel()
-    private let temparatureLabel = UILabel()
-    private let weatherLabel = UILabel()
-    private let maxmimTemparatureLabel = UILabel()
+    let placeLabel = UILabel()
+    let temparatureLabel = UILabel()
+    let weatherLabel = UILabel()
+    let maxmimTemparatureLabel = UILabel()
     
     
     // MARK: - UI Components
@@ -91,7 +91,8 @@ final class DetailTopView: UIView {
 }
 
 extension DetailTopView {
-    func updateUI(_ data: WeatherModel) {
+    func updateUI(_ data: WeatherModel?) {
+        guard let data else { return }
         placeLabel.text = data.place
         temparatureLabel.text = "\(data.temparature)°"
         weatherLabel.text = data.weather

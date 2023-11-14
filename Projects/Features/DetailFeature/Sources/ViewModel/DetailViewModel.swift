@@ -15,21 +15,25 @@ import RxCocoa
 
 public final class DetailViewModel {
     internal var disposeBag = DisposeBag()
+    
+    public let detailCoordinator: DetailCoordinator?
     public let detailUseCase: DetailUseCase
     
-    public init(detailUseCase: DetailUseCase) {
+    public init(
+        detailCoordinator: DetailCoordinator,
+        detailUseCase: DetailUseCase
+    ) {
+        self.detailCoordinator = detailCoordinator
         self.detailUseCase = detailUseCase
     }
     
     struct Input {
-        let viewWillAppearEvent: Observable<Void>
-        let scrollEvent: Observable<Int>
+        let listButtonDidTapEvent: Observable<Void>
+        let pagingEvent: Observable<Int>
     }
     
     struct Output {
         var myPlaceWeatherList = BehaviorRelay<[WeatherModel]>(value: [])
-        var targetContentOffset = BehaviorRelay<CGPoint>(value: CGPoint())
-        var weatherIndicatorList = BehaviorRelay<[WeatherIndicatorModel]>(value: [])
         var currentPage = BehaviorRelay<Int>(value: 0)
     }
     
@@ -37,17 +41,13 @@ public final class DetailViewModel {
         let output = Output()
         self.bindOutput(output: output, disposeBag: disposeBag)
         
-        input.viewWillAppearEvent.subscribe(with: self, onNext: { owner, _ in
-            owner.detailUseCase.updateIndicatorView(nil)
+        input.listButtonDidTapEvent.subscribe(with: self, onNext: { owner, _ in
+            owner.detailCoordinator?.popViewController()
         }).disposed(by: disposeBag)
         
-        input.scrollEvent.subscribe(with: self, onNext: { owner, updatePage in
-            owner.detailUseCase.updateIndicatorView(updatePage)
+        input.pagingEvent.subscribe(with: self, onNext: { owner, page in
+            owner.detailUseCase.updateCurrentPage(page)
         }).disposed(by: disposeBag)
-        
-//        input.scrollEvent.subscribe(with: self, onNext: { owner, operand in
-//            owner.detailUseCase.calculatePage(operand)
-//        }).disposed(by: disposeBag)
         
         return output
     }
@@ -58,14 +58,6 @@ public final class DetailViewModel {
             output.myPlaceWeatherList.accept(weatherdata)
         }).disposed(by: disposeBag)
         
-        detailUseCase.targetContentOffset.subscribe(onNext: { targetContentOffset in
-            output.targetContentOffset.accept(targetContentOffset)
-        }).disposed(by: disposeBag)
-        
-        detailUseCase.weatherIndicatorList.subscribe(onNext: { indicatorList in
-            output.weatherIndicatorList.accept(indicatorList)
-        }).disposed(by: disposeBag)
-        
         detailUseCase.currentPage.subscribe(onNext: { currentPage in
             output.currentPage.accept(currentPage)
         }).disposed(by: disposeBag)
@@ -73,12 +65,12 @@ public final class DetailViewModel {
 }
 
 extension DetailViewModel {
-    public func getTargetContentOffset() -> CGPoint {
-        return detailUseCase.targetContentOffset.value
+    public func getWeatherData() -> [WeatherModel] {
+        return detailUseCase.weatherList.value
     }
     
-    public func getCurrentPage() -> CGFloat {
-        return CGFloat(detailUseCase.currentPage.value)
+    public func getCurrentPage() -> Int {
+        return detailUseCase.currentPage.value
     }
 }
 

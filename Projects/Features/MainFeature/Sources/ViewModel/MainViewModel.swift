@@ -6,6 +6,8 @@
 //  Copyright © 2023 hellohidi. All rights reserved.
 //
 
+import Foundation
+
 import Domain
 
 import RxSwift
@@ -13,13 +15,17 @@ import RxCocoa
 
 public final class MainViewModel {
     internal var disposeBag = DisposeBag()
+    
+    public let mainCoordinator: MainCoordinator?
     public let mainUseCase: MainUseCase
     
-    public init(mainUseCase: MainUseCase) {
+    public init(mainCoordinator: MainCoordinator ,mainUseCase: MainUseCase) {
+        self.mainCoordinator = mainCoordinator
         self.mainUseCase = mainUseCase
     }
     
     struct Input {
+        let weatherListViewDidTapEvent: Observable<IndexPath>
         let searchBarDidChangeEvent: Observable<String>
     }
     
@@ -30,6 +36,10 @@ public final class MainViewModel {
     func transform(from input: Input, disposeBag: DisposeBag) -> Output {
         let output = Output()
         self.bindOutput(output: output, disposeBag: disposeBag)
+        
+        input.weatherListViewDidTapEvent.subscribe(with: self, onNext: { owner, page in
+            self.mainCoordinator?.pushToDetailVC(with: page.item)
+        }).disposed(by: disposeBag)
         
         input.searchBarDidChangeEvent.subscribe(with: self, onNext: { owner, text in
             owner.mainUseCase.updateSearchResult(text)
