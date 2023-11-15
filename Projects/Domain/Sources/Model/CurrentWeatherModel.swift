@@ -10,12 +10,10 @@ import RxSwift
 import RxCocoa
 
 public struct CurrentWeatherModel {
-    public let tag: Int
     public let time, place, weather: String
     public let temparature, maxTemparature, minTemparature: Double
     
     public init(
-        tag: Int,
         time: String,
         place: String,
         weather: String,
@@ -23,7 +21,6 @@ public struct CurrentWeatherModel {
         maxTemparature: Double,
         minTemparature: Double
     ) {
-        self.tag = tag
         self.time = time
         self.place = place
         self.weather = weather

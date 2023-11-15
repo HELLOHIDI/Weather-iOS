@@ -9,9 +9,9 @@
 import RxSwift
 import RxCocoa
 
+import Core
+
 public final class DefaultMainUseCase: MainUseCase {
-    public var cityList = ["gongju", "gwangju", "gumi", "gunsan", "daegu", "daejeon", "mokpo", "busan", "seosan", "seoul", "sokcho", "suwon", "suncheon", "ulsan", "iksan", "jeonju", "jeju", "cheonan", "cheongju", "chuncheon"]
-    
     public var weatherList = BehaviorRelay<[CurrentWeatherModel]>(value: [])
     
     public let repository: WeatherRepository
@@ -32,8 +32,8 @@ public final class DefaultMainUseCase: MainUseCase {
     }
     
     public func getCurrentWeatherData() {
-        let currentCityWeatherList = cityList.enumerated().map { (index, city) in
-            return repository.getCityWeatherData(tag: index, city: city)
+        let currentCityWeatherList = City.cityList.map { city in
+            return repository.getCityWeatherData(city: city)
         }
         
         Observable.zip(currentCityWeatherList)

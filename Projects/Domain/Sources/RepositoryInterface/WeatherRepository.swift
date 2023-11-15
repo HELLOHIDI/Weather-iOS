@@ -9,5 +9,5 @@
 import RxSwift
 
 public protocol WeatherRepository {
-    func getCityWeatherData(tag: Int, city: String) -> Observable<CurrentWeatherModel>
+    func getCityWeatherData(city: String) -> Observable<CurrentWeatherModel>
 }

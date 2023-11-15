@@ -17,16 +17,19 @@ import Then
 import RxSwift
 import RxGesture
 import RxCocoa
+import Networks
+import Data
 
 public final class DetailPageViewController: UIViewController {
     
     //MARK: - Properties
     
-    public let viewModel: DetailViewModel
+    public let detailCoordinator: DetailCoordinator?
     private let disposeBag = DisposeBag()
     
     private let pagingSubject = PublishSubject<Int>()
     
+    var currentPage: Int
     private var viewControllerList: [UIViewController] = [UIViewController]()
     
     //MARK: - UI Components
@@ -34,20 +37,22 @@ public final class DetailPageViewController: UIViewController {
     private var pageViewController: UIPageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
     private let detailBottomView = DetailBottomView()
     
-    
-    public init(viewModel: DetailViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: - Life Cycle
+    
+    public init(currentPage: Int, detailCoordinator: DetailCoordinator) {
+        self.currentPage = currentPage
+        self.detailCoordinator = detailCoordinator
+        super.init(nibName: nil, bundle: nil)
     }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        bindViewModel()
+        bindUI()
         
         setDelegate()
         
@@ -56,27 +61,22 @@ public final class DetailPageViewController: UIViewController {
         layout()
     }
     
-    private func bindViewModel() {
-        let input = DetailViewModel.Input(
-            viewWillAppearEvent: self.rx.viewWillAppear.asObservable(),
-            listButtonDidTapEvent: detailBottomView.listButton.rx.tap.asObservable(),
-            pagingEvent: pagingSubject.asObservable()
-        )
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        let output = self.viewModel.transform(from: input, disposeBag: disposeBag)
-        
-        output.myPlaceWeatherList
-            .asDriver(onErrorJustReturn: [])
-            .filter { !$0.isEmpty}
-            .drive(with: self, onNext: { owner, weatherList in
-                owner.updatePageViewController(weatherList)
-                owner.updatePageControl(weatherList.count)
+        updatePageViewController()
+        updatePageControl()
+    }
+    
+    private func bindUI() {
+        detailBottomView.listButton.rx.tap
+            .subscribe(with: self, onNext: { owner, _ in
+                owner.detailCoordinator?.popViewController()
             }).disposed(by: disposeBag)
         
-        output.currentPage
-            .asDriver(onErrorJustReturn: Int())
-            .drive(with: self, onNext: { owner, currnetPage in
-                owner.detailBottomView.pageControl.currentPage = currnetPage
+        pagingSubject
+            .subscribe(with: self, onNext: { owner, currentPage in
+                owner.detailBottomView.pageControl.currentPage = currentPage
             }).disposed(by: disposeBag)
     }
     
@@ -136,25 +136,31 @@ extension DetailPageViewController: UIPageViewControllerDataSource {
 }
 
 extension DetailPageViewController {
-    func updatePageViewController(_ weatherList: [CurrentWeatherModel]) {
-        for page in 0..<weatherList.count {
+    func updatePageViewController() {
+        for city in City.cityList {
             self.viewControllerList.append(
                 DetailViewController(
-                    forPK: page,
-                    weatherData: weatherList[page]
+                    viewModel: DetailViewModel(
+                        detailUseCase: DefaultDetailUseCase(
+                            city: city,
+                            repository: DefaultWeatherRepository(
+                                urlSessionService: DefaultURLSessionNetworkService()
+                                )
+                        )
+                    )
                 )
             )
         }
         self.pageViewController.setViewControllers(
-            [self.viewControllerList[self.viewModel.getCurrentPage()]],
+            [self.viewControllerList[currentPage]],
             direction: .forward,
             animated: true,
             completion: nil
         )
     }
     
-    func updatePageControl(_ cnt: Int) {
-        self.detailBottomView.pageControl.numberOfPages = cnt
+    func updatePageControl() {
+        self.detailBottomView.pageControl.numberOfPages = City.cityList.count
         self.detailBottomView.pageControl.setIndicatorImage(DSKitAsset.navigator.image, forPage: 0)
     }
 }

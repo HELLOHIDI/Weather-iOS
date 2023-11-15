@@ -22,7 +22,7 @@ public class DefaultWeatherRepository: WeatherRepository {
         self.urlSessionService = urlSessionService
     }
     
-    public func getCityWeatherData(tag: Int, city: String) -> Observable<CurrentWeatherModel> {
+    public func getCityWeatherData(city: String) -> Observable<CurrentWeatherModel> {
         return urlSessionService.get(
             url: "https://api.openweathermap.org/data/2.5/weather?q=\(city)&appid=\("7618d35ff394f5dd39212928a3a4692f")",
             headers: ["Content-Type": "application/json"]
@@ -30,7 +30,7 @@ public class DefaultWeatherRepository: WeatherRepository {
             switch result {
             case .success(let data):
                 guard let dto = self.decode(data: data, to: CurrentWeatherEntity.self) else { throw Error.responseDecodingError }
-                return dto.toDomain(of: tag)
+                return dto.toDomain()
             case .failure(let error):
                 throw error
             }

@@ -131,7 +131,6 @@ final class MainWeatherCollectionViewCell: UICollectionViewCell {
     }
     
     func dataBind(_ data: CurrentWeatherModel) {
-        self.tag = data.tag
         timeLabel.text = data.time
         placeLabel.text = data.place
         weatherLabel.text = data.weather

@@ -10,7 +10,6 @@ import RxSwift
 import RxCocoa
 
 public protocol MainUseCase {
-    var cityList: [String] { get }
     var weatherList: BehaviorRelay<[CurrentWeatherModel]> { get }
     
     func updateSearchResult(_ text: String)

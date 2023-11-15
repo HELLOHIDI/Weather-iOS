@@ -12,9 +12,8 @@ import Domain
 
 
 extension CurrentWeatherEntity {
-    public func toDomain(of tag: Int) -> CurrentWeatherModel {
+    public func toDomain() -> CurrentWeatherModel {
         return CurrentWeatherModel(
-            tag: tag,
             time: makeTimeZoneToTime(timeZone: timezone),
             place: name,
             weather: weather[0].main,

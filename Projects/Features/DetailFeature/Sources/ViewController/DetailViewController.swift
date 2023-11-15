@@ -22,8 +22,7 @@ public final class DetailViewController : UIViewController {
     
     //MARK: - Properties
     
-    private var weatherModelPrimaryKey: Int?
-    private var weatherData: CurrentWeatherModel
+    public let viewModel: DetailViewModel
     
     private let disposeBag = DisposeBag()
     
@@ -37,9 +36,8 @@ public final class DetailViewController : UIViewController {
     
     //MARK: - Life Cycle
     
-    init(forPK: Int, weatherData: CurrentWeatherModel) {
-        self.weatherData = weatherData
-        self.weatherModelPrimaryKey = forPK
+    public init(viewModel: DetailViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -54,16 +52,10 @@ public final class DetailViewController : UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        updateUI()
-        
         configureDataSource()
         configureCollectionView()
         
         bindViewModel()
-    }
-    
-    private func updateUI() {
-        rootView.detailTopView.updateUI(weatherData)
     }
     
     private func configureDataSource() {
@@ -90,6 +82,18 @@ public final class DetailViewController : UIViewController {
     }
     
     private func bindViewModel() {
+        let input = DetailViewModel.Input(
+            viewWillAppearEvent: self.rx.viewWillAppear.asObservable()
+        )
+        
+        let output = self.viewModel.transform(from: input, disposeBag: disposeBag)
+        
+        output.currentWeatherData
+            .subscribe(with: self, onNext: { owner, weatherData in
+                owner.rootView.detailTopView.updateUI(weatherData)
+            }).disposed(by: disposeBag)
+        
+            
 //        weatherData.hourlyWeatherData
 //            .asDriver(onErrorJustReturn: [])
 //            .drive(

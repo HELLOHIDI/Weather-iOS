@@ -24,16 +24,9 @@ public class DefaultDetailCoordinator: DetailCoordinator {
     
     public func start(_ currentPage: Int) {
         let viewController = DetailPageViewController(
-            viewModel: DetailViewModel(
-                detailCoordinator: self,
-                detailUseCase: DefaultDetailUseCase(
-                    repository: DefaultWeatherRepository(
-                        urlSessionService: DefaultURLSessionNetworkService()
-                    ),
-                    currentPage
-                )
-            )
+            currentPage: currentPage, detailCoordinator: self
         )
+        
         self.navigationController.pushViewController(viewController, animated: true)
     }
     
