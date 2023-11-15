@@ -18,7 +18,7 @@ public struct CurrentWeatherEntity: Codable {
     let clouds: Clouds
     let dt: Int
     let sys: Sys
-    let timezone, id: Int
+    public let timezone, id: Int
     public let name: String
     let cod: Int
 }

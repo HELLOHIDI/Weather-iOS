@@ -10,10 +10,12 @@ import Foundation
 import Networks
 import Domain
 
+
 extension CurrentWeatherEntity {
     public func toDomain(of tag: Int) -> CurrentWeatherModel {
         return CurrentWeatherModel(
             tag: tag,
+            time: makeTimeZoneToTime(timeZone: timezone),
             place: name,
             weather: weather[0].main,
             temparature: main.temp,
@@ -21,9 +23,13 @@ extension CurrentWeatherEntity {
             minTemparature: main.tempMin
         )
     }
+    
+    func makeTimeZoneToTime(timeZone: Int) -> String {
+            let today = Date()
+            let dateFormatter = DateFormatter()
+            dateFormatter.timeZone = TimeZone(secondsFromGMT: timeZone)
+            dateFormatter.dateFormat = "HH:mm"
+            return dateFormatter.string(from: today)
+            
+        }
 }
-
-//public func toDomain() -> UserMainInfoModel? {
-//        guard let user = user, !user.name.isEmpty else { return nil }
-//        return UserMainInfoModel.init(status: user.status, name: user.name, profileImage: user.profileImage, historyList: user.historyList, attendanceScore: operation?.attendanceScore, announcement: operation?.announcement, isAllConfirm: isAllConfirm)
-//    }

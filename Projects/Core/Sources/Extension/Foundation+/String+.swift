@@ -18,11 +18,11 @@ extension String {
         return self.count > length
     }
     
-//    func transform() -> AppVersion {
-//        self.split(separator: ".").map { Int($0) ?? 0 }
-//    }
+    //    func transform() -> AppVersion {
+    //        self.split(separator: ".").map { Int($0) ?? 0 }
+    //    }
     
-      // MARK: - 휴대폰 번호 검증
+    // MARK: - 휴대폰 번호 검증
     public func validatePhone(number: String) -> Bool {
         let regex = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$"
         return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: number)
@@ -35,8 +35,7 @@ extension String {
         stringWithHypen.insert("-", at: stringWithHypen.index(stringWithHypen.endIndex, offsetBy: -4))
         
         return stringWithHypen
-      }
-    
+    }
 }
-    
+
 

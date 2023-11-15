@@ -24,7 +24,7 @@ public final class DefaultMainUseCase: MainUseCase {
     }
     
     public func updateSearchResult(_ text: String) {
-        let defaultWeatherList: [CurrentWeatherModel] = CurrentWeatherModel.weatherData
+        let defaultWeatherList: [CurrentWeatherModel] = []
         if text.isEmpty {
             weatherList.accept(defaultWeatherList)
         } else {

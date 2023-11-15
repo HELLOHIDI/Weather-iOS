@@ -123,8 +123,6 @@ public final class MainViewController : UIViewController {
                 cellIdentifier: MainWeatherCollectionViewCell.cellIdentifier,
                 cellType: MainWeatherCollectionViewCell.self)
             ) { _, data, cell in
-                print("🦖 뿌려주는 데이터입니다!")
-                dump(data)
                 cell.dataBind(data)
             }.disposed(by: disposeBag)
     }

@@ -20,8 +20,8 @@ final class MainWeatherCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
     
     private let weatherImageView = UIImageView()
-    private let myPlaceLabel = UILabel()
     private let placeLabel = UILabel()
+    private let timeLabel = UILabel()
     private let weatherLabel = UILabel()
     private let temparatureLabel = UILabel()
     private let maximumTemparatureLabel = UILabel()
@@ -48,13 +48,13 @@ final class MainWeatherCollectionViewCell: UICollectionViewCell {
             $0.image = DSKitAsset.listImg.image
         }
         
-        myPlaceLabel.do {
+        placeLabel.do {
             $0.text = "나의 위치"
             $0.font = DSKitFontFamily.SFProDisplay.bold.font(size: 24)
             $0.textColor = .white
         }
         
-        placeLabel.do {
+        timeLabel.do {
             $0.font = DSKitFontFamily.SFProDisplay.medium.font(size: 17)
             $0.textColor = .white
         }
@@ -85,8 +85,8 @@ final class MainWeatherCollectionViewCell: UICollectionViewCell {
     private func hieararchy() {
         self.addSubview(weatherImageView)
         weatherImageView.addSubviews(
-            myPlaceLabel,
             placeLabel,
+            timeLabel,
             weatherLabel,
             temparatureLabel,
             maximumTemparatureLabel,
@@ -99,19 +99,19 @@ final class MainWeatherCollectionViewCell: UICollectionViewCell {
             $0.edges.equalToSuperview()
         }
         
-        myPlaceLabel.snp.makeConstraints {
+        placeLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(15)
             $0.leading.equalToSuperview().offset(20)
         }
         
-        placeLabel.snp.makeConstraints {
-            $0.top.equalTo(myPlaceLabel.snp.bottom).offset(2)
-            $0.leading.equalTo(myPlaceLabel)
+        timeLabel.snp.makeConstraints {
+            $0.top.equalTo(placeLabel.snp.bottom).offset(2)
+            $0.leading.equalTo(placeLabel)
         }
         
         weatherLabel.snp.makeConstraints {
-            $0.top.equalTo(placeLabel.snp.bottom).offset(23)
-            $0.leading.equalTo(myPlaceLabel)
+            $0.top.equalTo(timeLabel.snp.bottom).offset(23)
+            $0.leading.equalTo(placeLabel)
         }
         
         temparatureLabel.snp.makeConstraints {
@@ -132,6 +132,7 @@ final class MainWeatherCollectionViewCell: UICollectionViewCell {
     
     func dataBind(_ data: CurrentWeatherModel) {
         self.tag = data.tag
+        timeLabel.text = data.time
         placeLabel.text = data.place
         weatherLabel.text = data.weather
         temparatureLabel.text = "\(Int(data.temparature - 273))°"
