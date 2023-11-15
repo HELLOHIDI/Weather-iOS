@@ -11,9 +11,9 @@ import Networks
 import Domain
 
 extension CurrentWeatherEntity {
-    public func toDomain() -> CurrentWeatherModel {
+    public func toDomain(of tag: Int) -> CurrentWeatherModel {
         return CurrentWeatherModel(
-            tag: 0,
+            tag: tag,
             place: name,
             weather: weather[0].main,
             temparature: main.temp,

@@ -134,9 +134,9 @@ final class MainWeatherCollectionViewCell: UICollectionViewCell {
         self.tag = data.tag
         placeLabel.text = data.place
         weatherLabel.text = data.weather
-        temparatureLabel.text = "\(data.temparature)°"
-        maximumTemparatureLabel.text = "최고:\(data.maxTemparature)°"
-        minimumTemparatureLabel.text = "최저:\(data.minTemparature)°"
+        temparatureLabel.text = "\(Int(data.temparature - 273))°"
+        maximumTemparatureLabel.text = "최고:\(Int(data.maxTemparature - 273))°"
+        minimumTemparatureLabel.text = "최저:\(Int(data.minTemparature - 273))°"
     }
 }
 

@@ -10,6 +10,8 @@ import UIKit
 
 import BaseFeatureDependency
 import Domain
+import Data
+import Networks
 
 public protocol MainCoordinatorDelegate {
     func pushToDetailVC(_ coordinator: MainCoordinator, _ page: Int)
@@ -29,7 +31,11 @@ public class DefaultMainCoordinator: MainCoordinator {
         let viewController = MainViewController(
             viewModel: MainViewModel(
                 mainCoordinator: self,
-                mainUseCase: DefaultMainUseCase()
+                mainUseCase: DefaultMainUseCase(
+                    repository: DefaultWeatherRepository(
+                        urlSessionService: DefaultURLSessionNetworkService()
+                    )
+                )
             )
         )
         self.navigationController.pushViewController(viewController, animated: true)

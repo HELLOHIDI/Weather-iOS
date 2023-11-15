@@ -14,5 +14,5 @@ public protocol MainUseCase {
     var weatherList: BehaviorRelay<[CurrentWeatherModel]> { get }
     
     func updateSearchResult(_ text: String)
-    func getCurrentWeatherData() async throws
+    func getCurrentWeatherData()
 }

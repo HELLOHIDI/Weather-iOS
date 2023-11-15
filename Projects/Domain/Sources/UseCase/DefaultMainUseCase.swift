@@ -11,14 +11,17 @@ import RxCocoa
 
 public final class DefaultMainUseCase: MainUseCase {
     
+    
     public var cityList = ["gongju", "gwangju", "gumi", "gunsan", "daegu", "daejeon", "mokpo", "busan", "seosan", "seoul", "sokcho", "suwon", "suncheon", "ulsan", "iksan", "jeonju", "jeju", "cheonan", "cheongju", "chuncheon"]
-    public var weatherList = BehaviorRelay<[CurrentWeatherModel]>(value: CurrentWeatherModel.weatherData)
+    
+    public var weatherList = BehaviorRelay<[CurrentWeatherModel]>(value: [])
+    
     public let repository: WeatherRepository
+    private let disposeBag = DisposeBag()
     
     public init(repository: WeatherRepository) {
         self.repository = repository
     }
-    
     
     public func updateSearchResult(_ text: String) {
         let defaultWeatherList: [CurrentWeatherModel] = CurrentWeatherModel.weatherData
@@ -30,13 +33,18 @@ public final class DefaultMainUseCase: MainUseCase {
         }
     }
     
-    public func getCurrentWeatherData() async throws {
-        var updateCurrentWeatherList: [CurrentWeatherModel] = []
-        for city in cityList {
-            let cityCurrentWeather = try await repository.getCityWeatherData(city: city)
-            updateCurrentWeatherList.append(cityCurrentWeather)
+    public func getCurrentWeatherData() {
+        let currentCityWeatherList = cityList.enumerated().map { (index, city) in
+            return repository.getCityWeatherData(tag: index, city: city)
         }
-        self.weatherList.accept(updateCurrentWeatherList)
+        
+        Observable.zip(currentCityWeatherList)
+            .subscribe(onNext: { cityWeatherArray in
+                let updateCurrentWeatherList = cityWeatherArray.compactMap { $0 }
+                self.weatherList.accept(updateCurrentWeatherList)
+            })
+            .disposed(by: disposeBag)
+        
+        
     }
 }
-

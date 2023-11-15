@@ -25,20 +25,25 @@ public final class MainViewModel {
     }
     
     struct Input {
+        let viewWillAppearEvent: Observable<Void>
         let weatherListViewDidTapEvent: Observable<IndexPath>
         let searchBarDidChangeEvent: Observable<String>
     }
     
     struct Output {
-        public var weatherList = BehaviorRelay<[CurrentWeatherModel]>(value: CurrentWeatherModel.weatherData)
+        public var weatherList = BehaviorRelay<[CurrentWeatherModel]>(value: [])
     }
     
     func transform(from input: Input, disposeBag: DisposeBag) -> Output {
         let output = Output()
         self.bindOutput(output: output, disposeBag: disposeBag)
         
+        input.viewWillAppearEvent.subscribe(with: self, onNext: { owner, _ in
+            owner.mainUseCase.getCurrentWeatherData()
+        }).disposed(by: disposeBag)
+        
         input.weatherListViewDidTapEvent.subscribe(with: self, onNext: { owner, page in
-            self.mainCoordinator?.pushToDetailVC(with: page.item)
+            owner.mainCoordinator?.pushToDetailVC(with: page.item)
         }).disposed(by: disposeBag)
         
         input.searchBarDidChangeEvent.subscribe(with: self, onNext: { owner, text in

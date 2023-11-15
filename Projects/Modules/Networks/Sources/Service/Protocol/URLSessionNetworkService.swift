@@ -14,19 +14,18 @@ public protocol URLSessionNetworkService {
         _ data: T,
         url urlString: String,
         headers: [String: String]?
-    ) async throws -> Data
+    ) -> Observable<Result<Data, URLSessionNetworkServiceError>>
     func patch<T: Codable>(
         _ data: T,
         url urlString: String,
         headers: [String: String]?
-    ) async throws -> Data
-    func delete<T: Codable>(
-        _ data: T,
+    ) -> Observable<Result<Data, URLSessionNetworkServiceError>>
+    func delete(
         url urlString: String,
         headers: [String: String]?
-    ) async throws -> Data
+    ) -> Observable<Result<Data, URLSessionNetworkServiceError>>
     func get(
         url urlString: String,
         headers: [String: String]?
-    ) async throws -> Data
+    ) -> Observable<Result<Data, URLSessionNetworkServiceError>>
 }
