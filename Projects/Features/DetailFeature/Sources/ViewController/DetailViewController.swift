@@ -64,7 +64,6 @@ public final class DetailViewController : UIViewController {
     
     private func updateUI() {
         rootView.detailTopView.updateUI(weatherData)
-        rootView.detailStickyHeaderView.updateUI(weatherData)
     }
     
     private func configureDataSource() {

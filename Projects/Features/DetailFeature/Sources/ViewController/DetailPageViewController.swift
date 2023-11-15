@@ -58,6 +58,7 @@ public final class DetailPageViewController: UIViewController {
     
     private func bindViewModel() {
         let input = DetailViewModel.Input(
+            viewWillAppearEvent: self.rx.viewWillAppear.asObservable(),
             listButtonDidTapEvent: detailBottomView.listButton.rx.tap.asObservable(),
             pagingEvent: pagingSubject.asObservable()
         )
@@ -66,6 +67,7 @@ public final class DetailPageViewController: UIViewController {
         
         output.myPlaceWeatherList
             .asDriver(onErrorJustReturn: [])
+            .filter { !$0.isEmpty}
             .drive(with: self, onNext: { owner, weatherList in
                 owner.updatePageViewController(weatherList)
                 owner.updatePageControl(weatherList.count)

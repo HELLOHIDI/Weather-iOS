@@ -28,6 +28,7 @@ public final class DetailViewModel {
     }
     
     struct Input {
+        let viewWillAppearEvent: Observable<Void>
         let listButtonDidTapEvent: Observable<Void>
         let pagingEvent: Observable<Int>
     }
@@ -41,6 +42,10 @@ public final class DetailViewModel {
         let output = Output()
         self.bindOutput(output: output, disposeBag: disposeBag)
         
+        input.viewWillAppearEvent.subscribe(with: self, onNext: { owner, _ in
+            owner.detailUseCase.getCurrentWeatherData()
+        }).disposed(by: disposeBag)
+
         input.listButtonDidTapEvent.subscribe(with: self, onNext: { owner, _ in
             owner.detailCoordinator?.popViewController()
         }).disposed(by: disposeBag)

@@ -10,6 +10,8 @@ import UIKit
 
 import BaseFeatureDependency
 import Domain
+import Networks
+import Data
 
 public class DefaultDetailCoordinator: DetailCoordinator {
     
@@ -24,7 +26,12 @@ public class DefaultDetailCoordinator: DetailCoordinator {
         let viewController = DetailPageViewController(
             viewModel: DetailViewModel(
                 detailCoordinator: self,
-                detailUseCase: DefaultDetailUseCase.init(currentPage)
+                detailUseCase: DefaultDetailUseCase(
+                    repository: DefaultWeatherRepository(
+                        urlSessionService: DefaultURLSessionNetworkService()
+                    ),
+                    currentPage
+                )
             )
         )
         self.navigationController.pushViewController(viewController, animated: true)
