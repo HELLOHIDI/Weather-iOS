@@ -10,10 +10,18 @@ import RxSwift
 import RxCocoa
 
 public final class DefaultMainUseCase: MainUseCase {
-    public var weatherList = BehaviorRelay<[WeatherModel]>(value: WeatherModel.weatherData)
+    
+    public var cityList = ["gongju", "gwangju", "gumi", "gunsan", "daegu", "daejeon", "mokpo", "busan", "seosan", "seoul", "sokcho", "suwon", "suncheon", "ulsan", "iksan", "jeonju", "jeju", "cheonan", "cheongju", "chuncheon"]
+    public var weatherList = BehaviorRelay<[CurrentWeatherModel]>(value: CurrentWeatherModel.weatherData)
+    public let repository: WeatherRepository
+    
+    public init(repository: WeatherRepository) {
+        self.repository = repository
+    }
+    
     
     public func updateSearchResult(_ text: String) {
-        let defaultWeatherList: [WeatherModel] = WeatherModel.weatherData
+        let defaultWeatherList: [CurrentWeatherModel] = CurrentWeatherModel.weatherData
         if text.isEmpty {
             weatherList.accept(defaultWeatherList)
         } else {
@@ -22,6 +30,13 @@ public final class DefaultMainUseCase: MainUseCase {
         }
     }
     
-    public init() {} // 'DefaultMainUseCase'의 초기화 메서드를 public으로 선언하여 외부 모듈에서 사용 가능하도록 합니다.
+    public func getCurrentWeatherData() async throws {
+        var updateCurrentWeatherList: [CurrentWeatherModel] = []
+        for city in cityList {
+            let cityCurrentWeather = try await repository.getCityWeatherData(city: city)
+            updateCurrentWeatherList.append(cityCurrentWeather)
+        }
+        self.weatherList.accept(updateCurrentWeatherList)
+    }
 }
 

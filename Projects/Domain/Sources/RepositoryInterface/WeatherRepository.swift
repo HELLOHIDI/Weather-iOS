@@ -6,6 +6,8 @@
 //  Copyright © 2023 hellohidi. All rights reserved.
 //
 
+import RxSwift
+
 public protocol WeatherRepository {
-    func getCityWeatherData() 
+    func getCityWeatherData(city: String) async throws -> CurrentWeatherModel
 }

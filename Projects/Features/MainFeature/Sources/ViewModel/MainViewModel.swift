@@ -30,7 +30,7 @@ public final class MainViewModel {
     }
     
     struct Output {
-        public var weatherList = BehaviorRelay<[WeatherModel]>(value: WeatherModel.weatherData)
+        public var weatherList = BehaviorRelay<[CurrentWeatherModel]>(value: CurrentWeatherModel.weatherData)
     }
     
     func transform(from input: Input, disposeBag: DisposeBag) -> Output {
@@ -56,7 +56,7 @@ public final class MainViewModel {
 }
 
 public extension MainViewModel {
-    func getWeatherList() -> [WeatherModel] {
+    func getWeatherList() -> [CurrentWeatherModel] {
         return mainUseCase.weatherList.value
     }
 }

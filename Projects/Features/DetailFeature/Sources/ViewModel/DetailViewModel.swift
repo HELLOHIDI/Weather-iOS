@@ -33,7 +33,7 @@ public final class DetailViewModel {
     }
     
     struct Output {
-        var myPlaceWeatherList = BehaviorRelay<[WeatherModel]>(value: [])
+        var myPlaceWeatherList = BehaviorRelay<[CurrentWeatherModel]>(value: [])
         var currentPage = BehaviorRelay<Int>(value: 0)
     }
     
@@ -65,7 +65,7 @@ public final class DetailViewModel {
 }
 
 extension DetailViewModel {
-    public func getWeatherData() -> [WeatherModel] {
+    public func getWeatherData() -> [CurrentWeatherModel] {
         return detailUseCase.weatherList.value
     }
     

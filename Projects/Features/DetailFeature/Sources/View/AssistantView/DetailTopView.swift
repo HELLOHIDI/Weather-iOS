@@ -91,7 +91,7 @@ final class DetailTopView: UIView {
 }
 
 extension DetailTopView {
-    func updateUI(_ data: WeatherModel?) {
+    func updateUI(_ data: CurrentWeatherModel?) {
         guard let data else { return }
         placeLabel.text = data.place
         temparatureLabel.text = "\(data.temparature)°"

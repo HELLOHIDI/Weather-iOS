@@ -6,3 +6,24 @@
 //
 
 import Foundation
+
+import Networks
+import Domain
+
+extension CurrentWeatherEntity {
+    public func toDomain() -> CurrentWeatherModel {
+        return CurrentWeatherModel(
+            tag: 0,
+            place: name,
+            weather: weather[0].main,
+            temparature: main.temp,
+            maxTemparature: main.tempMax,
+            minTemparature: main.tempMin
+        )
+    }
+}
+
+//public func toDomain() -> UserMainInfoModel? {
+//        guard let user = user, !user.name.isEmpty else { return nil }
+//        return UserMainInfoModel.init(status: user.status, name: user.name, profileImage: user.profileImage, historyList: user.historyList, attendanceScore: operation?.attendanceScore, announcement: operation?.announcement, isAllConfirm: isAllConfirm)
+//    }

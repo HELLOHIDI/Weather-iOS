@@ -23,7 +23,7 @@ public final class DetailViewController : UIViewController {
     //MARK: - Properties
     
     private var weatherModelPrimaryKey: Int?
-    private var weatherData: WeatherModel
+    private var weatherData: CurrentWeatherModel
     
     private let disposeBag = DisposeBag()
     
@@ -37,7 +37,7 @@ public final class DetailViewController : UIViewController {
     
     //MARK: - Life Cycle
     
-    init(forPK: Int, weatherData: WeatherModel) {
+    init(forPK: Int, weatherData: CurrentWeatherModel) {
         self.weatherData = weatherData
         self.weatherModelPrimaryKey = forPK
         super.init(nibName: nil, bundle: nil)
@@ -91,27 +91,27 @@ public final class DetailViewController : UIViewController {
     }
     
     private func bindViewModel() {
-        weatherData.hourlyWeatherData
-            .asDriver(onErrorJustReturn: [])
-            .drive(
-                self.rootView.detailHourlyWeatherView.hourlyCollectionView.rx.items(
-                    cellIdentifier: DetailHourlyCollectionViewCell.cellIdentifier,
-                    cellType: DetailHourlyCollectionViewCell.self)
-            ) { _, data, cell in
-                cell.dataBind(data)
-            }.disposed(by: disposeBag)
-        
-        weatherData.weatherForecastData
-            .subscribe(with: self, onNext: { owner, forecastData in
-                var updateSection: [SectionData<WeatherForecastModel>] = []
-                updateSection.append(SectionData<WeatherForecastModel>(items: forecastData))
-                owner.sectionSubject.accept(updateSection)
-            }).disposed(by: disposeBag)
-        
-        weatherData.weatherForecastData
-            .asDriver(onErrorJustReturn: [])
-            .drive(with: self, onNext: { owner, weatherData in
-                owner.rootView.updateLayout(weatherData.count)
-            }).disposed(by: disposeBag)
+//        weatherData.hourlyWeatherData
+//            .asDriver(onErrorJustReturn: [])
+//            .drive(
+//                self.rootView.detailHourlyWeatherView.hourlyCollectionView.rx.items(
+//                    cellIdentifier: DetailHourlyCollectionViewCell.cellIdentifier,
+//                    cellType: DetailHourlyCollectionViewCell.self)
+//            ) { _, data, cell in
+//                cell.dataBind(data)
+//            }.disposed(by: disposeBag)
+//        
+//        weatherData.weatherForecastData
+//            .subscribe(with: self, onNext: { owner, forecastData in
+//                var updateSection: [SectionData<WeatherForecastModel>] = []
+//                updateSection.append(SectionData<WeatherForecastModel>(items: forecastData))
+//                owner.sectionSubject.accept(updateSection)
+//            }).disposed(by: disposeBag)
+//        
+//        weatherData.weatherForecastData
+//            .asDriver(onErrorJustReturn: [])
+//            .drive(with: self, onNext: { owner, weatherData in
+//                owner.rootView.updateLayout(weatherData.count)
+//            }).disposed(by: disposeBag)
     }
 }

@@ -134,7 +134,7 @@ extension DetailPageViewController: UIPageViewControllerDataSource {
 }
 
 extension DetailPageViewController {
-    func updatePageViewController(_ weatherList: [WeatherModel]) {
+    func updatePageViewController(_ weatherList: [CurrentWeatherModel]) {
         for page in 0..<weatherList.count {
             self.viewControllerList.append(
                 DetailViewController(

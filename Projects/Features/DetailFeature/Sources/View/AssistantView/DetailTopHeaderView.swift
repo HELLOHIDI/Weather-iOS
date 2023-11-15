@@ -74,7 +74,7 @@ final class DetailTopHeaderView: UIView {
 }
 
 extension DetailTopHeaderView {
-    func updateUI(_ data: WeatherModel?) {
+    func updateUI(_ data: CurrentWeatherModel?) {
         guard let data else { return }
         placeLabel.text = data.place
         weatherLabel.text = "\(data.temparature)° | \(data.weather)"
