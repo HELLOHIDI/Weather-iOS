@@ -27,7 +27,9 @@ final class DetailForecastCollectionViewCell: UICollectionViewCell {
     private let weatherImageView = UIImageView()
     private let rainFallLabel = UILabel()
     private let minTemparatureLabel = UILabel()
-    private let temparatureIndicatorBar = UIView()
+    private let temparatureIndicatorBar = DetailGradientView(frame: .init(origin: .zero,
+                                                                          size: .init(width: 100, height: 4)))
+    
     private let maxTemparatureLabel = UILabel()
     private let separator = UIView()
     
@@ -64,11 +66,7 @@ final class DetailForecastCollectionViewCell: UICollectionViewCell {
             $0.textColor = .white
             $0.font = DSKitFontFamily.SFProDisplay.medium.font(size: 22)
         }
-        
-        temparatureIndicatorBar.do {
-            $0.backgroundColor = .red
-        }
-        
+
         maxTemparatureLabel.do {
             $0.textColor = .white
             $0.font = DSKitFontFamily.SFProDisplay.medium.font(size: 22)
@@ -136,6 +134,11 @@ extension DetailForecastCollectionViewCell {
         }
         minTemparatureLabel.text = "\(data.minTemparature)°"
         maxTemparatureLabel.text = "\(data.maxTemparature)°"
+        temparatureIndicatorBar.setupGradient(forTendaysHighestTemp: 29, forTendaysLowestTemp: 15)
+        temparatureIndicatorBar.setupDaysGradient(
+            daysHighestTemp: data.minTemparature,
+            daysLowestTemp: data.maxTemparature
+        )
     }
 }
 
