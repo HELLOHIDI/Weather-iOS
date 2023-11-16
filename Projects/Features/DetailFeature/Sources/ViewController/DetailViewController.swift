@@ -28,6 +28,7 @@ public final class DetailViewController : UIViewController {
     
     var sectionSubject = BehaviorRelay(value: [SectionData<WeatherForecastModel>]())
     private var weatherForecastDataSource: RxCollectionViewSectionedReloadDataSource<SectionData<WeatherForecastModel>>?
+    private let weatherForcastData: BehaviorRelay<[WeatherForecastModel]> = BehaviorRelay(value: WeatherForecastModel.weatherForecastData)
     
     
     //MARK: - UI Components
@@ -98,26 +99,21 @@ public final class DetailViewController : UIViewController {
             .drive(self.rootView.detailHourlyWeatherView.hourlyCollectionView.rx.items(
                 cellIdentifier: DetailHourlyCollectionViewCell.cellIdentifier,
                 cellType: DetailHourlyCollectionViewCell.self)
-        ) { _, data, cell in
-            cell.dataBind(data)
-        }.disposed(by: disposeBag)
-            
-//        weatherData.hourlyWeatherData
-//            .asDriver(onErrorJustReturn: [])
-//            .drive(
-                
-//        
-//        weatherData.weatherForecastData
-//            .subscribe(with: self, onNext: { owner, forecastData in
-//                var updateSection: [SectionData<WeatherForecastModel>] = []
-//                updateSection.append(SectionData<WeatherForecastModel>(items: forecastData))
-//                owner.sectionSubject.accept(updateSection)
-//            }).disposed(by: disposeBag)
-//        
-//        weatherData.weatherForecastData
-//            .asDriver(onErrorJustReturn: [])
-//            .drive(with: self, onNext: { owner, weatherData in
-//                owner.rootView.updateLayout(weatherData.count)
-//            }).disposed(by: disposeBag)
+            ) { _, data, cell in
+                cell.dataBind(data)
+            }.disposed(by: disposeBag)
+        
+        weatherForcastData
+            .subscribe(with: self, onNext: { owner, forecastData in
+                var updateSection: [SectionData<WeatherForecastModel>] = []
+                updateSection.append(SectionData<WeatherForecastModel>(items: forecastData))
+                owner.sectionSubject.accept(updateSection)
+            }).disposed(by: disposeBag)
+        
+        weatherForcastData
+            .asDriver(onErrorJustReturn: [])
+            .drive(with: self, onNext: { owner, weatherData in
+                owner.rootView.updateLayout(weatherData.count)
+            }).disposed(by: disposeBag)
     }
 }
