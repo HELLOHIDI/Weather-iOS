@@ -10,4 +10,5 @@ import RxSwift
 
 public protocol WeatherRepository {
     func getCityWeatherData(city: String) -> Observable<CurrentWeatherModel>
+    func getHourlyWeatherData(city: String) -> Observable<[HourlyWeatherModel]>
 }

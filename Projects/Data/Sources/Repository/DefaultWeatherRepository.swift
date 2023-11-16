@@ -36,6 +36,21 @@ public class DefaultWeatherRepository: WeatherRepository {
             }
         })
     }
+    
+    public func getHourlyWeatherData(city: String) -> Observable<[HourlyWeatherModel]> {
+        return urlSessionService.get(
+            url: "https://api.openweathermap.org/data/2.5/forecast?q=\(city)&appid=\("7618d35ff394f5dd39212928a3a4692f")",
+            headers: ["Content-Type": "application/json"]
+        ).map({ result in
+            switch result {
+            case .success(let data):
+                guard let dto = self.decode(data: data, to: HourlyWeatherEntity.self) else { throw Error.responseDecodingError }
+                return dto.toDomain()
+            case .failure(let error):
+                throw error
+            }
+        })
+    }
         
     
     

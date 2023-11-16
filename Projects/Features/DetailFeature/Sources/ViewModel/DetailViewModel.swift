@@ -30,6 +30,7 @@ public final class DetailViewModel {
     
     struct Output {
         var currentWeatherData = PublishRelay<CurrentWeatherModel>()
+        var hourlyWeatherData = PublishRelay<[HourlyWeatherModel]>()
     }
     
     func transform(from input: Input, disposeBag: DisposeBag) -> Output {
@@ -38,6 +39,7 @@ public final class DetailViewModel {
         
         input.viewWillAppearEvent.subscribe(with: self, onNext: { owner, _ in
             owner.detailUseCase.getCurrentWeatherData()
+            owner.detailUseCase.getHourlyWeatherData()
         }).disposed(by: disposeBag)
         
         return output
@@ -48,14 +50,9 @@ public final class DetailViewModel {
         detailUseCase.currentWeatherData.subscribe(onNext: { weatherdata in
             output.currentWeatherData.accept(weatherdata)
         }).disposed(by: disposeBag)
+        
+        detailUseCase.hourlyWeatherData.subscribe(onNext: { weatherdata in
+            output.hourlyWeatherData.accept(weatherdata)
+        }).disposed(by: disposeBag)
     }
 }
-
-//extension DetailViewModel {
-//    public func getCurrentWeatherData() -> CurrentWeatherModel {
-//        return detailUseCase.currentWeatherData.value
-//    }
-//}
-
-
-

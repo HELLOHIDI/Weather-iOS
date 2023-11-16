@@ -71,7 +71,7 @@ final class DetailHourlyWeatherView: UIView {
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .horizontal
             layout.itemSize = CGSize(
-                width: 34.adjusted,
+                width: 50.adjusted,
                 height: 122.adjusted
             )
             layout.minimumLineSpacing = 22
@@ -79,6 +79,7 @@ final class DetailHourlyWeatherView: UIView {
             
             $0.collectionViewLayout = layout
             $0.backgroundColor = .clear
+            $0.showsHorizontalScrollIndicator = false
         }
     }
     

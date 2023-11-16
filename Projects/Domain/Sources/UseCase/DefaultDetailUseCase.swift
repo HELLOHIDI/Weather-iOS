@@ -14,6 +14,7 @@ import RxCocoa
 public final class DefaultDetailUseCase: DetailUseCase {
     
     public var currentWeatherData = PublishRelay<CurrentWeatherModel>()
+    public var hourlyWeatherData = PublishRelay<[HourlyWeatherModel]>()
     public var city: String
     
     public let repository: WeatherRepository
@@ -29,5 +30,12 @@ public final class DefaultDetailUseCase: DetailUseCase {
             .subscribe(with: self, onNext: { owner, currentWeatherData in
                 owner.currentWeatherData.accept(currentWeatherData)
         }).disposed(by: disposeBag)
+    }
+    
+    public func getHourlyWeatherData() {
+        repository.getHourlyWeatherData(city: city)
+            .subscribe(with: self, onNext: { owner, hourlyWeatherData in
+                owner.hourlyWeatherData.accept(hourlyWeatherData)
+            }).disposed(by: disposeBag)
     }
 }

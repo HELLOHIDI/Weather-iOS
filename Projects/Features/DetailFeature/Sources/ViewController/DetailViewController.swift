@@ -93,16 +93,19 @@ public final class DetailViewController : UIViewController {
                 owner.rootView.detailTopView.updateUI(weatherData)
             }).disposed(by: disposeBag)
         
+        output.hourlyWeatherData
+            .asDriver(onErrorJustReturn: [])
+            .drive(self.rootView.detailHourlyWeatherView.hourlyCollectionView.rx.items(
+                cellIdentifier: DetailHourlyCollectionViewCell.cellIdentifier,
+                cellType: DetailHourlyCollectionViewCell.self)
+        ) { _, data, cell in
+            cell.dataBind(data)
+        }.disposed(by: disposeBag)
             
 //        weatherData.hourlyWeatherData
 //            .asDriver(onErrorJustReturn: [])
 //            .drive(
-//                self.rootView.detailHourlyWeatherView.hourlyCollectionView.rx.items(
-//                    cellIdentifier: DetailHourlyCollectionViewCell.cellIdentifier,
-//                    cellType: DetailHourlyCollectionViewCell.self)
-//            ) { _, data, cell in
-//                cell.dataBind(data)
-//            }.disposed(by: disposeBag)
+                
 //        
 //        weatherData.weatherForecastData
 //            .subscribe(with: self, onNext: { owner, forecastData in

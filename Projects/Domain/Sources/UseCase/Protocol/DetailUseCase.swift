@@ -14,7 +14,9 @@ import RxCocoa
 public protocol DetailUseCase {
     var city: String { get }
     var currentWeatherData: PublishRelay<CurrentWeatherModel> { get }
+    var hourlyWeatherData: PublishRelay<[HourlyWeatherModel]> { get }
     
     func getCurrentWeatherData()
+    func getHourlyWeatherData()
 }
 
