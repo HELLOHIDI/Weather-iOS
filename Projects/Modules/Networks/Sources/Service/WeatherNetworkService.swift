@@ -11,45 +11,12 @@ import Foundation
 import RxSwift
 
 public final class WeatherNetworkService: URLSessionNetworkService {
-    public init () {}
-//    public func post<T: Codable>(
-//        _ data: T,
-//        url urlStrㄱing: String,
-//        headers: [String: String]?
-//    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
-//        return self.request(with: data, url: urlString, headers: headers, method: HTTPMethod.post)
-//    }
-//
-//    public func patch<T: Codable>(
-//        _ data: T,
-//        url urlString: String,
-//        headers: [String: String]?
-//    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
-//        return self.request(with: data, url: urlString, headers: headers, method: HTTPMethod.patch)
-//    }
-//
-//    public func delete(
-//        url urlString: String,
-//        headers: [String: String]?
-//    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
-//        return self.request(url: urlString, headers: headers, method: HTTPMethod.delete)
-//    }
-//
-//    public func get(
-//        url urlString: String,
-//        headers: [String: String]?
-//    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
-//        return self.request(url: urlString, headers: headers, method: HTTPMethod.get)
-//    }
     
+    public init () {}
     public func request(target: URLSessionTargetType) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
-//        guard let url = URL(string: urlString) else {
-//            return Observable.error(URLSessionNetworkServiceError.invalidURLError)
-//        }
 
         return Observable<Result<Data, URLSessionNetworkServiceError>>.create { emitter in
             let request = URLRequest(target: target)
-//            self.createHTTPRequest(of: url, with: headers, httpMethod: method)
             NetworkLogger.log(request: request)
             let task = URLSession.shared.dataTask(with: request) { data, reponse, error in
                 NetworkLogger.log(response: reponse as? HTTPURLResponse, data: data, error: error)
@@ -57,12 +24,12 @@ public final class WeatherNetworkService: URLSessionNetworkService {
                     emitter.onError(URLSessionNetworkServiceError.unknownError)
                     return
                 }
-                
+
                 if error != nil {
                     emitter.onError(self.configureHTTPError(errorCode: httpResponse.statusCode))
                     return
                 }
-                
+
                 guard 200...299 ~= httpResponse.statusCode else {
                     emitter.onError(self.configureHTTPError(errorCode: httpResponse.statusCode))
                     return
@@ -75,52 +42,92 @@ public final class WeatherNetworkService: URLSessionNetworkService {
                 emitter.onCompleted()
             }
             task.resume()
-            
+
             return Disposables.create {
                 task.cancel()
             }
         }
     }
     
-    private func request<T: Codable>(
-        with bodyData: T,
-        url urlString: String,
-        headers: [String: String]? = nil,
-        method: String
-    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
-        guard let url = URL(string: urlString),
-              let httpBody = self.createPostPayload(from: bodyData) else {
-                  return Observable.error(URLSessionNetworkServiceError.emptyDataError)
-              }
-        return Observable<Result<Data, URLSessionNetworkServiceError>>.create { emitter in
-            let request = self.createHTTPRequest(of: url, with: headers, httpMethod: method, with: httpBody)
-            let task = URLSession.shared.dataTask(with: request) { data, reponse, error in
-                guard let httpResponse = reponse as? HTTPURLResponse else {
-                    emitter.onError(URLSessionNetworkServiceError.unknownError)
-                    return
-                }
-                if error != nil {
-                    emitter.onError(self.configureHTTPError(errorCode: httpResponse.statusCode))
-                    return
-                }
-                guard 200...299 ~= httpResponse.statusCode else {
-                    emitter.onError(self.configureHTTPError(errorCode: httpResponse.statusCode))
-                    return
-                }
-                guard let data = data else {
-                    emitter.onNext(.failure(.emptyDataError))
-                    return
-                }
-                emitter.onNext(.success(data))
-                emitter.onCompleted()
-            }
-            task.resume()
-            
-            return Disposables.create {
-                task.cancel()
-            }
-        }
-    }
+//    public func request<T: Codable>(
+//        with bodyData: T,
+//        target: URLSessionTargetType) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
+//        if let httpBody = self.createPostPayload(from: bodyData) {
+//            return Observable.error(URLSessionNetworkServiceError.emptyDataError)
+//        }
+//        return Observable<Result<Data, URLSessionNetworkServiceError>>.create { emitter in
+//            let request = URLRequest(target: target, with:)
+//            NetworkLogger.log(request: request)
+//            let task = URLSession.shared.dataTask(with: request) { data, reponse, error in
+//                NetworkLogger.log(response: reponse as? HTTPURLResponse, data: data, error: error)
+//                guard let httpResponse = reponse as? HTTPURLResponse else {
+//                    emitter.onError(URLSessionNetworkServiceError.unknownError)
+//                    return
+//                }
+//                
+//                if error != nil {
+//                    emitter.onError(self.configureHTTPError(errorCode: httpResponse.statusCode))
+//                    return
+//                }
+//                
+//                guard 200...299 ~= httpResponse.statusCode else {
+//                    emitter.onError(self.configureHTTPError(errorCode: httpResponse.statusCode))
+//                    return
+//                }
+//                guard let data = data else {
+//                    emitter.onNext(.failure(.emptyDataError))
+//                    return
+//                }
+//                emitter.onNext(.success(data))
+//                emitter.onCompleted()
+//            }
+//            task.resume()
+//            
+//            return Disposables.create {
+//                task.cancel()
+//            }
+//        }
+//    }
+    
+//    private func request<T: Codable>(
+//        with bodyData: T,
+//        url urlString: String,
+//        headers: [String: String]? = nil,
+//        method: String
+//    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
+//        guard let url = URL(string: urlString),
+//              let httpBody = self.createPostPayload(from: bodyData) else {
+//                  return Observable.error(URLSessionNetworkServiceError.emptyDataError)
+//              }
+//        return Observable<Result<Data, URLSessionNetworkServiceError>>.create { emitter in
+//            let request = self.createHTTPRequest(of: url, with: headers, httpMethod: method, with: httpBody)
+//            let task = URLSession.shared.dataTask(with: request) { data, reponse, error in
+//                guard let httpResponse = reponse as? HTTPURLResponse else {
+//                    emitter.onError(URLSessionNetworkServiceError.unknownError)
+//                    return
+//                }
+//                if error != nil {
+//                    emitter.onError(self.configureHTTPError(errorCode: httpResponse.statusCode))
+//                    return
+//                }
+//                guard 200...299 ~= httpResponse.statusCode else {
+//                    emitter.onError(self.configureHTTPError(errorCode: httpResponse.statusCode))
+//                    return
+//                }
+//                guard let data = data else {
+//                    emitter.onNext(.failure(.emptyDataError))
+//                    return
+//                }
+//                emitter.onNext(.success(data))
+//                emitter.onCompleted()
+//            }
+//            task.resume()
+//
+//            return Disposables.create {
+//                task.cancel()
+//            }
+//        }
+//    }
     
     private func createPostPayload<T: Codable>(from requestBody: T) -> Data? {
         if let data = requestBody as? Data {
@@ -134,21 +141,21 @@ public final class WeatherNetworkService: URLSessionNetworkService {
         ?? URLSessionNetworkServiceError.unknownError
     }
     
-    private func createHTTPRequest(
-        of url: URL,
-        with headers: [String: String]?,
-        httpMethod: String,
-        with body: Data? = nil
-    ) -> URLRequest {
-        var request = URLRequest(url: url)
-        request.httpMethod = httpMethod
-        headers?.forEach({ header in
-            request.addValue(header.value, forHTTPHeaderField: header.key)
-        })
-        if let body = body {
-            request.httpBody = body
-        }
-        
-        return request
-    }
+//    private func createHTTPRequest(
+//        of url: URL,
+//        with headers: [String: String]?,
+//        httpMethod: String,
+//        with body: Data? = nil
+//    ) -> URLRequest {
+//        var request = URLRequest(url: url)
+//        request.httpMethod = httpMethod
+//        headers?.forEach({ header in
+//            request.addValue(header.value, forHTTPHeaderField: header.key)
+//        })
+//        if let body = body {
+//            request.httpBody = body
+//        }
+//
+//        return request
+//    }
 }

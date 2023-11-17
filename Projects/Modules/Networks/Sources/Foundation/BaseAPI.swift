@@ -27,7 +27,6 @@ extension BaseAPI {
         case .weather:
             break
         }
-
         return base
     }
     
