@@ -10,60 +10,49 @@ import Foundation
 
 import RxSwift
 
-public final class DefaultURLSessionNetworkService: URLSessionNetworkService {
-    private enum HTTPMethod {
-        static let get = "GET"
-        static let post = "POST"
-        static let patch = "PATCH"
-        static let delete = "DELETE"
-    }
+public final class WeatherNetworkService: URLSessionNetworkService {
+    public init () {}
+//    public func post<T: Codable>(
+//        _ data: T,
+//        url urlStrㄱing: String,
+//        headers: [String: String]?
+//    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
+//        return self.request(with: data, url: urlString, headers: headers, method: HTTPMethod.post)
+//    }
+//
+//    public func patch<T: Codable>(
+//        _ data: T,
+//        url urlString: String,
+//        headers: [String: String]?
+//    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
+//        return self.request(with: data, url: urlString, headers: headers, method: HTTPMethod.patch)
+//    }
+//
+//    public func delete(
+//        url urlString: String,
+//        headers: [String: String]?
+//    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
+//        return self.request(url: urlString, headers: headers, method: HTTPMethod.delete)
+//    }
+//
+//    public func get(
+//        url urlString: String,
+//        headers: [String: String]?
+//    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
+//        return self.request(url: urlString, headers: headers, method: HTTPMethod.get)
+//    }
     
-    public init() {}
-    
-    public func post<T: Codable>(
-        _ data: T,
-        url urlString: String,
-        headers: [String: String]?
-    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
-        return self.request(with: data, url: urlString, headers: headers, method: HTTPMethod.post)
-    }
-    
-    public func patch<T: Codable>(
-        _ data: T,
-        url urlString: String,
-        headers: [String: String]?
-    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
-        return self.request(with: data, url: urlString, headers: headers, method: HTTPMethod.patch)
-    }
-    
-    public func delete(
-        url urlString: String,
-        headers: [String: String]?
-    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
-        return self.request(url: urlString, headers: headers, method: HTTPMethod.delete)
-    }
-    
-    public func get(
-        url urlString: String,
-        headers: [String: String]?
-    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
-        return self.request(url: urlString, headers: headers, method: HTTPMethod.get)
-    }
-    
-    private func request(
-        url urlString: String,
-        headers: [String: String]? = nil,
-        method: String
-    ) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
-        guard let url = URL(string: urlString) else {
-            return Observable.error(URLSessionNetworkServiceError.invalidURLError)
-        }
+    public func request(target: URLSessionTargetType) -> Observable<Result<Data, URLSessionNetworkServiceError>> {
+//        guard let url = URL(string: urlString) else {
+//            return Observable.error(URLSessionNetworkServiceError.invalidURLError)
+//        }
 
         return Observable<Result<Data, URLSessionNetworkServiceError>>.create { emitter in
-            let request = self.createHTTPRequest(of: url, with: headers, httpMethod: method)
+            let request = URLRequest(target: target)
+//            self.createHTTPRequest(of: url, with: headers, httpMethod: method)
             NetworkLogger.log(request: request)
             let task = URLSession.shared.dataTask(with: request) { data, reponse, error in
-                NetworkLogger.log(response: reponse as! HTTPURLResponse, data: data, error: error)
+                NetworkLogger.log(response: reponse as? HTTPURLResponse, data: data, error: error)
                 guard let httpResponse = reponse as? HTTPURLResponse else {
                     emitter.onError(URLSessionNetworkServiceError.unknownError)
                     return

@@ -10,22 +10,25 @@ import Foundation
 import RxSwift
 
 public protocol URLSessionNetworkService {
-    func post<T: Codable>(
-        _ data: T,
-        url urlString: String,
-        headers: [String: String]?
-    ) -> Observable<Result<Data, URLSessionNetworkServiceError>>
-    func patch<T: Codable>(
-        _ data: T,
-        url urlString: String,
-        headers: [String: String]?
-    ) -> Observable<Result<Data, URLSessionNetworkServiceError>>
-    func delete(
-        url urlString: String,
-        headers: [String: String]?
-    ) -> Observable<Result<Data, URLSessionNetworkServiceError>>
-    func get(
-        url urlString: String,
-        headers: [String: String]?
-    ) -> Observable<Result<Data, URLSessionNetworkServiceError>>
+    init() 
+    func request(target: URLSessionTargetType) -> Observable<Result<Data, URLSessionNetworkServiceError>>
+//    var targetType: URLSessionTargetType { get }
+//    func post<T: Codable>(
+//        _ data: T,
+//        url urlString: String,
+//        headers: [String: String]?
+//    ) -> Observable<Result<Data, URLSessionNetworkServiceError>>
+//    func patch<T: Codable>(
+//        _ data: T,
+//        url urlString: String,
+//        headers: [String: String]?
+//    ) -> Observable<Result<Data, URLSessionNetworkServiceError>>
+//    func delete(
+//        url urlString: String,
+//        headers: [String: String]?
+//    ) -> Observable<Result<Data, URLSessionNetworkServiceError>>
+//    func get(
+//        url urlString: String,
+//        headers: [String: String]?
+//    ) -> Observable<Result<Data, URLSessionNetworkServiceError>>
 }

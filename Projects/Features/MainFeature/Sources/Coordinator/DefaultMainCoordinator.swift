@@ -33,7 +33,7 @@ public class DefaultMainCoordinator: MainCoordinator {
                 mainCoordinator: self,
                 mainUseCase: DefaultMainUseCase(
                     repository: DefaultWeatherRepository(
-                        urlSessionService: DefaultURLSessionNetworkService()
+                        urlSessionService: WeatherNetworkService()
                     )
                 )
             )

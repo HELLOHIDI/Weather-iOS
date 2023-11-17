@@ -144,7 +144,7 @@ extension DetailPageViewController {
                         detailUseCase: DefaultDetailUseCase(
                             city: city,
                             repository: DefaultWeatherRepository(
-                                urlSessionService: DefaultURLSessionNetworkService()
+                                urlSessionService: WeatherNetworkService()
                                 )
                         )
                     )
