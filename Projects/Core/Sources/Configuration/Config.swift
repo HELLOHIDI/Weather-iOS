@@ -10,18 +10,10 @@ import Foundation
 
 import Foundation
 
-public enum Config {
-    public enum Keys {
-        public enum Plist {
-            public static let baseURL = "BASE_URL"
-            public static let apiKey = "API_KEY"
-        }
-    }
-    
-    private static let infoDictionary: [String: Any] = {
-        guard let dict = Bundle.main.infoDictionary else {
-            fatalError("plist cannot found.")
-        }
-        return dict
-    }()
+import Foundation
+
+public struct Config {
+    public static let apiKey = Bundle.main.infoDictionary?["API_KEY"] as! String
+    public static let baseURL = Bundle.main.infoDictionary?["BASE_URL"] as! String
 }
+

@@ -16,7 +16,7 @@ public enum HTTPMethod {
 }
 
 public protocol URLSessionTargetType {
-//    var baseURL: URL { get }
+    var baseURL: String { get }
     var path: String { get }
     var method: String { get }
     var headers: [String: String]? { get }
@@ -25,8 +25,7 @@ public protocol URLSessionTargetType {
 
 extension URLRequest {
     init(target: URLSessionTargetType) {
-//        let url = target.baseURL.appendingPathComponent(target.path)
-        let url = URL(string: target.path)
+        let url = URL(string: target.baseURL + target.path)
         self.init(url: url!)
         httpMethod = target.method
         

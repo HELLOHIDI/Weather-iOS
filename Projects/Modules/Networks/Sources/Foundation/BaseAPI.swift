@@ -18,9 +18,8 @@ public protocol BaseAPI: URLSessionTargetType {
 }
 
 extension BaseAPI {
-    public var baseURL: URL {
-//        let base = "https://api.openweathermap.org/data/2.5/"
-        let base = Config.Keys.Plist.baseURL
+    public var baseURL: String {
+        let base = Config.baseURL
         guard URL(string: base) != nil else {
             fatalError("baseURL could not be configured")
         }
@@ -28,10 +27,8 @@ extension BaseAPI {
         case .weather:
             break
         }
-        guard let url = URL(string: base) else {
-            fatalError("baseURL could not be configured")
-        }
-        return url
+
+        return base
     }
     
     public var headers: [String: String]? {

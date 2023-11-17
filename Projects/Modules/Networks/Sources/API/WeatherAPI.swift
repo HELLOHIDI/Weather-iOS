@@ -14,20 +14,15 @@ public enum WeatherAPI {
     case getHourlyWeatherData(city: String)
 }
 
-extension WeatherAPI: BaseAPI {
-//    public var baseURL: URL {
-//        
-//    }
-    
+extension WeatherAPI: BaseAPI {    
     public static var apiType: APIType = .weather
     
     public var path: String {
         switch self {
         case .getCurrentWeatherData(let city):
-//            return "weather?q=\(city)&appid=\(Config.Keys.Plist.apiKey)"
-            return "https://api.openweathermap.org/data/2.5/weather?q=\(city)&appid=\("7618d35ff394f5dd39212928a3a4692f")"
+            return "/weather?q=\(city)&appid=\(Config.apiKey)"
         case .getHourlyWeatherData(let city):
-            return "/forecast?q=\(city)&appid=\(Config.Keys.Plist.apiKey)"
+            return "/forecast?q=\(city)&appid=\(Config.apiKey)"
         }
     }
     

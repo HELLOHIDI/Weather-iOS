@@ -9,6 +9,8 @@ import ProjectDescription
 
 public extension Project {
     static let appInfoPlist: [String: InfoPlist.Value] = [
+        "BASE_URL": "https://api.openweathermap.org/data/2.5",
+        "API_KEY": "7618d35ff394f5dd39212928a3a4692f",
         "CFBundleShortVersionString": "1.0.0",
         "CFBundleDevelopmentRegion": "ko",
         "CFBundleVersion": "1",
