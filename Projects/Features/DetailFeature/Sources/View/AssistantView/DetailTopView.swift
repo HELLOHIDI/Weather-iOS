@@ -91,12 +91,14 @@ final class DetailTopView: UIView {
 }
 
 extension DetailTopView {
-    func updateUI(_ data: WeatherModel?) {
+    func updateUI(_ data: CurrentWeatherModel?) {
         guard let data else { return }
-        placeLabel.text = data.place
-        temparatureLabel.text = "\(data.temparature)°"
-        weatherLabel.text = data.weather
-        maxmimTemparatureLabel.text = "최고:\(data.maxTemparature)°   최저:\(data.minTemparature)°"
+        Task {
+            placeLabel.text = data.place
+            temparatureLabel.text = "\(Int(data.temparature - 273))°"
+            weatherLabel.text = data.weather
+            maxmimTemparatureLabel.text = "최고:\(Int(data.maxTemparature - 273))°   최저:\(Int(data.minTemparature - 273))°"
+        }
     }
 }
 

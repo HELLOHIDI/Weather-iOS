@@ -10,6 +10,8 @@ import UIKit
 
 import BaseFeatureDependency
 import Domain
+import Networks
+import Data
 
 public class DefaultDetailCoordinator: DetailCoordinator {
     
@@ -22,11 +24,9 @@ public class DefaultDetailCoordinator: DetailCoordinator {
     
     public func start(_ currentPage: Int) {
         let viewController = DetailPageViewController(
-            viewModel: DetailViewModel(
-                detailCoordinator: self,
-                detailUseCase: DefaultDetailUseCase.init(currentPage)
-            )
+            currentPage: currentPage, detailCoordinator: self
         )
+        
         self.navigationController.pushViewController(viewController, animated: true)
     }
     

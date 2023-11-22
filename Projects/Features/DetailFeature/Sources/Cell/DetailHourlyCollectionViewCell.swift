@@ -61,11 +61,10 @@ final class DetailHourlyCollectionViewCell: UICollectionViewCell {
             $0.font = DSKitFontFamily.SFProDisplay.medium.font(size: 22)
             $0.textAlignment = .center
             $0.textColor =  .white
-        }
-    }
+        }    }
     
     private func hieararchy() {
-        self.addSubview(stackView)
+        contentView.addSubview(stackView)
         stackView.addArrangedSubViews(
             timeLabel,
             weatherImageView,
@@ -79,9 +78,11 @@ final class DetailHourlyCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func dataBind(_ data: WeatherHourlyModel) {
-        timeLabel.text = data.time
-        weatherImageView.image = data.weatherImage
-        temparatureLabel.text = data.temparature
+    func dataBind(_ data: HourlyWeatherModel) {
+        Task {
+            timeLabel.text = "\(data.time)시"
+            weatherImageView.kfSetImage(url: data.weatherImage)
+            temparatureLabel.text = "\(Int(data.temparature - 273))°"
+        }
     }
 }

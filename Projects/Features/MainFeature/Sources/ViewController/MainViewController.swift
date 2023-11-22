@@ -110,6 +110,7 @@ public final class MainViewController : UIViewController {
     
     private func bindViewModel() {
         let input = MainViewModel.Input(
+            viewWillAppearEvent: self.rx.viewWillAppear.asObservable(),
             weatherListViewDidTapEvent: rootView.weatherView.rx.itemSelected.asObservable(),
             searchBarDidChangeEvent: searchBarDidChangeSubject.asObservable()
         )
@@ -132,4 +133,3 @@ extension MainViewController: UISearchResultsUpdating {
         searchBarDidChangeSubject.onNext(searchController.searchBar.text ?? "")
     }
 }
-

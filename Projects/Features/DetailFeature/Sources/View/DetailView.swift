@@ -19,6 +19,7 @@ final class DetailView: UIView {
     let scrollView = UIScrollView()
     private let contentView = UIView()
     private let backgroundImageView = UIImageView.init(image: DSKitAsset.backgroundImg.image)
+    
     let detailTopView = DetailTopView()
     let detailStickyHeaderView = DetailTopHeaderView()
     let detailHourlyWeatherView = DetailHourlyWeatherView()
@@ -44,12 +45,11 @@ final class DetailView: UIView {
     private func hieararchy() {
         self.addSubviews(
             backgroundImageView,
-            scrollView,
-            detailTopView,
-            detailStickyHeaderView
+            scrollView
         )
         scrollView.addSubview(contentView)
         contentView.addSubviews(
+            detailTopView,
             detailHourlyWeatherView,
             detailForecastWeatherView
         )
@@ -61,7 +61,7 @@ final class DetailView: UIView {
         }
         
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(detailStickyHeaderView.snp.bottom).offset(10)
+            $0.top.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview().inset(100)
         }
@@ -78,14 +78,8 @@ final class DetailView: UIView {
             $0.height.equalTo(212.adjusted)
         }
         
-        detailStickyHeaderView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(50.adjusted)
-            $0.leading.trailing.equalToSuperview().inset(111)
-            $0.height.equalTo(100)
-        }
-        
         detailHourlyWeatherView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(190.adjusted)
+            $0.top.equalTo(detailTopView.snp.bottom).offset(44.adjusted)
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(212.adjusted)
         }
@@ -100,7 +94,7 @@ final class DetailView: UIView {
 extension DetailView {
     func updateLayout(_ forecaseCnt: Int) {
         let foreCastHeight: CGFloat = CGFloat(forecaseCnt * 55) + 38
-        let contentHeight = 290.adjusted + 212.adjusted + 20.adjusted + foreCastHeight - 100
+        let contentHeight = 212.adjusted + 290.adjusted + 212.adjusted + 20.adjusted + foreCastHeight - 100
         
         contentView.snp.remakeConstraints {
             $0.edges.equalTo(scrollView.contentLayoutGuide)

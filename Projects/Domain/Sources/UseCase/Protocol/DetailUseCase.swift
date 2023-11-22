@@ -12,11 +12,11 @@ import RxSwift
 import RxCocoa
 
 public protocol DetailUseCase {
-    var weatherList: BehaviorRelay<[WeatherModel]> { get }
-    var currentPage: BehaviorRelay<Int> { get }
+    var city: String { get }
+    var currentWeatherData: PublishRelay<CurrentWeatherModel> { get }
+    var hourlyWeatherData: PublishRelay<[HourlyWeatherModel]> { get }
     
-    func updateCurrentPage(_ page: Int)
-    
-    init(_ currentPage: Int)
+    func getCurrentWeatherData()
+    func getHourlyWeatherData()
 }
 

@@ -9,11 +9,20 @@
 import RxSwift
 import RxCocoa
 
+import Core
+
 public final class DefaultMainUseCase: MainUseCase {
-    public var weatherList = BehaviorRelay<[WeatherModel]>(value: WeatherModel.weatherData)
+    public var weatherList = BehaviorRelay<[CurrentWeatherModel]>(value: [])
+    
+    public let repository: WeatherRepository
+    private let disposeBag = DisposeBag()
+    
+    public init(repository: WeatherRepository) {
+        self.repository = repository
+    }
     
     public func updateSearchResult(_ text: String) {
-        let defaultWeatherList: [WeatherModel] = WeatherModel.weatherData
+        let defaultWeatherList: [CurrentWeatherModel] = []
         if text.isEmpty {
             weatherList.accept(defaultWeatherList)
         } else {
@@ -22,6 +31,18 @@ public final class DefaultMainUseCase: MainUseCase {
         }
     }
     
-    public init() {} // 'DefaultMainUseCase'의 초기화 메서드를 public으로 선언하여 외부 모듈에서 사용 가능하도록 합니다.
+    public func getCurrentWeatherData() {
+        let currentCityWeatherList = City.cityList.map { city in
+            return repository.getCityWeatherData(city: city)
+        }
+        
+        Observable.zip(currentCityWeatherList)
+            .subscribe(onNext: { cityWeatherArray in
+                let updateCurrentWeatherList = cityWeatherArray.compactMap { $0 }
+                self.weatherList.accept(updateCurrentWeatherList)
+            })
+            .disposed(by: disposeBag)
+        
+        
+    }
 }
-

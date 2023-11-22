@@ -11,15 +11,31 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-public final class DefaultDetailUseCase: DetailUseCase {    
-    public var weatherList = BehaviorRelay<[WeatherModel]>(value: WeatherModel.weatherData)
-    public var currentPage = BehaviorRelay<Int>(value: Int())
+public final class DefaultDetailUseCase: DetailUseCase {
     
-    public init(_ currentPage: Int) {
-        self.currentPage.accept(currentPage)
+    public var currentWeatherData = PublishRelay<CurrentWeatherModel>()
+    public var hourlyWeatherData = PublishRelay<[HourlyWeatherModel]>()
+    public var city: String
+    
+    public let repository: WeatherRepository
+    private let disposeBag = DisposeBag()
+    
+    public init(city: String, repository: WeatherRepository) {
+        self.city = city
+        self.repository = repository
+    }
+
+    public func getCurrentWeatherData() {
+        repository.getCityWeatherData(city: city)
+            .subscribe(with: self, onNext: { owner, currentWeatherData in
+                owner.currentWeatherData.accept(currentWeatherData)
+        }).disposed(by: disposeBag)
     }
     
-    public func updateCurrentPage(_ page: Int) {
-        currentPage.accept(page)
+    public func getHourlyWeatherData() {
+        repository.getHourlyWeatherData(city: city)
+            .subscribe(with: self, onNext: { owner, hourlyWeatherData in
+                owner.hourlyWeatherData.accept(hourlyWeatherData)
+            }).disposed(by: disposeBag)
     }
 }

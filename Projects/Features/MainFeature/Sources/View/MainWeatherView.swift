@@ -40,7 +40,7 @@ final class MainWeatherView: UICollectionView {
     private func style() {
         self.do {
             let layout = UICollectionViewFlowLayout()
-            layout.scrollDirection = .horizontal
+            layout.scrollDirection = .vertical
             layout.itemSize = CGSize(
                 width: 375,
                 height: 117.adjusted
