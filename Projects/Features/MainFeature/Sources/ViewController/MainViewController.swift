@@ -10,7 +10,6 @@ import UIKit
 
 import Domain
 import DSKit
-import DetailFeature
 
 import SnapKit
 import Then
