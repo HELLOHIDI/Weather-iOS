@@ -14,7 +14,7 @@ public extension Project {
         "CFBundleShortVersionString": "1.0.0",
         "CFBundleDevelopmentRegion": "ko",
         "CFBundleVersion": "1",
-        "CFBundleIdentifier": "com.Weather-iOS.release",
+        "CFBundleIdentifier": "com.Weather-iOS.$(PRODUCT_MODULE_NAME)",
         "CFBundleDisplayName": "Weather-iOS",
         "UILaunchStoryboardName": "LaunchScreen",
         "UIApplicationSceneManifest": [
