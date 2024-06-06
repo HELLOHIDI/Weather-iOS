@@ -32,20 +32,20 @@ public extension Project {
             dependencies: dependencies
         )
 
-        let testTarget = Target(
-            name: "\(name)Tests",
-            platform: Environment.platform,
-            product: .unitTests,
-            bundleId: "\(Environment.bundlePrefix).\(name)Tests",
-            deploymentTarget: deploymentTarget,
-            infoPlist: .default,
-            sources: ["Tests/**"],
-            dependencies: [.target(name: name)]
-        )
+//        let testTarget = Target(
+//            name: "\(name)Tests",
+//            platform: Environment.platform,
+//            product: .unitTests,
+//            bundleId: "\(Environment.bundlePrefix).\(name)Tests",
+//            deploymentTarget: deploymentTarget,
+//            infoPlist: .default,
+//            sources: ["Tests/**"],
+//            dependencies: [.target(name: name)]
+//        )
 
         let schemes: [Scheme] = [.makeScheme(target: .debug, name: name)]
 
-        let targets: [Target] = [appTarget, testTarget]
+        let targets: [Target] = [appTarget]
 
         return Project(
             name: name,
