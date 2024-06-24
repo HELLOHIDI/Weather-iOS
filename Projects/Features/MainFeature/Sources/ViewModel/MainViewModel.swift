@@ -54,15 +54,15 @@ public final class MainViewModel {
     
     
     private func bindOutput(output: Output, disposeBag: DisposeBag) {
-        mainUseCase.weatherList.subscribe(onNext: { weatherList in
-            output.weatherList.accept(weatherList)
-        }).disposed(by: disposeBag)
+//        mainUseCase.weatherList.subscribe(onNext: { weatherList in
+//            output.weatherList.accept(weatherList)
+//        }).disposed(by: disposeBag)
     }
 }
 
-public extension MainViewModel {
-    func getWeatherList() -> [CurrentWeatherModel] {
-        return mainUseCase.weatherList.value
-    }
-}
+//public extension MainViewModel {
+//    func getWeatherList() -> [CurrentWeatherModel] {
+//        return mainUseCase.weatherList.value
+//    }
+//}
 

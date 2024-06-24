@@ -28,9 +28,9 @@ public class DefaultMainCoordinator: MainCoordinator {
     }
     
     public func start() {
-        let viewController = MainViewController(
-            viewModel: MainViewModel(
-                mainCoordinator: self,
+        let viewController = MainViewController_Reactor(
+            coordinator: self,
+            reactor: MainReactor(
                 mainUseCase: DefaultMainUseCase(
                     repository: DefaultWeatherRepository(
                         urlSessionService: WeatherNetworkService()

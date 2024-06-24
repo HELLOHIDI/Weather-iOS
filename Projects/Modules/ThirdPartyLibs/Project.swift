@@ -21,6 +21,7 @@ let project = Project.makeModule(
         .SPM.RxCocoa,
         .SPM.RxDataSources,
         .SPM.RxRelay,
-        .SPM.RxSwift
+        .SPM.RxSwift,
+        .SPM.ReactorKit
     ]
 )

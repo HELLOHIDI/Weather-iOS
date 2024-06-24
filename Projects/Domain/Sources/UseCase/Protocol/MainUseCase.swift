@@ -10,8 +10,6 @@ import RxSwift
 import RxCocoa
 
 public protocol MainUseCase {
-    var weatherList: BehaviorRelay<[CurrentWeatherModel]> { get }
-    
-    func updateSearchResult(_ text: String)
-    func getCurrentWeatherData()
+    func updateSearchResult(_ text: String) -> Observable<[CurrentWeatherModel]>
+    func getCurrentWeatherData() -> Observable<[CurrentWeatherModel]>
 }
