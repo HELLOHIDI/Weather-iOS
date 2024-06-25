@@ -19,18 +19,18 @@ public final class MainViewModel {
     public let mainCoordinator: MainCoordinator?
     public let mainUseCase: MainUseCase
     
-    public init(mainCoordinator: MainCoordinator ,mainUseCase: MainUseCase) {
+    public init(mainCoordinator: MainCoordinator? ,mainUseCase: MainUseCase) {
         self.mainCoordinator = mainCoordinator
         self.mainUseCase = mainUseCase
     }
     
-    struct Input {
+    public struct Input {
         let viewWillAppearEvent: Observable<Void>
         let weatherListViewDidTapEvent: Observable<IndexPath>
         let searchBarDidChangeEvent: Observable<String>
     }
     
-    struct Output {
+    public struct Output {
         public var weatherList = BehaviorRelay<[CurrentWeatherModel]>(value: [])
     }
     

@@ -22,26 +22,26 @@ public extension Project {
 
         let appTarget = Target(
             name: name,
-            platform: Environment.platform,
-            product: product,
-            bundleId: "\(Environment.bundlePrefix).\(name)",
-            deploymentTarget: deploymentTarget,
-            infoPlist: infoPlist,
-            sources: sources,
+            platform: Environment.platform, // iOS, macOS, tvOS, watchOS 같은 플랫폼
+            product: product, // app, appClips, staticFramework, frameWork, unitTest 같은 product
+            bundleId: "\(Environment.bundlePrefix).\(name)", // 번들 ID
+            deploymentTarget: deploymentTarget, // 배포타겟을 설정 (+버전)
+            infoPlist: infoPlist, // infoPlist
+            sources: sources, //소스 코드의 경로
             resources: resources,
             dependencies: dependencies
         )
 
-//        let testTarget = Target(
-//            name: "\(name)Tests",
-//            platform: Environment.platform,
-//            product: .unitTests,
-//            bundleId: "\(Environment.bundlePrefix).\(name)Tests",
-//            deploymentTarget: deploymentTarget,
-//            infoPlist: .default,
-//            sources: ["Tests/**"],
-//            dependencies: [.target(name: name)]
-//        )
+        let testTarget = Target(
+            name: "\(name)Tests",
+            platform: Environment.platform,
+            product: .unitTests,
+            bundleId: "\(Environment.bundlePrefix).\(name)Tests",
+            deploymentTarget: deploymentTarget,
+            infoPlist: .default,
+            sources: ["Tests/**"],
+            dependencies: [.target(name: name)]
+        )
 
         let schemes: [Scheme] = [.makeScheme(target: .debug, name: name)]
 
