@@ -10,8 +10,8 @@ import ProjectDescriptionHelpers
 import DependencyPlugin
 
 let project = Project.makeModule(
-    name: "MainFeature",
-    targets: [.unitTest, .staticFramework, .demo, .interface],
+    name: "RootFeature",
+    targets: [.unitTest, .staticFramework, .demo],
     internalDependencies: [
         .Features.Main.Feature,
         .Features.Detail.Feature
