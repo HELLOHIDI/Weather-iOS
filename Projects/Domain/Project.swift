@@ -11,9 +11,8 @@ import DependencyPlugin
 
 let project = Project.makeModule(
     name: "Domain",
-    product: .staticFramework,
-    dependencies: [
+    targets: [.unitTest, .dynamicFramework],
+    internalDependencies: [
         .core
-    ],
-    sources: ["Sources/**"]
+    ]
 )

@@ -11,11 +11,10 @@ import DependencyPlugin
 
 let project = Project.makeModule(
     name: "Data",
-    product: .staticFramework,
-    dependencies: [
+    targets: [.unitTest, .staticFramework],
+    internalDependencies: [
         .domain,
         .Modules.networks
-    ],
-    sources: ["Sources/**"]
+    ]
 )
 

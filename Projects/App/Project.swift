@@ -12,11 +12,9 @@ import EnvPlugin
 
 let project = Project.makeModule(
     name: Environment.workspaceName,
-    product: .app,
-    dependencies: [
-        .Features.RootFeature,
-        .data
-    ],
-    sources: ["Sources/**"],
-    resources: ["Resources/**"]
+    targets: [.app, .unitTest],
+    internalDependencies: [
+        .data,
+        .Features.RootFeature
+    ]
 )

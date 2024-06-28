@@ -11,11 +11,10 @@ import DependencyPlugin
 
 let project = Project.makeModule(
     name: "BaseFeatureDependency",
-    product: .framework,
-    dependencies: [
-        .Modules.dsKit,
-        .domain
-    ],
-    sources: ["Sources/**"]
+    targets: [.dynamicFramework],
+    internalDependencies: [
+        .domain,
+        .Modules.dsKit
+    ]
 )
 

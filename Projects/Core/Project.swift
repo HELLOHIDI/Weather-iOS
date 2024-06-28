@@ -9,11 +9,14 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 import DependencyPlugin
 
+import ProjectDescription
+import ProjectDescriptionHelpers
+import DependencyPlugin
+
 let project = Project.makeModule(
     name: "Core",
-    product: .framework,
-    dependencies: [
+    targets: [.unitTest, .dynamicFramework, .demo],
+    internalDependencies: [
         .Modules.thirdPartyLibs
-    ],
-    sources: ["Sources/**"]
+    ]
 )

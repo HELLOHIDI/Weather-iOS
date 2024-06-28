@@ -10,12 +10,10 @@ import ProjectDescriptionHelpers
 import DependencyPlugin
 
 let project = Project.makeModule(
-    name: "RootFeature",
-    product: .staticFramework,
-    dependencies: [
+    name: "MainFeature",
+    targets: [.unitTest, .staticFramework, .demo, .interface],
+    internalDependencies: [
         .Features.Main.Feature,
         .Features.Detail.Feature
-    ],
-    sources: ["Sources/**"]
+    ]
 )
-

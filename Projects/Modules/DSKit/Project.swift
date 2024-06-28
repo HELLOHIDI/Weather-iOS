@@ -11,10 +11,9 @@ import DependencyPlugin
 
 let project = Project.makeModule(
     name: "DSKit",
-    product: .framework,
-    dependencies: [
+    targets: [.unitTest, .demo, .dynamicFramework],
+    internalDependencies: [
         .core
     ],
-    sources: ["Sources/**"],
-    resources: ["ReSources/**"]
+    hasResources: true
 )

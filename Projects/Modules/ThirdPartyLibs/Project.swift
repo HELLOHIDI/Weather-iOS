@@ -11,9 +11,8 @@ import DependencyPlugin
 
 let project = Project.makeModule(
     name: "ThirdPartyLibs",
-    product: .framework,
-    packages: [],
-    dependencies: [
+    targets: [.dynamicFramework],
+    externalDependencies: [
         .SPM.SnapKit,
         .SPM.Then,
         .SPM.RxGesture,
