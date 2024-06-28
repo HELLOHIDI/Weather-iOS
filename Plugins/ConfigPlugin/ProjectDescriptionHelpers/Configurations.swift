@@ -1,19 +1,12 @@
-//
-//  Configurations.swift
-//  ConfigPlugin
-//
-//  Created by 류희재 on 6/28/24.
-//
-
 import Foundation
 import ProjectDescription
 
 public struct XCConfig {
     private struct Path {
-        static var framework: ProjectDescription.Path { .relativeToRoot("xcconfigs/targets/iOS-Framework.xcconfig") }
-        static var demo: ProjectDescription.Path { .relativeToRoot("xcconfigs/targets/iOS-Demo.xcconfig") }
-        static var tests: ProjectDescription.Path { .relativeToRoot("xcconfigs/targets/iOS-Tests.xcconfig") }
-        static func project(_ config: String) -> ProjectDescription.Path { .relativeToRoot("xcconfigs/Base/Projects/Project-\(config).xcconfig") }
+        static var framework: ProjectDescription.Path { .relativeToRoot("Configurations/Targets/iOS-Framework.xcconfig") }
+        static var demo: ProjectDescription.Path { .relativeToRoot("Configurations/Targets/iOS-Demo.xcconfig") }
+        static var tests: ProjectDescription.Path { .relativeToRoot("Configurations/Targets/iOS-Tests.xcconfig") }
+        static func project(_ config: String) -> ProjectDescription.Path { .relativeToRoot("Configurations/Base/Projects/Project-\(config).xcconfig") }
     }
     
     public static let framework: [Configuration] = [
