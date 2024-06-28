@@ -7,7 +7,26 @@
 
 import ProjectDescription
 
+/**
+comment
+ 
+ /// Sumarry
+ ///
+ /// Discussion/Overview
+ ///
+ /// - Parameters:
+ ///    - [param]: [description]
+ /// - Returns: [description]
+ /// - Warning: [description]
+ /// - Author: [name]
+ /// - Version: [version number]
+ /// - Note: [note message]
+ /// - Tip: [tip message]
+ /// - Todo: [todo message]
+ 
+*/
 public extension SettingsDictionary {
+    // allLoadSettings와 baseSettings는 빌드 설정 딕셔너리의 기본값을 정의
     static let allLoadSettings: Self = [
         "OTHER_LDFLAGS" : [
             "$(inherited) -all_load",

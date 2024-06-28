@@ -16,6 +16,7 @@ import Domain
 
 final class MainViewModelTests: XCTestCase {
     private var viewModel: MainViewModel!
+    private var scheduler:
     private var disposeBag: DisposeBag!
     private var input: MainViewModel.Input!
     private var output: MainViewModel.Output!

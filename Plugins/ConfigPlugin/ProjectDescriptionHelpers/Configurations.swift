@@ -16,6 +16,12 @@ public struct XCConfig {
         static func project(_ config: String) -> ProjectDescription.Path { .relativeToRoot("xcconfigs/Base/Projects/Project-\(config).xcconfig") }
     }
     
+    /*
+     - DEV : 실제 프로덕트 BaseURL을 사용하는 debug scheme
+     - TEST : 테스트 BaseURL을 사용하는 debug scheme
+     - QA : 테스트 BaseURL을 사용하는 release scheme
+     - RELEASE : 실제 프로덕트 BaseURL을 사용하는 release scheme
+     */
     public static let framework: [Configuration] = [
         .debug(name: "Development", xcconfig: Path.framework),
         .debug(name: "Test", xcconfig: Path.framework),

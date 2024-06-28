@@ -4,58 +4,63 @@ import EnvPlugin
 public extension Project {
     static func makeModule(
         name: String,
-        product: Product,
+        targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo]),
         organizationName: String = "hellohidi",
         packages: [Package] = [],
-        deploymentTarget: DeploymentTarget? = Environment.deploymentTarget,
-        dependencies: [TargetDependency] = [],
+        internalDependencies: [TargetDependency] = [],
+        externalDependencies: [TargetDependency] = [],
+        interfaceDependencies: [TargetDependency] = [],
         sources: SourceFilesList? = nil,
         resources: ResourceFileElements? = nil,
         infoPlist: InfoPlist = .extendingDefault(with: Project.appInfoPlist)
     ) -> Project {
-        let settings: Settings = .settings(
-            base: [:],
-            configurations: [
-                .debug(name: .debug),
-                .release(name: .release)
-            ], defaultSettings: .recommended)
+//        let settings: Settings = .settings(
+//            base: [:],
+//            configurations: [
+//                .debug(name: .debug),
+//                .release(name: .release)
+//            ], defaultSettings: .recommended)
+        
+        let configurationName: ConfigurationName = "Development"
+        let hasDynamicFramework = targets.contains(.dynamicFramework)
+        let deploymentTarget = Environment.deploymentTarget
+        let platform = Environment.platform
+        let baseSetting: SettingsDictionary = [:]
+        
+        var projectTargets: [Target] = []
+        var schemes: [Scheme] = []
+        
+        // MARK: - APP
+        
+        if targets.contains(.app) {
+            let bundleSuffix = name.contains("Demo") ? "test" : "release"
+            let infoPlist = name.contains("Demo") ? Project.demoInfoPlist : Project.appInfoPlist
+            let setting = baseSetting
+            
+            let target = Target(
+                name: name,
+                platform: platform,
+                product: .app,
+                bundleId: "\(Environment.bundlePrefix).\(bundleSuffix)",
+                deploymentTarget: deploymentTarget,
+                //infoPlist에 .extendingDefault로 Info.plsit에 추가 내용을 넣어준 이유는 tuist에서 .default 만들어주는 Info.plist는 앱을 실행할 때 화면이 어딘가 나사가 빠진상태로 실행되기 때문입니다.
+                infoPlist: .extendingDefault(with: infoPlist),
+                sources: ["Sources/**/*.swift"],
+                // 터미널 명령어랑 비슷한듯? 일단 바쁘니까 나중에 정리해보도록 하자ㅏ https://www.daleseo.com/glob-patterns/#google_vignette
+                resources: [.glob(pattern: "Resources/**", excluding: [])],
+                //entitlement: 주로 iOS 애플리케이션에서 특정 기능이나 권한을 활성화하기 위해 사용하는 설정 파일
+                entitlements: "\(name).entitlements",
+                dependencies: [
+                    internalDependencies,
+                    externalDependencies
+                ].flatMap { $0 },
+                settings: .settings(base: setting, configurations: XCConfig.project)
+            
+            
+            )
+        }
+        
 
-        let appTarget = Target(
-            name: name,
-            platform: Environment.platform, // iOS, macOS, tvOS, watchOS 같은 플랫폼
-            product: product, // app, appClips, staticFramework, frameWork, unitTest 같은 product
-            bundleId: "\(Environment.bundlePrefix).\(name)", // 번들 ID
-            deploymentTarget: deploymentTarget, // 배포타겟을 설정 (+버전)
-            infoPlist: infoPlist, // infoPlist
-            sources: sources, //소스 코드의 경로
-            resources: resources,
-            dependencies: dependencies
-        )
-
-        let testTarget = Target(
-            name: "\(name)Tests",
-            platform: Environment.platform,
-            product: .unitTests,
-            bundleId: "\(Environment.bundlePrefix).\(name)Tests",
-            deploymentTarget: deploymentTarget,
-            infoPlist: .default,
-            sources: ["\(name)Tests/**"],
-            dependencies: [.target(name: name)]
-        )
-
-        let schemes: [Scheme] = [.makeScheme(target: .debug, name: name)]
-
-        let targets: [Target] = [appTarget]
-
-        return Project(
-            name: name,
-            organizationName: organizationName,
-            packages: packages,
-            settings: settings,
-            targets: targets,
-            schemes: schemes
-        )
-    }
 }
 
 extension Scheme {
@@ -77,28 +82,6 @@ extension Scheme {
         )
     }
 }
-
-
-//import Foundation
-//import ProjectDescription
-//
-//public enum FeatureTarget {
-//    case app    // iOSApp
-//    case interface  // Feature Interface
-//    case dynamicFramework
-//    case staticFramework
-//    case unitTest   // Unit Test
-//    case uiTest // UI Test
-//    case demo   // Feature Excutable Test
-//
-//    public var hasFramework: Bool {
-//        switch self {
-//        case .dynamicFramework, .staticFramework: return true
-//        default: return false
-//        }
-//    }
-//    public var hasDynamicFramework: Bool { return self == .dynamicFramework }
-//}
 
 
 //import Foundation
@@ -242,41 +225,20 @@ extension Scheme {
 //            projectTargets.append(target)
 //        }
 //        
-//        // MARK: - UI Tests
-//        
-//        if targets.contains(.uiTest) {
-//            let deps: [TargetDependency] = targets.contains(.demo)
-//            ? [.target(name: name), .target(name: "\(name)Demo")] : [.target(name: name)]
-//            
-//            let target = Target(
-//                name: "\(name)UITests",
-//                platform: platform,
-//                product: .uiTests,
-//                bundleId: "\(Environment.bundlePrefix).\(name)UITests",
-//                deploymentTarget: deploymentTarget,
-//                infoPlist: .default,
-//                sources: ["UITests/Sources/**/*.swift"],
-//                dependencies: deps,
-//                settings: .settings(base: SettingsDictionary().setCodeSignManual(), configurations: XCConfig.tests)
-//            )
-//            
-//            projectTargets.append(target)
-//        }
-//        
 //        // MARK: - Schemes
 //        
 //        let additionalSchemes = targets.contains(.demo) // 타겟이 데모앱을 가지고 있는다면
 //        ? [Scheme.makeScheme(configs: configurationName, name: name), // 그냥 스킴이랑
 //           Scheme.makeDemoScheme(configs: configurationName, name: name)] // 데모앱 스킴을 같이 가지게 되고
-//        : [Scheme.makeScheme(configs: configurationName, name: name)] // 아니면 그냥 스킴만 가지고
+//        : [Scheme.makeScheme(configs: configurationName, name: name)] // 아니면 (테스트데모, 피쳐, 테스트, 인터페이스) 그냥 스킴만 가지고
 //        schemes += additionalSchemes // 그것을 배열에다가 더해준다
 //
-//        var scheme = targets.contains(.app) // 타겟이 앱을 포함하고 잇다면 앱 스킴도 추가해주고요
+//        var scheme = targets.contains(.app) // 타겟이 앱이면 걍 다 가지고 잇어야 됨
 //        ? appSchemes
 //        : schemes
 //        
-//        if name.contains("Demo") {
-//            let testAppScheme = Scheme.makeScheme(configs: "QA", name: name)
+//        if name.contains("Demo") { // 데모앱이다라는 뜻은
+//            let testAppScheme = Scheme.makeScheme(configs: "QA", name: name) // 테스트서버 + 릴리즈에서 확인을 해야함으로 QA 스킴 추가
 //            scheme.append(testAppScheme)
 //        }
 //        
@@ -293,7 +255,8 @@ extension Scheme {
 //
 //extension Scheme {
 //    /// Scheme 생성하는 method
-//    static func makeScheme(configs: ConfigurationName, name: String) -> Scheme {
+
+//    static func makeScheme(configs: ConfigurationName, name: String) -> Scheme { // 일반앱
 //        return Scheme(
 //            name: name,
 //            shared: true,
@@ -310,7 +273,7 @@ extension Scheme {
 //        )
 //    }
 //    
-//    static func makeDemoScheme(configs: ConfigurationName, name: String) -> Scheme {
+//    static func makeDemoScheme(configs: ConfigurationName, name: String) -> Scheme { // 데모앱
 //        return Scheme(
 //            name: "\(name)Demo",
 //            shared: true,
@@ -327,7 +290,7 @@ extension Scheme {
 //        )
 //    }
 //    
-//    static func makeDemoAppTestScheme() -> Scheme {
+//    static func makeDemoAppTestScheme() -> Scheme { // 데모테스트앱
 //        let targetName = "\(Environment.workspaceName)-Demo"
 //        return Scheme(
 //          name: "\(targetName)-Test",
