@@ -38,7 +38,7 @@ public extension Project {
                 deploymentTarget: deploymentTarget,
                 //infoPlist에 .extendingDefault로 Info.plsit에 추가 내용을 넣어준 이유는 tuist에서 .default 만들어주는 Info.plist는 앱을 실행할 때 화면이 어딘가 나사가 빠진상태로 실행되기 때문입니다.
                 infoPlist: .extendingDefault(with: infoPlist),
-                sources: ["Sources/**/*.swift"],
+                sources: .sources,
                 // 터미널 명령어랑 비슷한듯? 일단 바쁘니까 나중에 정리해보도록 하자ㅏ https://www.daleseo.com/glob-patterns/#google_vignette
                 resources: [.glob(pattern: "Resources/**", excluding: [])],
                 //entitlement: 주로 iOS 애플리케이션에서 특정 기능이나 권한을 활성화하기 위해 사용하는 설정 파일
@@ -63,7 +63,7 @@ public extension Project {
                 bundleId: "\(Environment.bundlePrefix).\(name)Interface",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .default,
-                sources: ["Interface/Sources/**/*.swift"],
+                sources: .interface,
                 dependencies: internalDependencies,
                 settings: .settings(base: setting,configurations: XCConfig.framework)
             )
@@ -86,7 +86,7 @@ public extension Project {
                 bundleId: "\(Environment.bundlePrefix).\(name)",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .default,
-                sources: ["Sources/**/*.swift"],
+                sources: .sources,
                 resources: hasResources ? [.glob(pattern: "Resources/**", excluding: [])] : [],
                 dependencies: deps + internalDependencies + externalDependencies,
                 settings: .settings(base: settings, configurations: XCConfig.framework)
@@ -108,7 +108,7 @@ public extension Project {
                 bundleId: "\(Environment.bundlePrefix).\(name)Demo",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .extendingDefault(with: Project.demoInfoPlist),
-                sources: ["Demo/Sources/**/*.swift"],
+                sources: .demoSources,
                 resources: [.glob(pattern: "Demo/Resources/**", excluding: ["Demo/Resources/dummy.txt"])],
                 dependencies: deps,
                 settings: .settings(base: setting, configurations: XCConfig.demo)
@@ -128,7 +128,7 @@ public extension Project {
                 bundleId: "\(Environment.bundlePrefix).\(name)Tests",
                 deploymentTarget: deploymentTarget,
                 infoPlist: .default,
-                sources: ["Tests/Sources/**/*.swift"],
+                sources: .unitTests,
                 resources: [.glob(pattern: "Tests/Resources/**", excluding: [])],
                 dependencies: deps,
                 settings: .settings(base: SettingsDictionary().setCodeSignManual(), configurations: XCConfig.tests)
