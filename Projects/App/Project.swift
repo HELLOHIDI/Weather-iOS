@@ -11,7 +11,7 @@ import DependencyPlugin
 import EnvPlugin
 
 let project = Project.makeModule(
-    name: Environment.workspaceName,
+    name: env.workspaceName,
     targets: [.app, .unitTest],
     internalDependencies: [
         .data,

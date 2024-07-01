@@ -7,15 +7,17 @@
 
 import ProjectDescription
 
-public enum Environment {
-    public static let workspaceName = "Weather-iOS"
+
+public struct ProjectEnvironment {
+    public let workspaceName: String
+    public let deploymentTarget: DeploymentTarget
+    public let platform: Platform
+    public let bundlePrefix: String
 }
 
-public extension Project {
-    enum Environment {
-        public static let workspaceName = "Weather-iOS"
-        public static let deploymentTarget = DeploymentTarget.iOS(targetVersion: "17.0", devices: [.iphone])
-        public static let platform = Platform.iOS
-        public static let bundlePrefix = "com.Weather-iOS"
-    }
-}
+public let env = ProjectEnvironment(
+    workspaceName: "Weather-iOS",
+    deploymentTarget: DeploymentTarget.iOS(targetVersion: "17.0", devices: [.iphone]),
+    platform: .iOS,
+    bundlePrefix: "com.Weather-iOS"
+)

@@ -9,7 +9,17 @@ public extension Project {
     /// Discussion/Overview
     ///
     /// - Parameters:
-    ///    - [param]: [description]
+    ///    - name: 프로젝트 이름 (모듈 이름)
+    ///    - targets: 빌드할 타겟의 대상
+    ///    - organizationName: organization 이름
+    ///    - packages:SPM의 package
+    ///    - internalDependencies: 내부 의존성
+    ///    - externalDependencies: 외부 의존성
+    ///    - interfaceDependencies: 인터페이스 의존성
+    ///    - sources: 소스 파일
+    ///    - hasResourcces: 리소스 파일 포함 여부
+    
+    ///
     /// - Returns: [description]
     /// - Warning: [description]
     /// - Author: [name]
@@ -30,8 +40,6 @@ public extension Project {
     ) -> Project {
         let configurationName: ConfigurationName = "Development"
         let hasDynamicFramework = targets.contains(.dynamicFramework)
-        let deploymentTarget = Environment.deploymentTarget
-        let platform = Environment.platform
         let baseSetting: SettingsDictionary = [:]
         
         var projectTargets: [Target] = []
@@ -46,10 +54,10 @@ public extension Project {
             
             let target = Target(
                 name: name,
-                platform: platform,
+                platform: env.platform,
                 product: .app,
-                bundleId: "\(Environment.bundlePrefix).\(bundleSuffix)",
-                deploymentTarget: deploymentTarget,
+                bundleId: "\(env.bundlePrefix).\(bundleSuffix)",
+                deploymentTarget: env.deploymentTarget,
                 //infoPlist에 .extendingDefault로 Info.plsit에 추가 내용을 넣어준 이유는 tuist에서 .default 만들어주는 Info.plist는 앱을 실행할 때 화면이 어딘가 나사가 빠진상태로 실행되기 때문입니다.
                 infoPlist: .extendingDefault(with: infoPlist),
                 sources: .sources,
@@ -72,10 +80,10 @@ public extension Project {
             let setting = baseSetting
             let target = Target(
                 name: "\(name)Interface",
-                platform: platform,
+                platform: env.platform,
                 product: .framework,
-                bundleId: "\(Environment.bundlePrefix).\(name)Interface",
-                deploymentTarget: deploymentTarget,
+                bundleId: "\(env.bundlePrefix).\(name)Interface",
+                deploymentTarget: env.deploymentTarget,
                 infoPlist: .default,
                 sources: .interface,
                 dependencies: internalDependencies,
@@ -95,10 +103,10 @@ public extension Project {
             
             let target = Target(
                 name: name,
-                platform: platform,
+                platform: env.platform,
                 product: hasDynamicFramework ? .framework : .staticFramework,
-                bundleId: "\(Environment.bundlePrefix).\(name)",
-                deploymentTarget: deploymentTarget,
+                bundleId: "\(env.bundlePrefix).\(name)",
+                deploymentTarget: env.deploymentTarget,
                 infoPlist: .default,
                 sources: .sources,
                 resources: hasResources ? [.glob(pattern: "Resources/**", excluding: [])] : [],
@@ -117,10 +125,10 @@ public extension Project {
             
             let target = Target(
                 name: "\(name)Demo",
-                platform: platform,
+                platform: env.platform,
                 product: .app,
-                bundleId: "\(Environment.bundlePrefix).\(name)Demo",
-                deploymentTarget: deploymentTarget,
+                bundleId: "\(env.bundlePrefix).\(name)Demo",
+                deploymentTarget: env.deploymentTarget,
                 infoPlist: .extendingDefault(with: Project.demoInfoPlist),
                 sources: .demoSources,
                 resources: [.glob(pattern: "Demo/Resources/**", excluding: ["Demo/Resources/dummy.txt"])],
@@ -137,10 +145,10 @@ public extension Project {
             
             let target = Target(
                 name: "\(name)Tests",
-                platform: platform,
+                platform: env.platform,
                 product: .unitTests,
-                bundleId: "\(Environment.bundlePrefix).\(name)Tests",
-                deploymentTarget: deploymentTarget,
+                bundleId: "\(env.bundlePrefix).\(name)Tests",
+                deploymentTarget: env.deploymentTarget,
                 infoPlist: .default,
                 sources: .unitTests,
                 resources: [.glob(pattern: "Tests/Resources/**", excluding: [])],
@@ -165,7 +173,7 @@ public extension Project {
         
         return Project(
             name: name,
-            organizationName: Environment.workspaceName,
+            organizationName: env.workspaceName,
             packages: packages,
             settings: .settings(configurations: XCConfig.project),
             targets: projectTargets,
@@ -179,13 +187,13 @@ extension Project {
     static let appSchemes: [Scheme] = [
         // PROD API, debug scheme
         .init(
-            name: "\(Environment.workspaceName)-DEV",
+            name: "\(env.workspaceName)-DEV",
             shared: true,
-            buildAction: .buildAction(targets: ["\(Environment.workspaceName)"]),
+            buildAction: .buildAction(targets: ["\(env.workspaceName)"]),
             testAction: .targets(
-                ["\(Environment.workspaceName)Tests", "\(Environment.workspaceName)UITests"],
+                ["\(env.workspaceName)Tests", "\(env.workspaceName)UITests"],
                 configuration: "Development",
-                options: .options(coverage: true, codeCoverageTargets: ["\(Environment.workspaceName)"])
+                options: .options(coverage: true, codeCoverageTargets: ["\(env.workspaceName)"])
             ),
             runAction: .runAction(configuration: "Development"),
             archiveAction: .archiveAction(configuration: "Development"),
@@ -194,13 +202,13 @@ extension Project {
         ),
         // Test API, debug scheme
         .init(
-            name: "\(Environment.workspaceName)-Test",
+            name: "\(env.workspaceName)-Test",
             shared: true,
-            buildAction: .buildAction(targets: ["\(Environment.workspaceName)"]),
+            buildAction: .buildAction(targets: ["\(env.workspaceName)"]),
             testAction: .targets(
-                ["\(Environment.workspaceName)Tests", "\(Environment.workspaceName)UITests"],
+                ["\(env.workspaceName)Tests", "\(env.workspaceName)UITests"],
                 configuration: "Test",
-                options: .options(coverage: true, codeCoverageTargets: ["\(Environment.workspaceName)"])
+                options: .options(coverage: true, codeCoverageTargets: ["\(env.workspaceName)"])
             ),
             runAction: .runAction(configuration: "Test"),
             archiveAction: .archiveAction(configuration: "Test"),
@@ -209,9 +217,9 @@ extension Project {
         ),
         // Test API, release scheme
         .init(
-            name: "\(Environment.workspaceName)-QA",
+            name: "\(env.workspaceName)-QA",
             shared: true,
-            buildAction: .buildAction(targets: ["\(Environment.workspaceName)"]),
+            buildAction: .buildAction(targets: ["\(env.workspaceName)"]),
             runAction: .runAction(configuration: "QA"),
             archiveAction: .archiveAction(configuration: "QA"),
             profileAction: .profileAction(configuration: "QA"),
@@ -219,9 +227,9 @@ extension Project {
         ),
         // PROD API, release scheme
         .init(
-            name: "\(Environment.workspaceName)-PROD",
+            name: "\(env.workspaceName)-PROD",
             shared: true,
-            buildAction: .buildAction(targets: ["\(Environment.workspaceName)"]),
+            buildAction: .buildAction(targets: ["\(env.workspaceName)"]),
             runAction: .runAction(configuration: "PROD"),
             archiveAction: .archiveAction(configuration: "PROD"),
             profileAction: .profileAction(configuration: "PROD"),

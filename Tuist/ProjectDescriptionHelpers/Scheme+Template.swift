@@ -46,7 +46,7 @@ extension Scheme {
     }
 
     static func makeDemoAppTestScheme() -> Scheme { // 데모테스트앱
-        let targetName = "\(Environment.workspaceName)-Demo"
+        let targetName = "\(env.workspaceName)-Demo"
         return Scheme(
           name: "\(targetName)-Test",
           shared: true,
