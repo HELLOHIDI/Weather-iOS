@@ -18,15 +18,6 @@ public extension Project {
     ///    - interfaceDependencies: 인터페이스 의존성
     ///    - sources: 소스 파일
     ///    - hasResourcces: 리소스 파일 포함 여부
-    
-    ///
-    /// - Returns: [description]
-    /// - Warning: [description]
-    /// - Author: [name]
-    /// - Version: [version number]
-    /// - Note: [note message]
-    /// - Tip: [tip message]
-    /// - Todo: [todo message]
     static func makeModule(
         name: String,
         targets: Set<FeatureTarget> = Set([.staticFramework, .unitTest, .demo]),
@@ -86,7 +77,7 @@ public extension Project {
                 deploymentTarget: env.deploymentTarget,
                 infoPlist: .default,
                 sources: .interface,
-                dependencies: internalDependencies,
+                dependencies: interfaceDependencies,
                 settings: .settings(base: setting,configurations: XCConfig.framework)
             )
             
