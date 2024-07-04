@@ -150,7 +150,14 @@ public extension Project {
             projectTargets.append(target)
         }
         
-        let additionalSchemes = targets.contains(.demo) ? [Scheme.makeScheme(configs: configurationName, name: name), Scheme.makeDemoScheme(configs: configurationName, name: name)] : [Scheme.makeScheme(configs: configurationName, name: name)]
+        let additionalSchemes = targets.contains(.demo) ? 
+        [
+            Scheme.makeScheme(configs: configurationName, name: name),
+            Scheme.makeDemoScheme(configs: configurationName, name: name)
+        ] 
+        : [
+            Scheme.makeScheme(configs: configurationName, name: name)
+        ]
         
         schemes += additionalSchemes
         
@@ -173,10 +180,9 @@ public extension Project {
     }
 }
 
-
 extension Project {
     static let appSchemes: [Scheme] = [
-        // PROD API, debug scheme
+        // PROD API, debug scheme : 실제 프로덕트 BaseURL을 사용하는 debug scheme
         .init(
             name: "\(env.workspaceName)-DEV",
             shared: true,
@@ -191,7 +197,7 @@ extension Project {
             profileAction: .profileAction(configuration: "Development"),
             analyzeAction: .analyzeAction(configuration: "Development")
         ),
-        // Test API, debug scheme
+        // Test API, debug scheme : 테스트 BaseURL을 사용하는 debug scheme
         .init(
             name: "\(env.workspaceName)-Test",
             shared: true,
@@ -206,7 +212,7 @@ extension Project {
             profileAction: .profileAction(configuration: "Test"),
             analyzeAction: .analyzeAction(configuration: "Test")
         ),
-        // Test API, release scheme
+        // Test API, release scheme : 테스트 BaseURL을 사용하는 release scheme
         .init(
             name: "\(env.workspaceName)-QA",
             shared: true,
@@ -216,7 +222,7 @@ extension Project {
             profileAction: .profileAction(configuration: "QA"),
             analyzeAction: .analyzeAction(configuration: "QA")
         ),
-        // PROD API, release scheme
+        // PROD API, release scheme : 실제 프로덕트 BaseURL을 사용하는 release scheme
         .init(
             name: "\(env.workspaceName)-PROD",
             shared: true,
