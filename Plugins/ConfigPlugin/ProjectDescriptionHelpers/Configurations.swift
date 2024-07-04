@@ -1,6 +1,17 @@
 import Foundation
 import ProjectDescription
 
+/// 빌드할 환경에 대한 설정
+
+/// Target 분리 (The Modular Architecture 기반으로 분리했습니다)
+
+
+/// DEV : 실제 프로덕트 BaseURL을 사용하는 debug scheme
+/// TEST : 테스트 BaseURL을 사용하는 debug scheme
+/// QA : 테스트 BaseURL을 사용하는 release scheme
+/// RELEASE : 실제 프로덕트 BaseURL을 사용하는 release scheme
+
+
 public struct XCConfig {
     private struct Path {
         static var framework: ProjectDescription.Path { .relativeToRoot("Configurations/Targets/iOS-Framework.xcconfig") }

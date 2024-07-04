@@ -7,6 +7,8 @@
 
 import ProjectDescription
 
+/// InfoPList를 정리해둔 파일이빈다
+/// 
 public extension Project {
     static let appInfoPlist: [String: Plist.Value] = [
         "BASE_URL": "https://api.openweathermap.org/data/2.5",

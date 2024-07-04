@@ -7,24 +7,8 @@
 
 import ProjectDescription
 
-/**
-comment
- 
- /// Sumarry
- ///
- /// Discussion/Overview
- ///
- /// - Parameters:
- ///    - [param]: [description]
- /// - Returns: [description]
- /// - Warning: [description]
- /// - Author: [name]
- /// - Version: [version number]
- /// - Note: [note message]
- /// - Tip: [tip message]
- /// - Todo: [todo message]
- 
-*/
+// 아직 여기의 필요성은 못 느끼는중 무슨 역할을 하게 될지 궁금하다!
+
 public extension SettingsDictionary {
     // allLoadSettings와 baseSettings는 빌드 설정 딕셔너리의 기본값을 정의
     static let allLoadSettings: Self = [

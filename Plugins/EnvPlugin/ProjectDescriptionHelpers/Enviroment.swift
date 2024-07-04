@@ -7,6 +7,7 @@
 
 import ProjectDescription
 
+/// 프로젝트 환경 관련 파일입니다
 
 public struct ProjectEnvironment {
     public let workspaceName: String
