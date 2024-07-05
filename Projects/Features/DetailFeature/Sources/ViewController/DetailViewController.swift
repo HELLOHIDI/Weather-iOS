@@ -17,12 +17,14 @@ import Then
 import RxSwift
 import RxCocoa
 import RxDataSources
+import BaseFeatureDependency
+import DetailFeatureInterface
 
-public final class DetailViewController : UIViewController {
+public final class DetailViewController : UIViewController, DetailViewControllable {
     
     //MARK: - Properties
     
-    public let viewModel: DetailViewModel
+    public var viewModel: DetailViewModel
     
     private let disposeBag = DisposeBag()
     

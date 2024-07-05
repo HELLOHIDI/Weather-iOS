@@ -21,9 +21,9 @@ final class DetailBuilder {
 }
 
 extension DetailBuilder: DetailFeatureViewBuildable {
-    public func makeMain() -> DetailPresentable {
-        let useCase = DefaultMainUseCase(repository: repository)
-        let vm = DetailViewModel(mainUseCase: useCase)
+    public func makeDetail() -> DetailPresentable {
+        let useCase = DefaultDetailUseCase(city: "", repository: repository)
+        let vm = DetailViewModel(detailUseCase: useCase)
         let vc = DetailViewController(viewModel: vm)
         vc.viewModel = vm
         return (vc, vm)

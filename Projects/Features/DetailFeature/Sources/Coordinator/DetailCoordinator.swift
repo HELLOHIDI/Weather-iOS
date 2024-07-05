@@ -8,6 +8,7 @@
 
 import BaseFeatureDependency
 import Core
+import DetailFeatureInterface
 
 public enum DetailCoordinatorDestination {
     case detail

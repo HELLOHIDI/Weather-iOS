@@ -13,6 +13,7 @@ import Domain
 import RxSwift
 import RxCocoa
 import BaseFeatureDependency
+import DetailFeatureInterface
 
 public final class DetailViewModel: DetailViewModelType {
     internal var disposeBag = DisposeBag()
@@ -25,16 +26,16 @@ public final class DetailViewModel: DetailViewModelType {
         self.detailUseCase = detailUseCase
     }
     
-    struct Input {
+    public struct Input {
         let viewWillAppearEvent: Observable<Void>
     }
     
-    struct Output {
+    public struct Output {
         var currentWeatherData = PublishRelay<CurrentWeatherModel>()
         var hourlyWeatherData = PublishRelay<[HourlyWeatherModel]>()
     }
     
-    func transform(from input: Input, disposeBag: DisposeBag) -> Output {
+    public func transform(from input: Input, disposeBag: DisposeBag) -> Output {
         let output = Output()
         self.bindOutput(output: output, disposeBag: disposeBag)
         

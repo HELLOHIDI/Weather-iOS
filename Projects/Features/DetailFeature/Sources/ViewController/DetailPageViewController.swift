@@ -71,7 +71,7 @@ public final class DetailPageViewController: UIViewController {
     private func bindUI() {
         detailBottomView.listButton.rx.tap
             .subscribe(with: self, onNext: { owner, _ in
-                owner.detailCoordinator?.popViewController()
+//                owner.detailCoordinator?.popViewController()
             }).disposed(by: disposeBag)
         
         pagingSubject

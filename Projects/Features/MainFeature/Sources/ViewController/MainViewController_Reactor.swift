@@ -113,7 +113,7 @@ public final class MainViewController_Reactor : UIViewController {
             .map { $0.item }
             .asDriver(onErrorJustReturn: Int())
             .drive(with: self, onNext: { owner, page in
-                owner.coordinator?.pushToDetailVC(with: page)
+//                owner.coordinator?.pushToDetailVC(with: page)
             }).disposed(by: disposeBag)
         
         rx.viewWillAppear
