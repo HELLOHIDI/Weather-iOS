@@ -7,27 +7,32 @@
 
 import UIKit
 
-import Domain
+import Core
+import BaseFeatureDependency
 import RootFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     
+    var rootController: UINavigationController {
+        return self.window!.rootViewController as? UINavigationController ?? UINavigationController(rootViewController: UIViewController())
+    }
+    
+    lazy var appCoordinator: AppCoordinator = AppCoordinator(
+        router: Router(rootController: rootController)
+    )
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         if let windowScene = scene as? UIWindowScene {
+            guard let scene = (scene as? UIWindowScene) else { return }
             
-            let window = UIWindow(windowScene: windowScene)
-            self.window = window
+            window = UIWindow(windowScene: scene)
+            window?.rootViewController = rootController
+            window?.makeKeyAndVisible()
             
-            let navigationController = UINavigationController()
-            self.window?.rootViewController = navigationController
-            
-            let coordinator = AppCoordinator(navigationController: navigationController)
-            coordinator.start()
-            
-            self.window?.makeKeyAndVisible()
+            self.appCoordinator.start()
         }
     }
     

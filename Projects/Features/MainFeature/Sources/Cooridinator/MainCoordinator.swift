@@ -10,18 +10,21 @@ import BaseFeatureDependency
 import Core
 import MainFeatureInterface
 
-public enum MainCoordinatorDestination {
-    case detail
-}
-public protocol MainCoordinatorOutput {
-    var requestCoordinating: ((MainCoordinatorDestination) -> Void)? { get set }
-}
-public typealias DefaultMainCoordinator = BaseCoordinator & MainCoordinatorOutput
+//public enum MainCoordinatorDestination {
+//    case detail
+//}
+//public protocol MainCoordinatorOutput {
+//    var requestCoordinating: (() -> Void)? { get set }
+//}
+//public typealias DefaultMainCoordinator = BaseCoordinator & MainCoordinatorOutput
 
 public
-final class MainCoordinator: DefaultMainCoordinator {
+final class MainCoordinator: DefaultCoordinator {
     
-    public var requestCoordinating: ((MainCoordinatorDestination) -> Void)?
+    public var finishFlow: (() -> Void)?
+    
+    
+    public var requestCoordinating: (() -> Void)?
     
     private let factory: MainFeatureViewBuildable
     private let router: Router
@@ -35,8 +38,9 @@ final class MainCoordinator: DefaultMainCoordinator {
         var main = factory.makeMain()
         
         main.vm.onWeatherCellTap = { [weak self] page in
-            self?.requestCoordinating?(.detail)
+            self?.requestCoordinating?()
         }
         
+        router.setRootModule(main.vc, animated: true)
     }
 }

@@ -11,13 +11,10 @@ import Domain
 
 import MainFeatureInterface
 
-public
-final class MainBuilder {
-    public var repository: WeatherRepository
+public final class MainBuilder {
+    @Injected public var repository: WeatherRepository
     
-    public init(repository: WeatherRepository) {
-        self.repository = repository
-    }
+    public init() {}
 }
 
 extension MainBuilder: MainFeatureViewBuildable {

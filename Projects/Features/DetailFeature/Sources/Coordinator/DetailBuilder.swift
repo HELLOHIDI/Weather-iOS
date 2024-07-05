@@ -13,11 +13,9 @@ import DetailFeatureInterface
 
 public
 final class DetailBuilder {
-    public var repository: WeatherRepository
+    @Injected public var repository: WeatherRepository
     
-    public init(repository: WeatherRepository) {
-        self.repository = repository
-    }
+    public init() {}
 }
 
 extension DetailBuilder: DetailFeatureViewBuildable {

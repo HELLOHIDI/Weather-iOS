@@ -20,25 +20,60 @@ public class AppCoordinator: BaseCoordinator {
         
         super.init()
     }
+    
+    public override func start() {
+        runMainFlow()
+    }
 }
 
 extension AppCoordinator {
     private func runMainFlow() {
+        self.childCoordinators = []
+        
         let coordinator = MainCoordinator(
             router: router,
             factory: MainBuilder()
         )
+        coordinator.requestCoordinating = { [weak self] /*destination in*/  in
+            self?.runDetailFlow()
+            //            switch destination {
+            //            case .myPage(let userType):
+            //                self?.runMyPageFlow(of: userType)
+            //            case .notification:
+            //                self?.runNotificationFlow()
+            //            case .attendance:
+            //                self?.runAttendanceFlow()
+            //            case .stamp:
+            //                self?.runStampFlow()
+            //            case .poke:
+            //                self?.runPokeFlow()
+            //            case .pokeOnboarding:
+            //                self?.runPokeOnboardingFlow()
+            //            case .signIn:
+            //                self?.runSignInFlow(by: .rootWindow(animated: true, message: nil))
+            //                self?.removeDependency(coordinator)
+            //            }
+        }
+        addDependency(coordinator)
+        coordinator.start()
+//        coordinator.start(by: .rootWindow(animated: false, message: nil))
+    }
+    
+    @discardableResult
+    internal func runDetailFlow() -> DetailCoordinator {
+        let coordinator = DetailCoordinator(
+            router: Router(
+                rootController: UIWindow.getRootNavigationController
+            ),
+            factory: DetailBuilder()
+        )
         coordinator.finishFlow = { [weak self, weak coordinator] in
-            self?.checkDidSignIn()
             self?.removeDependency(coordinator)
         }
         addDependency(coordinator)
         coordinator.start()
-    }
-    
-    private func checkDidSignIn() {
-        let needAuth = UserDefaultKeyList.Auth.appAccessToken == nil
-        needAuth ? runSignInFlow(by: .modal) : runMainFlow()
+        
+        return coordinator
     }
 }
 

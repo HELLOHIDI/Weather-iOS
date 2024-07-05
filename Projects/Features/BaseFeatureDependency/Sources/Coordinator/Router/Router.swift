@@ -41,6 +41,8 @@ public protocol RouterProtocol: ViewControllable {
     
     func showTitles()
     func hideTitles()
+    
+    func replaceRootWindow(_ module: ViewControllable, withAnimation: Bool, completion: ((UIWindow) -> Void)?)
 }
 
 /// RouterProtocol을 채택하여 Coordinator가 모르는 화면전환의 기능을 수행합니다. RootController를 가지고 다양한 기능을 수행합니다.
@@ -189,6 +191,34 @@ final class Router: NSObject, RouterProtocol {
     public func hideTitles() {
         self.rootController?.isNavigationBarHidden = true
     }
+    
+    public func replaceRootWindow(_ module: ViewControllable, withAnimation: Bool, completion: ((UIWindow) -> Void)? = nil) {
+            let viewController = module.viewController
+            let window = UIWindow.keyWindowGetter!
+            let navigation = UINavigationController(rootViewController: viewController)
+            
+            self.rootController = navigation
+            
+            if !withAnimation {
+                window.rootViewController = navigation
+                window.makeKeyAndVisible()
+                return
+            }
+            
+            if let snapshot = window.snapshotView(afterScreenUpdates: true) {
+                viewController.view.addSubview(snapshot)
+                window.rootViewController = navigation
+                window.makeKeyAndVisible()
+                
+                completion?(window)
+                
+                UIView.animate(withDuration: 0.4, animations: {
+                    snapshot.layer.opacity = 0
+                }, completion: { _ in
+                    snapshot.removeFromSuperview()
+                })
+            }
+        }
 
     // MARK: - Private methods
     

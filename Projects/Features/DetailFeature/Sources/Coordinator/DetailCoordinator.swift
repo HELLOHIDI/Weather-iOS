@@ -10,18 +10,10 @@ import BaseFeatureDependency
 import Core
 import DetailFeatureInterface
 
-public enum DetailCoordinatorDestination {
-    case detail
-}
-public protocol DetailCoordinatorOutput {
-    var requestCoordinating: ((DetailCoordinatorDestination) -> Void)? { get set }
-}
-public typealias DefaultDetailCoordinator = BaseCoordinator & DetailCoordinatorOutput
-
 public
-final class DetailCoordinator: DefaultDetailCoordinator {
+final class DetailCoordinator: DefaultCoordinator {
     
-    public var requestCoordinating: ((DetailCoordinatorDestination) -> Void)?
+    public var finishFlow: (() -> Void)?
     
     private let factory: DetailFeatureViewBuildable
     private let router: Router
@@ -32,7 +24,7 @@ final class DetailCoordinator: DefaultDetailCoordinator {
     }
     
     public override func start() {
-        var main = factory.makeDetail()
+        var detail = factory.makeDetail()
         
     }
 }
