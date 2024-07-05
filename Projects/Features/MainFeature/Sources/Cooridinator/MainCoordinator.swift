@@ -19,7 +19,7 @@ public typealias DefaultMainCoordinator = BaseCoordinator & MainCoordinatorOutpu
 
 public
 final class MainCoordinator: DefaultMainCoordinator {
-        
+    
     public var requestCoordinating: ((MainCoordinatorDestination) -> Void)?
     
     private let factory: MainFeatureViewBuildable
@@ -33,6 +33,9 @@ final class MainCoordinator: DefaultMainCoordinator {
     public override func start() {
         var main = factory.makeMain()
         
+        main.vm.onWeatherCellTap = { [weak self] page in
+            self?.requestCoordinating?(.detail)
+        }
         
     }
 }

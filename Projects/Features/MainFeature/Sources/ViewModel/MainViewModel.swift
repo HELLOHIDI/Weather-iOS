@@ -33,6 +33,10 @@ public final class MainViewModel: MainViewModelType {
         public var weatherList = BehaviorRelay<[CurrentWeatherModel]>(value: [])
     }
     
+    //MARK: - MainCoordinator
+    
+    public var onWeatherCellTap: ((Int) -> Void)?
+    
     public func transform(from input: Input, disposeBag: DisposeBag) -> Output {
         let output = Output()
         self.bindOutput(output: output, disposeBag: disposeBag)
@@ -42,7 +46,7 @@ public final class MainViewModel: MainViewModelType {
         }).disposed(by: disposeBag)
         
         input.weatherListViewDidTapEvent.subscribe(with: self, onNext: { owner, page in
-            //owner.mainCoordinator?.pushToDetailVC(with: page.item)
+            owner.onWeatherCellTap?(page.item)
         }).disposed(by: disposeBag)
         
         input.searchBarDidChangeEvent.subscribe(with: self, onNext: { owner, text in
