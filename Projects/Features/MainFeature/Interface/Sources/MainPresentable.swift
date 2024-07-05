@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+import BaseFeatureDependency
+import Core
+
+public protocol MainViewControllable: ViewControllable { }
+public protocol MainCoordinatable {
+}
+public typealias MainViewModelType = ViewModelType & MainCoordinatable
+public typealias MainPresentable = (vc: MainViewControllable, vm: any MainViewModelType)
+
+
