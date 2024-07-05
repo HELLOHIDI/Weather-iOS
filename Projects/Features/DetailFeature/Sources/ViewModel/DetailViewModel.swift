@@ -12,8 +12,9 @@ import Domain
 
 import RxSwift
 import RxCocoa
+import BaseFeatureDependency
 
-public final class DetailViewModel {
+public final class DetailViewModel: DetailViewModelType {
     internal var disposeBag = DisposeBag()
     
     public let detailUseCase: DetailUseCase

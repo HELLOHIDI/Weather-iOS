@@ -12,15 +12,14 @@ import Domain
 
 import RxSwift
 import RxCocoa
+import MainFeatureInterface
 
-public final class MainViewModel {
+public final class MainViewModel: MainViewModelType {
     internal var disposeBag = DisposeBag()
     
-    public let mainCoordinator: MainCoordinator?
     public let mainUseCase: MainUseCase
     
-    public init(mainCoordinator: MainCoordinator? ,mainUseCase: MainUseCase) {
-        self.mainCoordinator = mainCoordinator
+    public init(mainUseCase: MainUseCase) {
         self.mainUseCase = mainUseCase
     }
     
@@ -34,7 +33,11 @@ public final class MainViewModel {
         public var weatherList = BehaviorRelay<[CurrentWeatherModel]>(value: [])
     }
     
-    func transform(from input: Input, disposeBag: DisposeBag) -> Output {
+    //MARK: - MainCoordinator
+    
+    public var onWeatherCellTap: ((Int) -> Void)?
+    
+    public func transform(from input: Input, disposeBag: DisposeBag) -> Output {
         let output = Output()
         self.bindOutput(output: output, disposeBag: disposeBag)
         
@@ -43,7 +46,7 @@ public final class MainViewModel {
         }).disposed(by: disposeBag)
         
         input.weatherListViewDidTapEvent.subscribe(with: self, onNext: { owner, page in
-            owner.mainCoordinator?.pushToDetailVC(with: page.item)
+            owner.onWeatherCellTap?(page.item)
         }).disposed(by: disposeBag)
         
         input.searchBarDidChangeEvent.subscribe(with: self, onNext: { owner, text in

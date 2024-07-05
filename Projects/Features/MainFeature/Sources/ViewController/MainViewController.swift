@@ -16,12 +16,13 @@ import Then
 import RxSwift
 import RxGesture
 import RxCocoa
+import BaseFeatureDependency
+import MainFeatureInterface
 
-public final class MainViewController : UIViewController {
-    
+public final class MainViewController: UIViewController, MainViewControllable {
     //MARK: - Properties
     
-    public let viewModel: MainViewModel
+    public var viewModel: MainViewModel
     private let disposeBag = DisposeBag()
     
     public let searchBarDidChangeSubject = PublishSubject<String>()
