@@ -11,9 +11,8 @@ import DependencyPlugin
 
 let project = Project.makeModule(
     name: "ThirdPartyLibs",
-    product: .framework,
-    packages: [],
-    dependencies: [
+    targets: [.dynamicFramework],
+    externalDependencies: [
         .SPM.SnapKit,
         .SPM.Then,
         .SPM.RxGesture,
@@ -21,6 +20,7 @@ let project = Project.makeModule(
         .SPM.RxCocoa,
         .SPM.RxDataSources,
         .SPM.RxRelay,
-        .SPM.RxSwift
+        .SPM.RxSwift,
+        .SPM.ReactorKit
     ]
 )

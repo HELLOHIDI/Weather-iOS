@@ -7,14 +7,16 @@
 
 import ProjectDescription
 
+/// InfoPList를 정리해둔 파일이빈다
+/// 
 public extension Project {
-    static let appInfoPlist: [String: InfoPlist.Value] = [
+    static let appInfoPlist: [String: Plist.Value] = [
         "BASE_URL": "https://api.openweathermap.org/data/2.5",
         "API_KEY": "7618d35ff394f5dd39212928a3a4692f",
         "CFBundleShortVersionString": "1.0.0",
         "CFBundleDevelopmentRegion": "ko",
         "CFBundleVersion": "1",
-        "CFBundleIdentifier": "com.Weather-iOS.release",
+        "CFBundleIdentifier": "com.Weather-iOS.$(PRODUCT_MODULE_NAME)",
         "CFBundleDisplayName": "Weather-iOS",
         "UILaunchStoryboardName": "LaunchScreen",
         "UIApplicationSceneManifest": [
@@ -38,18 +40,9 @@ public extension Project {
         "App Transport Security Settings": ["Allow Arbitrary Loads": true],
         "NSAppTransportSecurity": ["NSAllowsArbitraryLoads": true],
         "ITSAppUsesNonExemptEncryption": false,
-//        "UIUserInterfaceStyle": "Dark",
-//        "CFBundleURLTypes": [
-//            [
-//                "CFBundleTypeRole": "Editor",
-//                "CFBundleURLName": "sopt-makers",
-//                "CFBundleURLSchemes": ["sopt-makers"]
-//            ]
-//        ],
-//        "UIBackgroundModes": ["remote-notification"]
     ]
     
-    static let demoInfoPlist: [String: InfoPlist.Value] = [
+    static let demoInfoPlist: [String: Plist.Value] = [
       "CFBundleShortVersionString": "1.0.0",
       "CFBundleDevelopmentRegion": "ko",
       "CFBundleVersion": "1",

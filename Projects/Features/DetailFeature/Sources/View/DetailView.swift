@@ -18,7 +18,7 @@ import Then
 final class DetailView: UIView {
     let scrollView = UIScrollView()
     private let contentView = UIView()
-    private let backgroundImageView = UIImageView.init(image: DSKitAsset.backgroundImg.image)
+    private let backgroundImageView = UIImageView.init(image: DSKitAsset.backgroundIMG.image)
     
     let detailTopView = DetailTopView()
     let detailStickyHeaderView = DetailTopHeaderView()

@@ -19,18 +19,18 @@ public final class MainViewModel {
     public let mainCoordinator: MainCoordinator?
     public let mainUseCase: MainUseCase
     
-    public init(mainCoordinator: MainCoordinator ,mainUseCase: MainUseCase) {
+    public init(mainCoordinator: MainCoordinator? ,mainUseCase: MainUseCase) {
         self.mainCoordinator = mainCoordinator
         self.mainUseCase = mainUseCase
     }
     
-    struct Input {
+    public struct Input {
         let viewWillAppearEvent: Observable<Void>
         let weatherListViewDidTapEvent: Observable<IndexPath>
         let searchBarDidChangeEvent: Observable<String>
     }
     
-    struct Output {
+    public struct Output {
         public var weatherList = BehaviorRelay<[CurrentWeatherModel]>(value: [])
     }
     
@@ -54,15 +54,15 @@ public final class MainViewModel {
     
     
     private func bindOutput(output: Output, disposeBag: DisposeBag) {
-        mainUseCase.weatherList.subscribe(onNext: { weatherList in
-            output.weatherList.accept(weatherList)
-        }).disposed(by: disposeBag)
+//        mainUseCase.weatherList.subscribe(onNext: { weatherList in
+//            output.weatherList.accept(weatherList)
+//        }).disposed(by: disposeBag)
     }
 }
 
-public extension MainViewModel {
-    func getWeatherList() -> [CurrentWeatherModel] {
-        return mainUseCase.weatherList.value
-    }
-}
+//public extension MainViewModel {
+//    func getWeatherList() -> [CurrentWeatherModel] {
+//        return mainUseCase.weatherList.value
+//    }
+//}
 

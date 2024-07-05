@@ -8,8 +8,6 @@
 
 import UIKit
 
-import DSKit
-
 public struct WeatherForecastModel {
     public let day: String
     public let weatherImg: UIImage

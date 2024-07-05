@@ -8,8 +8,6 @@
 
 import UIKit
 
-import DSKit
-
 public struct HourlyWeatherModel {
     public let time, weatherImage: String
     public let temparature: Double
