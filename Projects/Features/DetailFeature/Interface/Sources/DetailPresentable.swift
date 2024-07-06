@@ -12,9 +12,11 @@ import BaseFeatureDependency
 import Core
 
 public protocol DetailViewControllable: ViewControllable { }
-public protocol DetailCoordinatable {}
+public protocol DetailCoordinatable {
+    var listButtonDidTap: (() -> Void)? { get set }
+}
 
 public typealias DetailViewModelType = ViewModelType & DetailCoordinatable
-public typealias DetailPresentable = (vc: DetailViewControllable, vm: any DetailViewModelType)
+public typealias DetailPresentable = (DetailViewControllable & DetailCoordinatable)
 
 

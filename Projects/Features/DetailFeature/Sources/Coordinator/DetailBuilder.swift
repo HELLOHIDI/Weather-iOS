@@ -13,18 +13,13 @@ import DetailFeatureInterface
 
 public
 final class DetailBuilder {
-    @Injected public var repository: WeatherRepository
-    
     public init() {}
 }
 
 extension DetailBuilder: DetailFeatureViewBuildable {
-    public func makeDetail() -> DetailPresentable {
-        let useCase = DefaultDetailUseCase(city: "", repository: repository)
-        let vm = DetailViewModel(detailUseCase: useCase)
-        let vc = DetailViewController(viewModel: vm)
-        vc.viewModel = vm
-        return (vc, vm)
+    public func makeDetail(with page: Int) -> DetailPresentable {
+        let vc = DetailPageViewController(currentPage: page)
+        return vc
     }
 }
 

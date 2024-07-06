@@ -55,7 +55,6 @@ public final class MainViewController: UIViewController, MainViewControllable {
         style()
         setDelegate()
         
-        bindUI()
         bindViewModel()
     }
     
@@ -100,12 +99,6 @@ public final class MainViewController: UIViewController, MainViewControllable {
     
     private func setDelegate() {
         weatherSearchController.searchResultsUpdater = self
-    }
-    
-    private func bindUI() {
-        self.rx.viewWillAppear.subscribe(with: self, onNext: { owner, _ in
-            owner.navigationController?.navigationBar.isHidden = false
-        }).disposed(by: disposeBag)
     }
     
     private func bindViewModel() {

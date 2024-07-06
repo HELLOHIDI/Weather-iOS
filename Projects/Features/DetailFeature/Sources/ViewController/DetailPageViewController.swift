@@ -11,20 +11,23 @@ import UIKit
 import Core
 import DSKit
 import Domain
+import Networks
+import Data
+import BaseFeatureDependency
+import DetailFeatureInterface
 
 import SnapKit
 import Then
 import RxSwift
 import RxGesture
 import RxCocoa
-import Networks
-import Data
 
-public final class DetailPageViewController: UIViewController {
-    
+
+public final class DetailPageViewController: UIViewController, DetailPresentable {
     //MARK: - Properties
     
-    public let detailCoordinator: DetailCoordinator?
+    public var listButtonDidTap: (() -> Void)?
+    
     private let disposeBag = DisposeBag()
     
     private let pagingSubject = PublishSubject<Int>()
@@ -43,9 +46,8 @@ public final class DetailPageViewController: UIViewController {
     
     //MARK: - Life Cycle
     
-    public init(currentPage: Int, detailCoordinator: DetailCoordinator) {
+    public init(currentPage: Int) {
         self.currentPage = currentPage
-        self.detailCoordinator = detailCoordinator
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -71,7 +73,7 @@ public final class DetailPageViewController: UIViewController {
     private func bindUI() {
         detailBottomView.listButton.rx.tap
             .subscribe(with: self, onNext: { owner, _ in
-//                owner.detailCoordinator?.popViewController()
+                owner.listButtonDidTap?()
             }).disposed(by: disposeBag)
         
         pagingSubject

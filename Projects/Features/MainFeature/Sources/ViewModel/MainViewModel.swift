@@ -35,7 +35,7 @@ public final class MainViewModel: MainViewModelType {
     
     //MARK: - MainCoordinator
     
-    public var onWeatherCellTap: (() -> Void)?
+    public var onWeatherCellTap: ((Int) -> Void)?
     
     public func transform(from input: Input, disposeBag: DisposeBag) -> Output {
         let output = Output()
@@ -46,7 +46,7 @@ public final class MainViewModel: MainViewModelType {
             .disposed(by: disposeBag)
         
         input.weatherListViewDidTapEvent.subscribe(with: self, onNext: { owner, page in
-            owner.onWeatherCellTap?()
+            owner.onWeatherCellTap?(page.item)
         }).disposed(by: disposeBag)
         
         input.searchBarDidChangeEvent

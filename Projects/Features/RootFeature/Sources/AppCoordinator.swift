@@ -34,21 +34,21 @@ extension AppCoordinator {
             router: router,
             factory: MainBuilder()
         )
-        coordinator.requestCoordinating = { [weak self]  in
-            self?.runDetailFlow()
+        coordinator.requestCoordinating = { [weak self] page in
+            self?.runDetailFlow(with: page)
         }
         addDependency(coordinator)
         coordinator.start()
-//        coordinator.start(by: .rootWindow(animated: false, message: nil))
     }
     
     @discardableResult
-    internal func runDetailFlow() -> DetailCoordinator {
+    internal func runDetailFlow(with page: Int) -> DetailCoordinator {
         let coordinator = DetailCoordinator(
             router: Router(
                 rootController: UIWindow.getRootNavigationController
             ),
-            factory: DetailBuilder()
+            factory: DetailBuilder(),
+            page: page
         )
         coordinator.finishFlow = { [weak self, weak coordinator] in
             self?.removeDependency(coordinator)
@@ -59,38 +59,3 @@ extension AppCoordinator {
         return coordinator
     }
 }
-
-//public class AppCoordinator: Coordinator {
-//
-//    public var childCoordinators: [Coordinator] = []
-//    public var navigationController: UINavigationController
-//
-//    public init(navigationController: UINavigationController!) {
-//        self.navigationController = navigationController
-//    }
-//
-//    public func start() {
-//        showMainViewController()
-//    }
-//
-//    private func showMainViewController() {
-//        let coordinator = DefaultMainCoordinator(navigationController: self.navigationController)
-//        coordinator.delegate = self
-//        coordinator.start()
-//        self.childCoordinators.append(coordinator)
-//    }
-//
-//    private func showDetailViewController(_ tag: Int) {
-//        let coordinator = DefaultDetailCoordinator(navigationController: navigationController)
-//        coordinator.start(tag)
-//        self.childCoordinators.append(coordinator)
-//    }
-//}
-//
-//extension AppCoordinator: MainCoordinatorDelegate {
-//    public func pushToDetailVC(_ coordinator: MainFeature.MainCoordinator, _ tag: Int) {
-//        self.childCoordinators = self.childCoordinators.filter { $0 !== coordinator }
-//        self.showDetailViewController(tag)
-//    }
-//}
-

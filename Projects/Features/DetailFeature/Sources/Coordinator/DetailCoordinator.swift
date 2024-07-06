@@ -17,16 +17,26 @@ final class DetailCoordinator: DefaultCoordinator {
     
     private let factory: DetailFeatureViewBuildable
     private let router: Router
+    private let page: Int
     
-    public init(router: Router, factory: DetailFeatureViewBuildable) {
+    public init(
+        router: Router,
+        factory: DetailFeatureViewBuildable,
+        page: Int
+    ) {
         self.factory = factory
         self.router = router
+        self.page = page
     }
     
     public override func start() {
-        var detail = factory.makeDetail()
+        var detail = factory.makeDetail(with: page)
         
-        router.push(detail.vc)
+        detail.listButtonDidTap = { [weak self]  in
+            self?.router.popModule()
+            self?.finishFlow?()
+        }
+        router.push(detail)
         
     }
 }

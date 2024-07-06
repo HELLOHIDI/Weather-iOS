@@ -24,7 +24,7 @@ final class MainCoordinator: DefaultCoordinator {
     public var finishFlow: (() -> Void)?
     
     
-    public var requestCoordinating: (() -> Void)?
+    public var requestCoordinating: ((Int) -> Void)?
     
     private let factory: MainFeatureViewBuildable
     private let router: Router
@@ -37,10 +37,9 @@ final class MainCoordinator: DefaultCoordinator {
     public override func start() {
         var main = factory.makeMain()
         
-        main.vm.onWeatherCellTap = { [weak self] in
-            self?.requestCoordinating?()
+        main.vm.onWeatherCellTap = { [weak self] page in
+            self?.requestCoordinating?(page)
         }
-//        router.replaceRootWindow(main.vc, withAnimation: true)
         router.setRootModule(main.vc, animated: true)
     }
 }

@@ -20,7 +20,7 @@ import RxDataSources
 import BaseFeatureDependency
 import DetailFeatureInterface
 
-public final class DetailViewController : UIViewController, DetailViewControllable {
+public final class DetailViewController : UIViewController {
     
     //MARK: - Properties
     

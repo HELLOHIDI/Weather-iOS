@@ -9,6 +9,6 @@
 import Core
 
 public protocol DetailFeatureViewBuildable {
-    func makeDetail() -> DetailPresentable
+    func makeDetail(with page: Int) -> DetailPresentable
 }
 
