@@ -26,6 +26,8 @@ final class DetailCoordinator: DefaultCoordinator {
     public override func start() {
         var detail = factory.makeDetail()
         
+        router.push(detail.vc)
+        
     }
 }
 

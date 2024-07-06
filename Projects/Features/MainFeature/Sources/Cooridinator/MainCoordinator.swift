@@ -37,10 +37,10 @@ final class MainCoordinator: DefaultCoordinator {
     public override func start() {
         var main = factory.makeMain()
         
-        main.vm.onWeatherCellTap = { [weak self] page in
+        main.vm.onWeatherCellTap = { [weak self] in
             self?.requestCoordinating?()
         }
-        
+//        router.replaceRootWindow(main.vc, withAnimation: true)
         router.setRootModule(main.vc, animated: true)
     }
 }

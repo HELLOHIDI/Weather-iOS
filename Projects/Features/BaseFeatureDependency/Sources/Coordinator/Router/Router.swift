@@ -232,6 +232,7 @@ final class Router: NSObject, RouterProtocol {
     
     public init(rootController: UINavigationController) {
         self.rootController = rootController
+        print(rootController)
         self.completions = [:]
         super.init()
     }

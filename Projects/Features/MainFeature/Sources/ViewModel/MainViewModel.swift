@@ -35,37 +35,26 @@ public final class MainViewModel: MainViewModelType {
     
     //MARK: - MainCoordinator
     
-    public var onWeatherCellTap: ((Int) -> Void)?
+    public var onWeatherCellTap: (() -> Void)?
     
     public func transform(from input: Input, disposeBag: DisposeBag) -> Output {
         let output = Output()
-        self.bindOutput(output: output, disposeBag: disposeBag)
         
-        input.viewWillAppearEvent.subscribe(with: self, onNext: { owner, _ in
-            owner.mainUseCase.getCurrentWeatherData()
-        }).disposed(by: disposeBag)
+        input.viewWillAppearEvent
+            .flatMap(mainUseCase.getCurrentWeatherData)
+            .bind(to: output.weatherList)
+            .disposed(by: disposeBag)
         
         input.weatherListViewDidTapEvent.subscribe(with: self, onNext: { owner, page in
-            owner.onWeatherCellTap?(page.item)
+            owner.onWeatherCellTap?()
         }).disposed(by: disposeBag)
         
-        input.searchBarDidChangeEvent.subscribe(with: self, onNext: { owner, text in
-            owner.mainUseCase.updateSearchResult(text)
-        }).disposed(by: disposeBag)
+        input.searchBarDidChangeEvent
+            .flatMap(mainUseCase.updateSearchResult)
+            .bind(to: output.weatherList)
+            .disposed(by: disposeBag)
+        
         return output
     }
-    
-    
-    private func bindOutput(output: Output, disposeBag: DisposeBag) {
-//        mainUseCase.weatherList.subscribe(onNext: { weatherList in
-//            output.weatherList.accept(weatherList)
-//        }).disposed(by: disposeBag)
-    }
 }
-
-//public extension MainViewModel {
-//    func getWeatherList() -> [CurrentWeatherModel] {
-//        return mainUseCase.weatherList.value
-//    }
-//}
 

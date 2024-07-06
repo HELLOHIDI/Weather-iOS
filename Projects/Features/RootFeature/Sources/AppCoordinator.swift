@@ -34,25 +34,8 @@ extension AppCoordinator {
             router: router,
             factory: MainBuilder()
         )
-        coordinator.requestCoordinating = { [weak self] /*destination in*/  in
+        coordinator.requestCoordinating = { [weak self]  in
             self?.runDetailFlow()
-            //            switch destination {
-            //            case .myPage(let userType):
-            //                self?.runMyPageFlow(of: userType)
-            //            case .notification:
-            //                self?.runNotificationFlow()
-            //            case .attendance:
-            //                self?.runAttendanceFlow()
-            //            case .stamp:
-            //                self?.runStampFlow()
-            //            case .poke:
-            //                self?.runPokeFlow()
-            //            case .pokeOnboarding:
-            //                self?.runPokeOnboardingFlow()
-            //            case .signIn:
-            //                self?.runSignInFlow(by: .rootWindow(animated: true, message: nil))
-            //                self?.removeDependency(coordinator)
-            //            }
         }
         addDependency(coordinator)
         coordinator.start()
